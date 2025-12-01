@@ -31,10 +31,11 @@ model Tour {
   totalReviews Int   @default(0)
 
   // Relations
-  images  TourImage[]
-  guideId String
-  guide   Guide       @relation(fields: [guideId], references: [id])
-  reviews Review[]
+  images   TourImage[]
+  guideId  String
+  guide    Guide       @relation(fields: [guideId], references: [id])
+  bookings Booking[]   @relation("TourBookings")
+  reviews  Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,28 +57,4 @@ model TourImage {
   tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
 
   @@index([tourId])
-}
-
-model Review {
-  id      String  @id @default(uuid())
-  rating  Int // 1 to 5
-  comment String?
-
-  // User who reviewed (tourist)
-  touristId String
-  tourist   User   @relation(fields: [touristId], references: [id])
-
-  // Which tour is being reviewed
-  tourId String
-  tour   Tour   @relation(fields: [tourId], references: [id])
-
-  // Optional: review visibility
-  isVisible Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([tourId, touristId])
-  @@index([tourId])
-  @@index([touristId])
 }

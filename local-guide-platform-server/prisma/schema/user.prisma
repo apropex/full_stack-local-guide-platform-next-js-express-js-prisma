@@ -27,7 +27,8 @@ model User {
   guide Guide?
   admin Admin?
 
-  reviews Review[]
+  bookings Booking[]
+  reviews  Review[]
 
   @@index([email])
 }

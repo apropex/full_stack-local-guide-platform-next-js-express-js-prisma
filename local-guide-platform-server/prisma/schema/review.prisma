@@ -1,0 +1,43 @@
+model Review {
+  id      String  @id @default(uuid())
+  rating  Int // 1 to 5
+  comment String?
+
+  images ReviewImage[]
+
+  // User who reviewed (tourist)
+  touristId String
+  tourist   User   @relation(fields: [touristId], references: [id])
+
+  // Which tour is being reviewed
+  tourId String
+  tour   Tour   @relation(fields: [tourId], references: [id])
+
+  // Optional: review visibility
+  isVisible Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tourId, touristId])
+  @@index([tourId])
+  @@index([touristId])
+}
+
+model ReviewImage {
+  id       String  @id @default(uuid())
+  reviewId String
+  url      String
+  publicId String  @unique
+  format   String?
+  width    Int?
+  height   Int?
+  bytes    Int?
+  folder   String?
+
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId])
+}
