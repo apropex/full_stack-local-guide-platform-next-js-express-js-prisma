@@ -32,7 +32,8 @@ const payloadMaker = (user: iJwtPayloadMaker) => {
   if (user.nationality) payload.nationality = user.nationality;
 
   if (user.status) payload.status = user.status;
-  if (user.avatar) payload.avatar = user.avatar.url;
+  if (user.socialImageUrl) payload.avatar = user.socialImageUrl;
+  if (user.avatar?.url) payload.avatar = user.avatar.url;
   if ("isVerified" in user) payload.isVerified = user.isVerified;
   if ("isDeleted" in user) payload.isDeleted = user.isDeleted;
 

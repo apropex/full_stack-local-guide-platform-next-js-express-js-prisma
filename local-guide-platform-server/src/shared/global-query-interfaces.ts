@@ -29,4 +29,8 @@ export interface iUserSearchQuery extends iPaginationAndSearchQuery {
   status: string;
   isVerified: string;
   isDeleted: string;
+  address: string;
+  language: string;
+  country: string;
+  nationality: string;
 }

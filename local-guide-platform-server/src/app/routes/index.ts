@@ -3,12 +3,12 @@ import { Router } from "express";
 // import bookingRoutes from "../modules/booking/booking.routes";
 // import eventRoutes from "../modules/event/event.routes";
 // import paymentRoutes from "../modules/payment/payment.route";
-// import userRoutes from "../modules/user/user.routes";
+import userRoutes from "../modules/user/user.routes";
 
 const router = Router();
 
 [
-  // { path: "/user", route: userRoutes },
+  { path: "/user", route: userRoutes },
   // { path: "/auth", route: authRoutes },
   // { path: "/event", route: eventRoutes },
   // { path: "/booking", route: bookingRoutes },
