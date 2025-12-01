@@ -27,6 +27,8 @@ model User {
   guide Guide?
   admin Admin?
 
+  reviews Review[]
+
   @@index([email])
 }
 
@@ -56,7 +58,8 @@ model Guide {
 
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tours Tour[]
 }
 
 model Admin {

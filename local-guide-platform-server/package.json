@@ -12,10 +12,10 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev:migrate": "bunx prisma migrate dev",
-    "prisma:generate": "bunx prisma generate",
     "pgm": "bunx prisma generate && bunx prisma migrate dev",
-    "prisma:reset": "bunx prisma migrate reset --force",
+    "pg": "bunx prisma generate",
+    "pm": "bunx prisma migrate dev",
+    "pr": "bunx prisma migrate reset --force",
     "prisma:studio": "bunx prisma studio",
     "prisma:status": "bunx prisma migrate status"
   },

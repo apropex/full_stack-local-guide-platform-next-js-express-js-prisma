@@ -1,0 +1,83 @@
+model Tour {
+  id           String     @id @default(uuid())
+  title        String
+  description  String
+  highlights   String[] // Short bullet points
+  price        Float
+  duration     Int // Hours or days
+  durationType String // "hours" | "days"
+  location     String // City/Destination
+  latitude     Float?
+  longitude    Float?
+  meetingPoint String
+  maxGroupSize Int
+  category     String
+  tags         String[]
+  languages    String[] // e.g., ["English", "Spanish"]
+  difficulty   Difficulty @default(MEDIUM)
+
+  includes           String[] // e.g., ["Guide", "Snacks"]
+  excludes           String[] // e.g., ["Tickets", "Transport"]
+  whatToBring        String[]
+  cancellationPolicy String?
+
+  approveStatus TourStatus @default(PENDING)
+
+  isActive  Boolean @default(true)
+  isDeleted Boolean @default(false)
+  deletedBy String?
+
+  rating       Float @default(0.0)
+  totalReviews Int   @default(0)
+
+  // Relations
+  images  TourImage[]
+  guideId String
+  guide   Guide       @relation(fields: [guideId], references: [id])
+  reviews Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TourImage {
+  id       String  @id @default(uuid())
+  tourId   String
+  url      String
+  publicId String  @unique
+  format   String?
+  width    Int?
+  height   Int?
+  bytes    Int?
+  folder   String?
+
+  createdAt DateTime @default(now())
+
+  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@index([tourId])
+}
+
+model Review {
+  id      String  @id @default(uuid())
+  rating  Int // 1 to 5
+  comment String?
+
+  // User who reviewed (tourist)
+  touristId String
+  tourist   User   @relation(fields: [touristId], references: [id])
+
+  // Which tour is being reviewed
+  tourId String
+  tour   Tour   @relation(fields: [tourId], references: [id])
+
+  // Optional: review visibility
+  isVisible Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tourId, touristId])
+  @@index([tourId])
+  @@index([touristId])
+}
