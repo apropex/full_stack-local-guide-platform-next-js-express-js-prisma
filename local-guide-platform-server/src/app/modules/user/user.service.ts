@@ -152,8 +152,6 @@ export const getAllUsers = async (query: iQuery) => {
     filters,
   }) as WhereInput;
 
-  if (!Array.isArray(where?.AND)) where.AND = [];
-
   const include = {
     avatar: true,
   };

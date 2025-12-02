@@ -29,3 +29,12 @@ export const PasswordSchema = z
   .refine((pw) => !commonPasswords.has(pw.toLowerCase()), {
     message: "That password is too common — please choose a stronger one",
   });
+
+export const DateSchema = z
+  .string()
+  .refine((value) => !isNaN(new Date(value).getTime()), {
+    message: "Invalid date format",
+  });
+
+// const a = DateSchema.parse("2024-12-03"); // OK
+// const b = DateSchema.parse("abc");        // throws

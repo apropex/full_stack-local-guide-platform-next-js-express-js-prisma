@@ -78,6 +78,9 @@ model Guide {
 
   createdAt DateTime @default(now())
 
+  verifierId String?
+  verifier   Admin?  @relation(fields: [verifierId], references: [id], onDelete: Cascade)
+
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tours Tour[]
 }
@@ -89,11 +92,21 @@ model Admin {
   dob DateTime
   nid String
 
-  permissions String[] // Optional: MANAGE_USERS, DELETE_TOURS etc.
+  permissions      String[] // MANAGE_USERS, DELETE_TOURS etc.
+  isVerifiedAdmin  Boolean  @default(false)
+  verificationDocs String[]
 
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  verifiedGuides Guide[]
+
+  /// SELF RELATION: verified by another admin
+  verifierId String?
+  verifier   Admin?  @relation("AdminVerifications", fields: [verifierId], references: [id])
+
+  verifiedAdmins Admin[] @relation("AdminVerifications")
 }
 
 model UserAvatar {

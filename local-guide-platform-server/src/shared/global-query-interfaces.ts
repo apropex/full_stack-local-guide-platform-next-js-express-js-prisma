@@ -34,3 +34,29 @@ export interface iUserSearchQuery extends iPaginationAndSearchQuery {
   country: string;
   nationality: string;
 }
+
+export interface iGuideSearchQuery extends iPaginationAndSearchQuery {
+  id: string;
+  userId: string;
+  expertise: string;
+  languages: string;
+  about: string;
+  experienceYears: string;
+  city: string;
+  country: string;
+  dailyRate: string;
+  hourlyRate: string;
+  isVerifiedGuide: string;
+  verificationDocs: string;
+  dob: string;
+  nid: string;
+  averageRating: string;
+  totalReviews: string;
+}
+
+export interface iAdminSearchQuery extends iPaginationAndSearchQuery {
+  id: string;
+  userId: string;
+  dob: string;
+  nid: string;
+}

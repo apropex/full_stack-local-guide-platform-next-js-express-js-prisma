@@ -45,12 +45,14 @@ interface iProps {
   searchFields?: string[];
   search?: string;
   filters?: iQuery;
+  arrayFields?: iQuery;
 }
 
 export function getSearchFilters<T extends iWhereInputs>({
   searchFields,
   search,
   filters,
+  arrayFields,
 }: iProps): T {
   const where: T = {} as T;
 

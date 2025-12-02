@@ -46,6 +46,12 @@ interface iENV {
     fail_client_url: string;
     cancel_client_url: string;
   };
+
+  google: {
+    client_secret: string;
+    client_id: string;
+    callback_url: string;
+  };
 }
 
 const env = {
@@ -85,6 +91,12 @@ const env = {
     success_client_url: ENV.SSL_SUCCESS_CLIENT_URL,
     fail_client_url: ENV.SSL_FAIL_CLIENT_URL,
     cancel_client_url: ENV.SSL_CANCEL_CLIENT_URL,
+  },
+
+  google: {
+    client_secret: ENV.GOOGLE_CLIENT_SECRET,
+    client_id: ENV.GOOGLE_CLIENT_ID,
+    callback_url: ENV.GOOGLE_CALLBACK_URL,
   },
 } as iENV;
 

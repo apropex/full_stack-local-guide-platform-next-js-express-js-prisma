@@ -4,6 +4,7 @@ import ApiError from "../../../lib/ApiError";
 import { fileUploader } from "../../../lib/fileUploader";
 import catchAsync from "../../../shared/catchAsync";
 import _response from "../../../shared/sendResponse";
+import { adminAccess } from "../../constants";
 import * as userService from "./user.service";
 
 //* CREATE USER *\\
@@ -30,7 +31,7 @@ export const updateUser = catchAsync(async (req, res) => {
   const user = req.decoded ?? ({} as JwtPayload);
   const { id } = req.params;
 
-  if (user.id !== id && user.role !== "admin") {
+  if (user.id !== id && !adminAccess.includes(user.role)) {
     throw new ApiError(
       403,
       "Forbidden: You don't have permission to update this user",

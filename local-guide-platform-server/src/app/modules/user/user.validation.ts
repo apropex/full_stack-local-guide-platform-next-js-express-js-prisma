@@ -1,5 +1,5 @@
 import z from "zod";
-import { PasswordSchema } from "../../../shared/password_schema";
+import { PasswordSchema } from "../../../shared/common-zod-schema";
 
 export const UpdateUserSchema = z.object({
   name: z.string().min(1, "Name is required"),

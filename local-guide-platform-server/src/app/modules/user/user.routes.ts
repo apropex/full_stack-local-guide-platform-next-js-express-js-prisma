@@ -1,6 +1,6 @@
-import { Role } from "@prisma/client";
 import { Router } from "express";
 import { singleFileUploader } from "../../../lib/config/cloudinary/multer.controller";
+import { adminAccess } from "../../constants";
 import { roleVerifier } from "../../middlewares/roleVerifier";
 import { tokenVerifier } from "../../middlewares/tokenVerifier";
 import validateRequest from "../../middlewares/validateRequest";
@@ -13,7 +13,7 @@ router.get("/me", tokenVerifier, userController.getMe);
 
 router.get("/:id", tokenVerifier, userController.getUserById);
 
-router.get("/all", roleVerifier(Role.ADMIN), userController.getAllUsers);
+router.get("/all", roleVerifier(adminAccess), userController.getAllUsers);
 
 router.post(
   "/",
