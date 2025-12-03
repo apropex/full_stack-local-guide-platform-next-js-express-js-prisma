@@ -60,3 +60,32 @@ export interface iAdminSearchQuery extends iPaginationAndSearchQuery {
   dob: string;
   nid: string;
 }
+
+export interface iTourSearchQuery {
+  id: string;
+  title: string;
+  description: string;
+  highlights: string;
+  price: string;
+  duration: string;
+  durationType: string;
+  location: string;
+  latitude: string;
+  longitude: string;
+  meetingPoint: string;
+  maxGroupSize: string;
+  category: string;
+  tags: string;
+  languages: string;
+  difficulty: string;
+  includes: string;
+  excludes: string;
+  whatToBring: string;
+  cancellationPolicy: string;
+  approveStatus: string;
+  isActive: string;
+  isDeleted: string;
+  deletedBy: string;
+  rating: string;
+  totalReviews: string;
+}

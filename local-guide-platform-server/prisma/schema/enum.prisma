@@ -42,3 +42,8 @@ enum PaymentStatus {
   FAILED
   CANCELLED
 }
+
+enum TourDurationType {
+  HOURS
+  DAYS
+}

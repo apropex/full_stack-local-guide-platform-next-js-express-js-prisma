@@ -1,11 +1,11 @@
 model Tour {
-  id           String     @id @default(uuid())
+  id           String           @id @default(uuid())
   title        String
   description  String
   highlights   String[] // Short bullet points
   price        Float
   duration     Int // Hours or days
-  durationType String // "hours" | "days"
+  durationType TourDurationType @default(HOURS)
   location     String // City/Destination
   latitude     Float?
   longitude    Float?
@@ -14,7 +14,7 @@ model Tour {
   category     String
   tags         String[]
   languages    String[] // e.g., ["English", "Spanish"]
-  difficulty   Difficulty @default(MEDIUM)
+  difficulty   Difficulty       @default(MEDIUM)
 
   includes           String[] // e.g., ["Guide", "Snacks"]
   excludes           String[] // e.g., ["Tickets", "Transport"]
