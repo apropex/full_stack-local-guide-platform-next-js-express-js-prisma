@@ -121,9 +121,8 @@ export const getUserById = async (id: string) => {
     },
     omit: { password: true },
   });
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
+
+  if (!user) throw new ApiError(404, "User not found");
   return user;
 };
 

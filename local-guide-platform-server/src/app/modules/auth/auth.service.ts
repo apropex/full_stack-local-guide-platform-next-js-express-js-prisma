@@ -1,0 +1,148 @@
+import { UserStatus } from "@prisma/client";
+import * as jwt from "jsonwebtoken";
+import ApiError from "../../../lib/ApiError";
+import env from "../../../lib/config/env";
+import { generateAccessToken, generateRefreshToken } from "../../../lib/jwt";
+import prisma from "../../../lib/prisma";
+import { setOtp, verifyOtp } from "../../../lib/redis.config";
+import { sCode } from "../../../utils";
+import { buildHash, compareHash } from "../../../utils/bcrypt";
+import {
+  iLoginPayload,
+  iOtpVerifyPayload,
+  iResetPasswordPayload,
+} from "./auth.validation";
+
+//* USER LOGIN *\\
+export const login = async (payload: iLoginPayload) => {
+  const existingUser = await prisma.user.findUnique({
+    where: { email: payload.email },
+    include: {
+      avatar: true,
+      guide: { select: { id: true } },
+      admin: { select: { id: true } },
+    },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(404, "User does not exist with this email");
+  }
+
+  const { password, ...safeUser } = existingUser;
+
+  if (password) await compareHash(payload.password, password);
+  else throw new ApiError(sCode.BAD_REQUEST, "Invalid credentials");
+
+  const access_token = generateAccessToken(safeUser);
+  const refresh_token = generateRefreshToken(safeUser);
+
+  return { user: safeUser, access_token, refresh_token };
+};
+
+//* RESET PASSWORD *\\
+export const resetPassword = async (
+  id: string,
+  { oldPassword, newPassword }: iResetPasswordPayload,
+) => {
+  const existingUser = await prisma.user.findUnique({ where: { id } });
+  await compareHash(oldPassword, existingUser?.password ?? "");
+
+  const hashed = await buildHash(newPassword);
+  await prisma.user.update({ where: { id }, data: { password: hashed } });
+};
+
+//* VERIFY USER *\\
+export const verifyUser = async ({ email, option, otp }: iOtpVerifyPayload) => {
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+
+  if (!existingUser) {
+    throw new ApiError(sCode.NOT_FOUND, "User does not exist with this email");
+  }
+
+  if (existingUser.isDeleted) {
+    throw new ApiError(
+      sCode.BAD_REQUEST,
+      "User was deleted, contact to support",
+    );
+  }
+
+  if (existingUser.isVerified) {
+    throw new ApiError(sCode.BAD_REQUEST, "User already verified");
+  }
+
+  const otpKey = "verify_otp";
+
+  if (option === "setOtp") return await setOtp(email, { key: otpKey });
+  //
+  else if (option === "verifyOtp") {
+    if (!otp) throw new ApiError(sCode.BAD_REQUEST, "OTP not found");
+    const result = await verifyOtp(email, otp, otpKey);
+
+    if (result.success) {
+      await prisma.user.update({
+        where: { id: existingUser.id },
+        data: { isVerified: true },
+      });
+    }
+
+    return result;
+  }
+};
+
+//* FORGOT PASSWORD *\\
+export const forgotPassword = async ({
+  email,
+  option,
+  otp,
+}: iOtpVerifyPayload) => {
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (!existingUser) {
+    throw new ApiError(sCode.NOT_FOUND, "User does not exist with this email");
+  }
+
+  if (existingUser.isDeleted) {
+    throw new ApiError(
+      sCode.BAD_REQUEST,
+      "User was deleted, contact to support",
+    );
+  }
+
+  if (existingUser.status === UserStatus.BANNED) {
+    throw new ApiError(
+      sCode.BAD_REQUEST,
+      "User was banned, contact to support",
+    );
+  }
+
+  const otpKey = "forgot_pass_otp";
+
+  if (option === "setOtp") return await setOtp(email, { key: otpKey });
+  //
+  else if (option === "verifyOtp") {
+    if (!otp) throw new ApiError(sCode.BAD_REQUEST, "OTP not found");
+    const result = await verifyOtp(email, otp, otpKey);
+
+    if (result.success) {
+      const temp_token = jwt.sign(
+        { id: existingUser.id },
+        env.jwt.temp_token_secret,
+        { expiresIn: env.jwt.temp_token_expire_time } as jwt.SignOptions,
+      );
+
+      if (!temp_token) {
+        throw new ApiError(
+          sCode.EXPECTATION_FAILED,
+          "Failed to generate token",
+        );
+      }
+
+      return { temp_token };
+    }
+  }
+};
+
+//* RESET FORGOT PASSWORD *\\
+export const resetForgotPassword = async (id: string, newPassword: string) => {
+  const hashed = await buildHash(newPassword);
+  await prisma.user.update({ where: { id }, data: { password: hashed } });
+};

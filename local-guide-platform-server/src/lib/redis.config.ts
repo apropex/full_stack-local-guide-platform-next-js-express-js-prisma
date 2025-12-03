@@ -4,7 +4,8 @@ import ApiError from "./ApiError";
 import env from "./config/env";
 import { redisClient } from "./redis";
 
-const getOtpKey = (email: string) => `otp:${email}`;
+const getOtpKey = (email: string, name?: string) =>
+  `${name ? name : "otp"}:${email}`;
 const getOtpCountKey = (email: string) => `otp-req-count:${email}`;
 
 const OTP_REQUEST_LIMIT = 5;
@@ -49,10 +50,12 @@ export const canRequestOtp = async (email: string) => {
   };
 };
 
-export const setOtp = async (
-  email: string,
-  expirySeconds: number = env.redis.otp_expiration,
-) => {
+interface Options {
+  expirySeconds?: number;
+  key?: string;
+}
+
+export const setOtp = async (email: string, options?: Options) => {
   if (!email) throw new ApiError(sCode.BAD_REQUEST, "Email is required");
 
   const limitInfo = await canRequestOtp(email);
@@ -63,13 +66,13 @@ export const setOtp = async (
     );
   }
 
-  const redisKey = getOtpKey(email);
+  const redisKey = getOtpKey(email, options?.key);
   const otp = OTP();
 
   await redisClient.set(redisKey, otp, {
     expiration: {
       type: "EX",
-      value: expirySeconds,
+      value: options?.expirySeconds ?? env.redis.otp_expiration,
     },
   });
 
@@ -79,11 +82,12 @@ export const setOtp = async (
 export const verifyOtp = async (
   email: string,
   otp: string,
+  key?: string,
 ): Promise<{ success: boolean }> => {
   if (!email) throw new ApiError(sCode.BAD_REQUEST, "Email is required");
   if (!otp) throw new ApiError(sCode.BAD_REQUEST, "OTP is required");
 
-  const redisKey = getOtpKey(email);
+  const redisKey = getOtpKey(email, key);
   const savedOtp = await redisClient.get(redisKey);
 
   if (!savedOtp)
