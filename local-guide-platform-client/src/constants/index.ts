@@ -48,6 +48,11 @@ export const TourDurationType = {
   DAYS: "DAYS",
 } as const;
 
+export const otpOptions = {
+  setOtp: "setOtp",
+  verifyOtp: "verifyOtp",
+} as const;
+
 export type tRole = (typeof Role)[keyof typeof Role];
 export type tUserStatus = (typeof UserStatus)[keyof typeof UserStatus];
 export type tGender = (typeof Gender)[keyof typeof Gender];
@@ -56,3 +61,4 @@ export type tTourStatus = (typeof TourStatus)[keyof typeof TourStatus];
 export type tBookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus];
 export type tPaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
 export type tTourDurationType = (typeof TourDurationType)[keyof typeof TourDurationType];
+export type tOtpOptions = (typeof otpOptions)[keyof typeof otpOptions];

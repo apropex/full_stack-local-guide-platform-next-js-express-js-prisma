@@ -73,6 +73,49 @@ export const setCookies = async (response: Response, refresh = true) => {
 };
 
 //* =======================================================
+//* SET TEMP TOKEN *\\
+export const setTempToken = async (response: Response) => {
+  const setCookieHeaders = response.headers.getSetCookie();
+  if (!setCookieHeaders || setCookieHeaders.length === 0) {
+    return {
+      success: false,
+      message: "Authentication failed: No cookies received",
+      user: null,
+    };
+  }
+
+  const cookieStore = await cookies();
+  let temp_tokenSet = false;
+  let temp_token: string | null = null;
+
+  for (const header of setCookieHeaders) {
+    const parsed = parse(header);
+
+    if (parsed.temp_token) {
+      cookieStore.set("temp_token", parsed.temp_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none" as const,
+        path: "/api/v1/auth/reset-forgot-password",
+        maxAge: getDuration("5m"),
+      });
+      temp_tokenSet = true;
+      temp_token = parsed.temp_token;
+    }
+  }
+
+  if (!temp_tokenSet) {
+    return {
+      success: false,
+      message: "Authentication failed: Missing token",
+      user: null,
+    };
+  }
+
+  return { success: true, temp_token };
+};
+
+//* =======================================================
 //* GET COOKIE *\\
 type Key = "all" | "accessToken" | "refreshToken" | "sidebar_state";
 

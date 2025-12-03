@@ -11,3 +11,10 @@ export type MulterFile = Express.Multer.File;
 export type MulterFiles = Express.Multer.File[];
 export type CloudFile = UploadApiResponse;
 export type CloudFiles = UploadApiResponse[];
+
+export const otpOptions = {
+  setOtp: "setOtp",
+  verifyOtp: "verifyOtp",
+} as const;
+
+export type tOtpOptions = (typeof otpOptions)[keyof typeof otpOptions];

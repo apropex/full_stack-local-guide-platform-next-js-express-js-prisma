@@ -7,6 +7,7 @@ import prisma from "../../../lib/prisma";
 import { setOtp, verifyOtp } from "../../../lib/redis.config";
 import { sCode } from "../../../utils";
 import { buildHash, compareHash } from "../../../utils/bcrypt";
+import { otpOptions } from "../../constants";
 import {
   iLoginPayload,
   iOtpVerifyPayload,
@@ -72,9 +73,9 @@ export const verifyUser = async ({ email, option, otp }: iOtpVerifyPayload) => {
 
   const otpKey = "verify_otp";
 
-  if (option === "setOtp") return await setOtp(email, { key: otpKey });
+  if (option === otpOptions.setOtp) return await setOtp(email, { key: otpKey });
   //
-  else if (option === "verifyOtp") {
+  else if (option === otpOptions.verifyOtp) {
     if (!otp) throw new ApiError(sCode.BAD_REQUEST, "OTP not found");
     const result = await verifyOtp(email, otp, otpKey);
 
