@@ -1,23 +1,21 @@
-import type { UploadApiResponse } from "cloudinary";
 import { JwtPayload } from "jsonwebtoken";
 import ApiError from "../../../lib/ApiError";
 import { fileUploader } from "../../../lib/fileUploader";
 import catchAsync from "../../../shared/catchAsync";
 import _response from "../../../shared/sendResponse";
-import { adminAccess } from "../../constants";
+import { adminAccess, CloudFile, MulterFile } from "../../constants";
 import * as userService from "./user.service";
 
 //* CREATE USER *\\
 export const createUser = catchAsync(async (req, res) => {
   const payload = req.body;
-  let file: UploadApiResponse | null = null;
 
   if (req.file) {
-    const uploadResult = await fileUploader(req.file);
-    if (uploadResult?.secure_url) file = uploadResult;
+    const uploadResult = await fileUploader(req.file as MulterFile);
+    if (uploadResult?.secure_url) req.file = uploadResult;
   }
 
-  await userService.createUser(payload, file);
+  await userService.createUser(payload, req.file as CloudFile);
 
   _response(res, {
     message: "User created successfully!",
@@ -27,7 +25,6 @@ export const createUser = catchAsync(async (req, res) => {
 //* UPDATE USER *\\
 export const updateUser = catchAsync(async (req, res) => {
   const payload = req.body;
-  let file: UploadApiResponse | null = null;
   const user = req.decoded ?? ({} as JwtPayload);
   const { id } = req.params;
 
@@ -39,11 +36,15 @@ export const updateUser = catchAsync(async (req, res) => {
   }
 
   if (req.file) {
-    const uploadResult = await fileUploader(req.file);
-    if (uploadResult?.secure_url) file = uploadResult;
+    const uploadResult = await fileUploader(req.file as MulterFile);
+    if (uploadResult?.secure_url) req.file = uploadResult;
   }
 
-  const updatedUser = await userService.updateUser(id, payload, file);
+  const updatedUser = await userService.updateUser(
+    id,
+    payload,
+    req.file as CloudFile,
+  );
   _response(res, {
     message: "User updated successfully!",
     data: updatedUser,

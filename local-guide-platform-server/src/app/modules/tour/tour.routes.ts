@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.get("/", tourControllers.getAllTours);
+router.get("/all", tourControllers.getAllTours);
 
 router.get("/:id", tokenVerifier, tourControllers.getTourById);
 

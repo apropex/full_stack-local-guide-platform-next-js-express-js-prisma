@@ -2,6 +2,7 @@
 "use server";
 
 import { otpOptions } from "@/constants";
+import { routes } from "@/constants/routes";
 import { setCookies, setTempToken } from "@/helper/cookie";
 import { errorResponse } from "@/helper/errorResponse";
 import { iResponse } from "@/interfaces";
@@ -14,7 +15,7 @@ import { headers } from "next/headers";
 
 export const login = async ({ email, password }: LoginPayload): Promise<iResponse<iUser>> => {
   try {
-    const res = await fetch(join(ENV.BASE_URL, "/auth/login"), {
+    const res = await fetch(join(ENV.BASE_URL, routes.auth("login")), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -35,7 +36,7 @@ export const login = async ({ email, password }: LoginPayload): Promise<iRespons
 
 export const resetPassword = async ({ oldPassword, newPassword }: ResetPasswordPayload) => {
   try {
-    return await _fetch.post("/reset-password", {}, { oldPassword, newPassword });
+    return await _fetch.post(routes.auth("reset-password"), {}, { oldPassword, newPassword });
   } catch (error) {
     return errorResponse(error);
   }
@@ -45,7 +46,7 @@ export const verifyUser = {
   setOtp: async (email: string) => {
     try {
       const { success, message, data } = await _fetch.post(
-        "/auth/verify",
+        routes.auth("verify"),
         {},
         {
           email,
@@ -63,7 +64,7 @@ export const verifyUser = {
 
   verifyOtp: async (email: string, otp: string) => {
     try {
-      return await _fetch.post("/auth/verify", {}, { email, option: otpOptions.verifyOtp, otp });
+      return await _fetch.post(routes.auth("verify"), {}, { email, option: otpOptions.verifyOtp, otp });
     } catch (error) {
       return errorResponse(error);
     }
@@ -74,7 +75,7 @@ export const forgotPassword = {
   setOtp: async (email: string) => {
     try {
       const { success, message, data } = await _fetch.post(
-        "/auth/verify",
+        routes.auth("forgot-password"),
         {},
         {
           email,
@@ -92,7 +93,7 @@ export const forgotPassword = {
 
   verifyOtp: async (email: string, otp: string) => {
     try {
-      const res = await fetch(join(ENV.BASE_URL, "/auth/verify"), {
+      const res = await fetch(join(ENV.BASE_URL, routes.auth("forgot-password")), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, option: otpOptions.verifyOtp, otp }),
@@ -117,7 +118,7 @@ export const resetForgotPassword = async (newPassword: string) => {
     const tokens = (await headers()).get("cookie") ?? "";
     const tempToken = tokens.split(";").find((c) => c.trim().startsWith("temp_token=")) ?? "";
 
-    const res = await fetch(join(ENV.BASE_URL, "/auth/reset-forgot-password"), {
+    const res = await fetch(join(ENV.BASE_URL, routes.auth("reset-forgot-password")), {
       method: "POST",
       headers: { "Content-Type": "application/json", cookie: tempToken },
       body: JSON.stringify({ newPassword }),
@@ -139,7 +140,7 @@ export const getAccessTokenByRefreshToken = async () => {
     const tokens = (await headers()).get("cookie") ?? "";
     const refreshToken = tokens.split(";").find((c) => c.trim().startsWith("refreshToken=")) ?? "";
 
-    const res = await fetch(join(ENV.BASE_URL, "/auth/refresh"), {
+    const res = await fetch(join(ENV.BASE_URL, routes.auth("refresh")), {
       method: "POST",
       headers: { "Content-Type": "application/json", cookie: refreshToken },
       body: JSON.stringify({}),

@@ -1,5 +1,4 @@
 import { Prisma, User } from "@prisma/client";
-import type { UploadApiResponse } from "cloudinary";
 import ApiError from "../../../lib/ApiError";
 import prisma from "../../../lib/prisma";
 import { iQuery } from "../../../shared/global-query-interfaces";
@@ -9,6 +8,7 @@ import configureQuery, {
   getSearchFilters,
 } from "../../../utils/configureQuery";
 import { deleteImageFromCloud } from "../../../utils/deleteImageFromCloud";
+import { CloudFile } from "../../constants";
 import {
   userBooleanFields,
   userFilterFields,
@@ -16,10 +16,7 @@ import {
 } from "./user.constants";
 
 //* CREATE A NEW USER *\\
-export const createUser = async (
-  payload: User,
-  file: UploadApiResponse | null,
-) => {
+export const createUser = async (payload: User, file: CloudFile) => {
   const existingUser = await prisma.user.findUnique({
     where: { email: payload.email },
   });
@@ -51,7 +48,7 @@ export const createUser = async (
 export const updateUser = async (
   id: string,
   payload: Prisma.UserUpdateInput,
-  file: UploadApiResponse | null,
+  file: CloudFile,
 ) => {
   const user = await prisma.user.findUnique({
     where: { id },
