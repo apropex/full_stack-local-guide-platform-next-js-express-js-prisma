@@ -60,7 +60,6 @@ export const getInvoiceUrl = catchAsync(async (req, res) => {
 //
 export const validatePayment = catchAsync(async (req, res) => {
   await validationPayment(req.body);
-
   _response(res, {
     message: "Payment validated successfully!",
   });
