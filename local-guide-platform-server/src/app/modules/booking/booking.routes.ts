@@ -15,6 +15,14 @@ bookingRoutes.post(
   bookingControllers.createBooking,
 );
 
+bookingRoutes.patch(
+  "/:id/status",
+  roleVerifier(Role.ADMIN),
+  bookingControllers.updateBookingStatus,
+);
+
+bookingRoutes.get("/:id", tokenVerifier, bookingControllers.getBookingById);
+
 bookingRoutes.get(
   "/all",
   roleVerifier(adminAccess),
@@ -26,13 +34,5 @@ bookingRoutes.get(
   tokenVerifier,
   bookingControllers.getMyBookings,
 );
-
-bookingRoutes.patch(
-  "/:id/status",
-  roleVerifier(Role.ADMIN),
-  bookingControllers.updateBookingStatus,
-);
-
-bookingRoutes.get("/:id", tokenVerifier, bookingControllers.getBookingById);
 
 export default bookingRoutes;

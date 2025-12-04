@@ -11,6 +11,8 @@ router.post("/fail", paymentControllers.failPayment);
 
 router.post("/cancel", paymentControllers.cancelPayment);
 
+router.post("/validate-payment", paymentControllers.validatePayment);
+
 router.post(
   "/repayment/:bookingId",
   tokenVerifier,
@@ -24,7 +26,5 @@ router.get(
   userAccessVerifier,
   paymentControllers.getInvoiceUrl,
 );
-
-router.post("/validate-payment", paymentControllers.validatePayment);
 
 export default router;

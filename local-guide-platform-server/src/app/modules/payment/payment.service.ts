@@ -3,6 +3,7 @@ import { Request } from "express";
 import ApiError from "../../../lib/ApiError";
 import prisma from "../../../lib/prisma";
 import { sCode } from "../../../utils";
+import { checkString } from "../../../utils/checkString";
 import { iSSLCommerz } from "../sslCommerz/sslCommerz.interface";
 import { sslPaymentInit } from "../sslCommerz/sslCommerz.service";
 
@@ -78,7 +79,10 @@ export const cancelPayment = async (trxId: string) => {
 // canceled
 
 export const repayment = async (req: Request) => {
-  const id = req.params?.bookingId;
+  const id = checkString(
+    req.params?.bookingId,
+    "Booking ID not found in the params",
+  );
   const decoded = req.decoded;
 
   if (!decoded) throw new ApiError(sCode.UNAUTHORIZED, "Unauthorized");
@@ -92,6 +96,16 @@ export const repayment = async (req: Request) => {
     throw new ApiError(
       sCode.NOT_FOUND,
       "Payment not found. Please book a tour",
+    );
+  }
+
+  if (
+    booking.status === BookingStatus.CONFIRMED &&
+    booking.payment.status === PaymentStatus.SUCCESS
+  ) {
+    throw new ApiError(
+      sCode.BAD_REQUEST,
+      "This user already paid the bill and booked the tour",
     );
   }
 
