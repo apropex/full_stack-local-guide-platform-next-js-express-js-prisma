@@ -1,13 +1,13 @@
 import { iResponse } from "@/interfaces";
 import { ENV } from "./config/env";
 
-type Options = Omit<RequestInit, "body"> & { body?: FormData };
+type Options<TRequest> = Omit<RequestInit, "body"> & { body?: FormData; data?: TRequest };
 
 /**
  *! fetchHelper Rules:
- ** - FormData must be passed in the 2nd parameter (options.body).
- ** - JSON or other raw payloads must be passed in the 3rd parameter (`data`).
- ** - If non-FormData is passed through options.body → throw error.
+ ** - FormData must be passed in the `options.body`.
+ ** - JSON or other raw payloads must be passed in `options.data`.
+ ** - If non-FormData is passed through `options.body` → throw error.
  ** - GET requests must never send a body; any existing body is removed.
  ** - JSON payload automatically applies "Content-Type: application/json".
  ** - FormData never sets any "Content-Type" header (browser sets boundary).
@@ -17,10 +17,10 @@ const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 
 export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
   api: string,
-  requestInit: Options = {},
-  data?: TRequest,
+  requestInit: Options<TRequest> = {}
 ): Promise<iResponse<TResponse>> {
-  const options = requestInit as RequestInit;
+  const options = requestInit as RequestInit & { data?: TRequest };
+  const data = options.data;
 
   const method = options.method?.toUpperCase() || "GET";
   const isGet = method === "GET";
@@ -37,7 +37,7 @@ export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
       // JSON payload cannot be placed in options.body
       if (options.body && !(options.body instanceof FormData)) {
         throw new Error(
-          "The 2nd parameter (options.body) must be FormData. For JSON/raw payload, use the 3rd parameter.",
+          "The 2nd parameter (options.body) must be FormData. For JSON/raw payload, use the 3rd parameter."
         );
       }
 
@@ -90,14 +90,9 @@ export const _fetch = Object.fromEntries(
     method.toLowerCase(),
     async <TResponse = unknown, TRequest = unknown>(
       api: string,
-      options: Options = {},
-      data?: TRequest,
+      options: Options<TRequest> = {}
     ): Promise<iResponse<TResponse>> => {
-      return fetchHelper<TResponse, TRequest>(
-        api,
-        { ...options, method },
-        data,
-      );
+      return fetchHelper<TResponse, TRequest>(api, { ...options, method });
     },
-  ]),
+  ])
 ) as Record<Lowercase<(typeof methods)[number]>, typeof fetchHelper>;

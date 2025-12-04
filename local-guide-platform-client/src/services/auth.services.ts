@@ -36,7 +36,7 @@ export const login = async ({ email, password }: LoginPayload): Promise<iRespons
 
 export const resetPassword = async ({ oldPassword, newPassword }: ResetPasswordPayload) => {
   try {
-    return await _fetch.post(routes.auth("reset-password"), {}, { oldPassword, newPassword });
+    return await _fetch.post(routes.auth("reset-password"), { data: { oldPassword, newPassword } });
   } catch (error) {
     return errorResponse(error);
   }
@@ -45,14 +45,12 @@ export const resetPassword = async ({ oldPassword, newPassword }: ResetPasswordP
 export const verifyUser = {
   setOtp: async (email: string) => {
     try {
-      const { success, message, data } = await _fetch.post(
-        routes.auth("verify"),
-        {},
-        {
+      const { success, message, data } = await _fetch.post(routes.auth("verify"), {
+        data: {
           email,
           option: otpOptions.setOtp,
-        }
-      );
+        },
+      });
 
       const otp = (data as any).otp; // TODO: set opt by resend
 
@@ -64,7 +62,7 @@ export const verifyUser = {
 
   verifyOtp: async (email: string, otp: string) => {
     try {
-      return await _fetch.post(routes.auth("verify"), {}, { email, option: otpOptions.verifyOtp, otp });
+      return await _fetch.post(routes.auth("verify"), { data: { email, option: otpOptions.verifyOtp, otp } });
     } catch (error) {
       return errorResponse(error);
     }
@@ -74,14 +72,9 @@ export const verifyUser = {
 export const forgotPassword = {
   setOtp: async (email: string) => {
     try {
-      const { success, message, data } = await _fetch.post(
-        routes.auth("forgot-password"),
-        {},
-        {
-          email,
-          option: otpOptions.setOtp,
-        }
-      );
+      const { success, message, data } = await _fetch.post(routes.auth("forgot-password"), {
+        data: { email, option: otpOptions.setOtp },
+      });
 
       const otp = (data as any).otp; // TODO: set opt by resend
 

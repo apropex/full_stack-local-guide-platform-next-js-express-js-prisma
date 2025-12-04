@@ -15,6 +15,8 @@ const createRoute = (base: string): ((...paths: string[]) => string) => {
 
 export const routes = {
   user: createRoute("/api/v1/user"),
+  guide: createRoute("/api/v1/guide"),
+  admin: createRoute("/api/v1/admin"),
   auth: createRoute("/api/v1/auth"),
   tour: createRoute("/api/v1/tour"),
   booking: createRoute("/api/v1/booking"),
