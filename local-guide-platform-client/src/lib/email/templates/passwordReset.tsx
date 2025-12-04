@@ -1,4 +1,15 @@
-import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Tailwind, Text } from "@react-email/components";
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Preview,
+  Section,
+  Tailwind,
+  Text,
+} from "@react-email/components";
 
 interface ForgotPasswordOtpEmailProps {
   otp: string;
@@ -10,7 +21,7 @@ interface ForgotPasswordOtpEmailProps {
 export default function ForgotPasswordOtpEmail({
   otp,
   userName = "there",
-  appName = "Local Guide",
+  appName = "LASV Guides",
   validMinutes = 2,
 }: ForgotPasswordOtpEmailProps) {
   return (
@@ -23,13 +34,20 @@ export default function ForgotPasswordOtpEmail({
           <Container className="mx-auto my-10 max-w-lg rounded-2xl bg-white px-8 py-12 shadow-xl">
             {/* Brand Header */}
             <Section className="text-center">
-              <Heading className="text-3xl font-bold text-gray-900">{appName}</Heading>
-              <Text className="mt-2 text-sm text-gray-500">Password Reset Request</Text>
+              <Heading className="text-3xl font-bold text-gray-900">
+                {appName}
+              </Heading>
+              <Text className="mt-2 text-sm text-gray-500">
+                Password Reset Request
+              </Text>
             </Section>
 
             {/* Main Content */}
             <Section className="mt-10">
-              <Heading as="h2" className="text-center text-2xl font-semibold text-gray-900">
+              <Heading
+                as="h2"
+                className="text-center text-2xl font-semibold text-gray-900"
+              >
                 Reset Your Password
               </Heading>
 
@@ -38,8 +56,8 @@ export default function ForgotPasswordOtpEmail({
               </Text>
 
               <Text className="text-base leading-relaxed text-gray-600">
-                We received a request to reset the password for your {appName} account. Use the one-time code below to
-                set a new password.
+                We received a request to reset the password for your {appName}{" "}
+                account. Use the one-time code below to set a new password.
               </Text>
 
               {/* OTP Highlight Box */}
@@ -52,12 +70,19 @@ export default function ForgotPasswordOtpEmail({
               </Section>
 
               <Text className="text-center text-base font-medium text-gray-700">
-                This code expires in <span className="font-bold text-red-600">{validMinutes} minutes</span>
+                This code expires in{" "}
+                <span className="font-bold text-red-600">
+                  {validMinutes} minutes
+                </span>
               </Text>
 
               <Text className="mt-8 text-base text-gray-600">
-                If you didn&apos;t request a password reset, please ignore this email or{" "}
-                <a href="#" className="font-medium text-indigo-600 hover:underline">
+                If you didn&apos;t request a password reset, please ignore this
+                email or{" "}
+                <a
+                  href="#"
+                  className="font-medium text-indigo-600 hover:underline"
+                >
                   contact support
                 </a>{" "}
                 immediately — someone may be trying to access your account.
@@ -67,9 +92,12 @@ export default function ForgotPasswordOtpEmail({
 
               {/* Security Tip */}
               <Section className="rounded-xl bg-amber-50 px-6 py-5">
-                <Text className="m-0 text-sm font-medium text-amber-900">Security Tip</Text>
+                <Text className="m-0 text-sm font-medium text-amber-900">
+                  Security Tip
+                </Text>
                 <Text className="mt-2 text-sm text-amber-800">
-                  Never share this code with anyone — {appName} staff will never ask for it.
+                  Never share this code with anyone — {appName} staff will never
+                  ask for it.
                 </Text>
               </Section>
 

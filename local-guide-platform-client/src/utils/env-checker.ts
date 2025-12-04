@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { isProd } from "@/lib/config/env";
 import { AppError } from "@/lib/errors/AppError";
 
 export function envChecker<T extends Record<string, any>>(
@@ -35,7 +34,7 @@ export function envChecker<T extends Record<string, any>>(
     }
   });
 
-  if (!isProd && !parentKey) {
+  if (process.env.NODE_ENV !== "production" && !parentKey) {
     console.log("All required environment variables are loaded.");
   }
 }

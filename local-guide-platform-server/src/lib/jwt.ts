@@ -90,22 +90,16 @@ export const generateRefreshToken = (
 
 //* VERIFY ACCESS TOKEN
 export const verifyAccessToken = (token: string): jwt.JwtPayload => {
-  const accessToken = jwt.verify(
-    token,
-    env.jwt.access_token_secret,
-  ) as jwt.JwtPayload;
-  if (!accessToken)
+  const accessToken = jwt.verify(token, env.jwt.access_token_secret);
+  if (!accessToken || typeof accessToken === "string")
     throw new ApiError(sCode.UNAUTHORIZED, "Token is not valid");
   return accessToken;
 };
 
 //* VERIFY REFRESH TOKEN
 export const verifyRefreshToken = (token: string): jwt.JwtPayload => {
-  const refreshToken = jwt.verify(
-    token,
-    env.jwt.refresh_token_secret,
-  ) as jwt.JwtPayload;
-  if (!refreshToken)
+  const refreshToken = jwt.verify(token, env.jwt.refresh_token_secret);
+  if (!refreshToken || typeof refreshToken === "string")
     throw new ApiError(sCode.UNAUTHORIZED, "Token is not valid");
   return refreshToken;
 };

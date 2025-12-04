@@ -119,4 +119,54 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  .custom_scrollbar {
+    /*
+    1. WebKit (Chrome, Safari, Edge) Browser Styles
+    ----------------------------------------------------------
+    These styles use the -webkit- prefix and offer extensive customization.
+  */
+
+    /* Scrollbar Width */
+    &::-webkit-scrollbar {
+      width: 0.375rem; /* Equivalent to w-1.5 (6px) */
+    }
+
+    /* Scrollbar Track (the channel the thumb moves in) */
+    &::-webkit-scrollbar-track {
+      margin-top: 1.5rem; /* Equivalent to my-6 (24px) */
+      margin-bottom: 1.5rem; /* Equivalent to my-6 (24px) */
+      background-color: transparent; /* bg-transparent */
+    }
+
+    /* Scrollbar Thumb (the draggable element) */
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(107, 114, 128, 0.4); /* bg-gray-600/40 */
+      border-radius: 9999px; /* rounded-full */
+    }
+
+    /* Dark Mode Scrollbar Thumb Style */
+    @media (prefers-color-scheme: dark) {
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(209, 213, 219, 0.4); /* dark:bg-gray-300/40 */
+      }
+    }
+
+    /* 2. Firefox Browser Standard Styles
+    -------------------------------------------
+    Firefox uses standard CSS properties but supports limited customization
+    (mainly width and color, not rounding or margin).
+  */
+
+    /* Scrollbar Thickness (thin or auto) */
+    scrollbar-width: thin;
+
+    /* Scrollbar Color (thumb color track color) */
+    /* Using an RGBA value close to the Tailwind gray-600/40 */
+    scrollbar-color: rgba(107, 114, 128, 0.4) transparent;
+  }
 }

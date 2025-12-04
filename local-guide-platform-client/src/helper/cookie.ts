@@ -1,6 +1,6 @@
 "use server";
 
-import { getDuration } from "@/utils/time_unit";
+import { getSeconds } from "@/utils/time_unit";
 import { parse } from "cookie";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -12,11 +12,11 @@ const CookieOptions = {
   sameSite: "none" as const,
   path: "/",
   // domain: process.env.COOKIE_DOMAIN, // e.g., .example.com
-  maxAge: getDuration("1d"),
+  maxAge: getSeconds("1d"),
 };
 
-const threeDays = getDuration("3d");
-const thirtyDays = getDuration("1M");
+const threeDays = getSeconds("3d");
+const thirtyDays = getSeconds("1M");
 
 //* =======================================================
 //* SET COOKIE *\\
@@ -97,7 +97,7 @@ export const setTempToken = async (response: Response) => {
         secure: true,
         sameSite: "none" as const,
         path: "/api/v1/auth/reset-forgot-password",
-        maxAge: getDuration("5m"),
+        maxAge: getSeconds("5m"),
       });
       temp_tokenSet = true;
       temp_token = parsed.temp_token;
@@ -117,7 +117,13 @@ export const setTempToken = async (response: Response) => {
 
 //* =======================================================
 //* GET COOKIE *\\
-type Key = "all" | "accessToken" | "refreshToken" | "sidebar_state";
+type Key =
+  | "all"
+  | "accessToken"
+  | "refreshToken"
+  | "sidebar_state"
+  | "temp_token"
+  | "reset_email";
 
 export async function getCookie(key?: Key): Promise<string> {
   if (!key) return (await headers()).get("cookie") ?? "";
@@ -136,7 +142,9 @@ export async function deleteCookie(key: Key, isRedirect = true): Promise<void> {
 
     // Runtime check: only allow in server context
     if (typeof window !== "undefined") {
-      throw new Error("deleteCookie can only be called in a Server Action or Route Handler.");
+      throw new Error(
+        "deleteCookie can only be called in a Server Action or Route Handler.",
+      );
     }
 
     if (key === "all") {

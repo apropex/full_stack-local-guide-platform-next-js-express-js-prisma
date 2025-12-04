@@ -16,6 +16,11 @@ interface EnvConfig {
     API_KEY: string;
     FROM: string;
   };
+
+  ACCESS_TOKEN_SECRET: string;
+  ACCESS_TOKEN_EXPIRE_TIME: string;
+  TEMP_TOKEN_SECRET: string;
+  TEMP_TOKEN_EXPIRE_TIME: string;
 }
 
 // === 1. Raw env values ===
@@ -31,6 +36,10 @@ const rawEnv = {
 
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRE_TIME: process.env.ACCESS_TOKEN_EXPIRE_TIME,
+  TEMP_TOKEN_SECRET: process.env.TEMP_TOKEN_SECRET,
+  TEMP_TOKEN_EXPIRE_TIME: process.env.TEMP_TOKEN_EXPIRE_TIME,
 } as const;
 
 // === 2. Validate at runtime (only once) ===
@@ -59,6 +68,11 @@ export const ENV = (() => {
       API_KEY: process.env.RESEND_API_KEY!,
       FROM: process.env.RESEND_FROM_EMAIL!,
     },
+
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
+    ACCESS_TOKEN_EXPIRE_TIME: process.env.ACCESS_TOKEN_EXPIRE_TIME!,
+    TEMP_TOKEN_SECRET: process.env.TEMP_TOKEN_SECRET!,
+    TEMP_TOKEN_EXPIRE_TIME: process.env.TEMP_TOKEN_EXPIRE_TIME!,
   } as Readonly<EnvConfig>;
 })();
 

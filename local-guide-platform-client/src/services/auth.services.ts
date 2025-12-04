@@ -3,17 +3,21 @@
 
 import { otpOptions } from "@/constants";
 import { routes } from "@/constants/routes";
-import { setCookies, setTempToken } from "@/helper/cookie";
+import { deleteCookie, setCookies, setTempToken } from "@/helper/cookie";
 import { errorResponse } from "@/helper/errorResponse";
 import { iResponse } from "@/interfaces";
 import { iUser } from "@/interfaces/user.interfaces";
 import { ENV } from "@/lib/config/env";
 import { _fetch } from "@/lib/custom-fetch";
+import { sendEmail } from "@/lib/email/sendEmail";
 import { join } from "@/utils";
 import { LoginPayload, ResetPasswordPayload } from "@/zod/auth.schema";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 
-export const login = async ({ email, password }: LoginPayload): Promise<iResponse<iUser>> => {
+export const login = async ({
+  email,
+  password,
+}: LoginPayload): Promise<iResponse<iUser>> => {
   try {
     const res = await fetch(join(ENV.BASE_URL, routes.auth("login")), {
       method: "POST",
@@ -23,7 +27,9 @@ export const login = async ({ email, password }: LoginPayload): Promise<iRespons
 
     if (!res.ok) {
       const errorText = await res.text();
-      return errorResponse({ message: `HTTP error ${res.status}: ${errorText} | api: /login` });
+      return errorResponse({
+        message: `HTTP error ${res.status}: ${errorText} | api: /login`,
+      });
     }
 
     await setCookies(res);
@@ -34,9 +40,14 @@ export const login = async ({ email, password }: LoginPayload): Promise<iRespons
   }
 };
 
-export const resetPassword = async ({ oldPassword, newPassword }: ResetPasswordPayload) => {
+export const resetPassword = async ({
+  oldPassword,
+  newPassword,
+}: ResetPasswordPayload) => {
   try {
-    return await _fetch.post(routes.auth("reset-password"), { data: { oldPassword, newPassword } });
+    return await _fetch.post(routes.auth("reset-password"), {
+      data: { oldPassword, newPassword },
+    });
   } catch (error) {
     return errorResponse(error);
   }
@@ -45,14 +56,26 @@ export const resetPassword = async ({ oldPassword, newPassword }: ResetPasswordP
 export const verifyUser = {
   setOtp: async (email: string) => {
     try {
-      const { success, message, data } = await _fetch.post(routes.auth("verify"), {
-        data: {
-          email,
-          option: otpOptions.setOtp,
+      const { success, message, data } = await _fetch.post(
+        routes.auth("verify"),
+        {
+          data: {
+            email,
+            option: otpOptions.setOtp,
+          },
         },
-      });
+      );
 
-      const otp = (data as any).otp; // TODO: set opt by resend
+      if (success) {
+        const otp = (data as any).otp; // TODO: set opt by resend
+
+        await sendEmail({
+          to: email,
+          subject: "Verify OTP | LASV Guides",
+          templateName: "verify_otp",
+          templateData: { otp },
+        });
+      }
 
       return { success, message };
     } catch (error) {
@@ -62,7 +85,9 @@ export const verifyUser = {
 
   verifyOtp: async (email: string, otp: string) => {
     try {
-      return await _fetch.post(routes.auth("verify"), { data: { email, option: otpOptions.verifyOtp, otp } });
+      return await _fetch.post(routes.auth("verify"), {
+        data: { email, option: otpOptions.verifyOtp, otp },
+      });
     } catch (error) {
       return errorResponse(error);
     }
@@ -72,11 +97,30 @@ export const verifyUser = {
 export const forgotPassword = {
   setOtp: async (email: string) => {
     try {
-      const { success, message, data } = await _fetch.post(routes.auth("forgot-password"), {
-        data: { email, option: otpOptions.setOtp },
-      });
+      const { success, message, data } = await _fetch.post(
+        routes.auth("forgot-password"),
+        {
+          data: { email, option: otpOptions.setOtp },
+        },
+      );
 
-      const otp = (data as any).otp; // TODO: set opt by resend
+      if (success) {
+        const otp = (data as any).otp; // TODO: set opt by resend
+
+        await sendEmail({
+          to: email,
+          subject: "Reset Password OTP | LASV Guides",
+          templateName: "passwordReset",
+          templateData: { otp },
+        });
+
+        (await cookies()).set("reset_email", email, {
+          httpOnly: true,
+          secure: true,
+          path: "/",
+          maxAge: 300, // 5 min
+        });
+      }
 
       return { success, message };
     } catch (error) {
@@ -84,17 +128,23 @@ export const forgotPassword = {
     }
   },
 
-  verifyOtp: async (email: string, otp: string) => {
+  verifyOtp: async (otp: string) => {
     try {
-      const res = await fetch(join(ENV.BASE_URL, routes.auth("forgot-password")), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, option: otpOptions.verifyOtp, otp }),
-      });
+      const email = (await cookies()).get("reset_email")?.value;
+      const res = await fetch(
+        join(ENV.BASE_URL, routes.auth("forgot-password")),
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, option: otpOptions.verifyOtp, otp }),
+        },
+      );
 
       if (!res.ok) {
         const errorText = await res.text();
-        return errorResponse({ message: `HTTP error ${res.status}: ${errorText} | api: /auth/verify` });
+        return errorResponse({
+          message: `HTTP error ${res.status}: ${errorText} | api: /auth/verify`,
+        });
       }
 
       await setTempToken(res);
@@ -109,20 +159,33 @@ export const forgotPassword = {
 export const resetForgotPassword = async (newPassword: string) => {
   try {
     const tokens = (await headers()).get("cookie") ?? "";
-    const tempToken = tokens.split(";").find((c) => c.trim().startsWith("temp_token=")) ?? "";
+    const tempToken =
+      tokens.split(";").find((c) => c.trim().startsWith("temp_token=")) ?? "";
 
-    const res = await fetch(join(ENV.BASE_URL, routes.auth("reset-forgot-password")), {
-      method: "POST",
-      headers: { "Content-Type": "application/json", cookie: tempToken },
-      body: JSON.stringify({ newPassword }),
-    });
+    const res = await fetch(
+      join(ENV.BASE_URL, routes.auth("reset-forgot-password")),
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", cookie: tempToken },
+        body: JSON.stringify({ newPassword }),
+      },
+    );
 
     if (!res.ok) {
       const errorText = await res.text();
-      return errorResponse({ message: `HTTP error ${res.status}: ${errorText} | api: /auth/reset-forgot-password` });
+      return errorResponse({
+        message: `HTTP error ${res.status}: ${errorText} | api: /auth/reset-forgot-password`,
+      });
     }
 
-    return await res.json();
+    const result = await res.json();
+
+    if (result.success) {
+      await deleteCookie("temp_token");
+      await deleteCookie("reset_email");
+    }
+
+    return;
   } catch (error) {
     return errorResponse(error);
   }
@@ -131,7 +194,8 @@ export const resetForgotPassword = async (newPassword: string) => {
 export const getAccessTokenByRefreshToken = async () => {
   try {
     const tokens = (await headers()).get("cookie") ?? "";
-    const refreshToken = tokens.split(";").find((c) => c.trim().startsWith("refreshToken=")) ?? "";
+    const refreshToken =
+      tokens.split(";").find((c) => c.trim().startsWith("refreshToken=")) ?? "";
 
     const res = await fetch(join(ENV.BASE_URL, routes.auth("refresh")), {
       method: "POST",
@@ -141,7 +205,9 @@ export const getAccessTokenByRefreshToken = async () => {
 
     if (!res.ok) {
       const errorText = await res.text();
-      return errorResponse({ message: `HTTP error ${res.status}: ${errorText} | api: /refresh` });
+      return errorResponse({
+        message: `HTTP error ${res.status}: ${errorText} | api: /refresh`,
+      });
     }
 
     await setCookies(res);

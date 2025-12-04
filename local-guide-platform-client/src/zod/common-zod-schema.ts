@@ -1,7 +1,7 @@
 import z from "zod";
 
 // password regex from above
-const PASSWORD_REGEX =
+export const PASSWORD_REGEX =
   /^(?=.{8,128}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>\/?\\|`~])[^\s]+$/;
 
 const commonPasswords = new Set([
