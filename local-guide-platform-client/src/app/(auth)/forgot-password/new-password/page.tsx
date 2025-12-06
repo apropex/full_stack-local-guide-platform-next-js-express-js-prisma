@@ -3,6 +3,7 @@ import { ENV } from "@/lib/config/env";
 import * as jwt from "jsonwebtoken";
 
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function NewPasswordPage() {
   const tokens = (await headers()).get("cookie") ?? "";
@@ -15,6 +16,7 @@ export default async function NewPasswordPage() {
     : null;
 
   if (!decoded || typeof decoded === "string") {
+    redirect("/login");
   }
 
   return (

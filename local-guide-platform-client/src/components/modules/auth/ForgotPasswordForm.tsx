@@ -1,10 +1,13 @@
 "use client";
 
+import { _alert } from "@/components/custom-toast/CustomToast";
 import { Label } from "@/components/ui/label";
 import Password from "@/components/ui/Password";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { resetForgotPassword } from "@/services/auth.services";
 import { PASSWORD_REGEX } from "@/zod/common-zod-schema";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ForgotPasswordForm() {
@@ -12,6 +15,8 @@ export default function ForgotPasswordForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!PASSWORD_REGEX.test(password)) {
@@ -21,10 +26,22 @@ export default function ForgotPasswordForm() {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setError("Password did not match with Confirm Password");
+      return;
+    }
+
     setError(null);
     setLoading(true);
 
-    //
+    const result = await resetForgotPassword(password);
+
+    if (result?.success) {
+      _alert.success("Password updated successfully!");
+      router.push("/login");
+    } else {
+      setError(result?.message ?? "Failed to update password, try again");
+    }
 
     setLoading(false);
   };

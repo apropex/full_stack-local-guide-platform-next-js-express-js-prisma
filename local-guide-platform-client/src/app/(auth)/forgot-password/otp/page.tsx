@@ -2,9 +2,12 @@
 
 import ForgotPassOTPForm from "@/components/modules/auth/ForgotPassOTPForm";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function OTPPage() {
-  const email = (await cookies()).get("reset_email")?.value ?? ""; //! TODO: remove fallback
+  const email = (await cookies()).get("reset_email")?.value ?? "";
+
+  if (!email) redirect("/forgot-password");
 
   return (
     <div className="">

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { forgotPassword } from "@/services/auth.services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,11 +23,22 @@ export default function ForgotPassword() {
       return;
     }
 
-    router.push("/forgot-password/otp");
+    setError(null);
+    setLoading(true);
+
+    const result = await forgotPassword.setOtp(email);
+
+    if (result.success) {
+      router.push("/forgot-password/otp");
+    } else {
+      setError(result.message ?? "An error occurred during sending OTP");
+    }
+
+    setLoading(false);
   };
 
   return (
-    <div className="">
+    <div>
       <div>
         <Label className="mb-1">Email</Label>
         <Input
@@ -41,6 +53,12 @@ export default function ForgotPassword() {
       {error && (
         <p className="mt-2 text-xs sm:text-sm text-red-600/90">{error}</p>
       )}
+
+      <p className="bg-amber-100/80 p-1 text-sm rounded-xs mt-4">
+        Enter a valid email address, we will send an OTP (6 digit) to this
+        email. If you do not have an account with this email, the OTP can not be
+        send.
+      </p>
 
       <div className="mt-6 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-3">
         <button

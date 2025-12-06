@@ -8,6 +8,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { forgotPassword } from "@/services/auth.services";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,6 +17,8 @@ export default function ForgotPassOTPForm({ email }: { email: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const storedEmail = email;
 
   // ---- Timer State ----
   const INITIAL_TIME = 150; // 150 seconds
@@ -60,7 +63,7 @@ export default function ForgotPassOTPForm({ email }: { email: string }) {
 
   const handleResend = async () => {
     setSeconds(INITIAL_TIME); // restart timer
-    await forgotPassword.setOtp(email);
+    await forgotPassword.setOtp(storedEmail);
   };
 
   return (
@@ -70,6 +73,13 @@ export default function ForgotPassOTPForm({ email }: { email: string }) {
           {error}
         </p>
       )}
+
+      <div className="flex text-center justify-between gap-3 flex-wrap pb-3">
+        <p>Your Email: {storedEmail}</p>
+        <Link className="text-blue-600 text-sm mr-2" href={"/forgot-password"}>
+          Edit
+        </Link>
+      </div>
 
       <InputOTP maxLength={6} value={value} onChange={setValue}>
         <InputOTPGroup>

@@ -105,7 +105,7 @@ export const forgotPassword = {
       );
 
       if (success) {
-        const otp = (data as any).otp; // TODO: set opt by resend
+        const otp = (data as any).otp;
 
         await sendEmail({
           to: email,
@@ -185,7 +185,7 @@ export const resetForgotPassword = async (newPassword: string) => {
       await deleteCookie("reset_email");
     }
 
-    return;
+    return { success: result?.success, message: result?.message };
   } catch (error) {
     return errorResponse(error);
   }

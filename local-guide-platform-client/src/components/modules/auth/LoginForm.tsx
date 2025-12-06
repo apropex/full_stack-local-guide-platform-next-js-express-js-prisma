@@ -41,6 +41,7 @@ export default function LoginForm({ dest }: { dest?: string }) {
     const result = await login({ email, password });
 
     _alert.dismiss(email);
+
     if (result.success) {
       _alert.success(
         "Welcome back to LASV Guides",

@@ -2,10 +2,16 @@
 
 import RegisterForm from "@/components/modules/auth/RegisterForm";
 
-export default function RegisterPage() {
+interface iProps {
+  searchParams?: Promise<{ dest?: string }>;
+}
+
+export default async function RegisterPage({ searchParams }: iProps) {
+  const dest = (await searchParams)?.dest;
+
   return (
     <>
-      <RegisterForm />
+      <RegisterForm dest={dest} />
     </>
   );
 }

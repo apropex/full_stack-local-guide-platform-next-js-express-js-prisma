@@ -2,10 +2,12 @@
 
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
+import { iUser } from "@/interfaces/user.interfaces";
 import { _fetch } from "@/lib/custom-fetch";
 import { join } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
 import { CreateUserPayload_server, UpdateUserPayload } from "@/zod/user.schema";
+import { login } from "./auth.services";
 
 export const createUser = async (
   payload: CreateUserPayload_server,
@@ -14,7 +16,18 @@ export const createUser = async (
   try {
     delete payload.confirmPass;
     const formData = makeFormData("data", payload, "file", file);
-    return await _fetch.post(routes.user(), { body: formData });
+    const result = await _fetch.post<iUser>(routes.user(), { body: formData });
+
+    if (result.success) {
+      const loginRes = await login({
+        email: payload.email,
+        password: payload.password,
+      });
+
+      if (loginRes.success) return loginRes;
+    }
+
+    return result;
   } catch (error) {
     return errorResponse(error);
   }
