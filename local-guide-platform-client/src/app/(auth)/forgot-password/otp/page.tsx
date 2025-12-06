@@ -4,7 +4,7 @@ import ForgotPassOTPForm from "@/components/modules/auth/ForgotPassOTPForm";
 import { cookies } from "next/headers";
 
 export default async function OTPPage() {
-  const email = (await cookies()).get("reset_email")?.value ?? ""; // TODO: remove fallback
+  const email = (await cookies()).get("reset_email")?.value ?? ""; //! TODO: remove fallback
 
   return (
     <div className="">

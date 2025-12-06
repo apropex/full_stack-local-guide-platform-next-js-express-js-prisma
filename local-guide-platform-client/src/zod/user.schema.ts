@@ -20,5 +20,15 @@ export const CreateUserSchema = z
     path: ["confirmPass"],
   });
 
+export const CreateUserSchema_server = CreateUserSchema.omit({
+  confirmPass: true,
+}).extend(z.object({ confirmPass: z.string().optional() }).shape);
+
+export const UpdateUserSchema = CreateUserSchema.omit({
+  password: true,
+  confirmPass: true,
+});
+
 export type CreateUserPayload = z.infer<typeof CreateUserSchema>;
-export type UpdateUserPayload = z.infer<typeof CreateUserSchema>; //! TODO:
+export type CreateUserPayload_server = z.infer<typeof CreateUserSchema_server>;
+export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;

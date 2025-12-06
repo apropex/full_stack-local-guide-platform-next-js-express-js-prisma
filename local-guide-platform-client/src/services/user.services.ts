@@ -5,10 +5,14 @@ import { errorResponse } from "@/helper/errorResponse";
 import { _fetch } from "@/lib/custom-fetch";
 import { join } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
-import { CreateUserPayload, UpdateUserPayload } from "@/zod/user.schema";
+import { CreateUserPayload_server, UpdateUserPayload } from "@/zod/user.schema";
 
-export const createUser = async (payload: CreateUserPayload, file: File) => {
+export const createUser = async (
+  payload: CreateUserPayload_server,
+  file: File,
+) => {
   try {
+    delete payload.confirmPass;
     const formData = makeFormData("data", payload, "file", file);
     return await _fetch.post(routes.user(), { body: formData });
   } catch (error) {
@@ -16,7 +20,11 @@ export const createUser = async (payload: CreateUserPayload, file: File) => {
   }
 };
 
-export const updateUser = async (userId: string, payload: UpdateUserPayload, file?: File) => {
+export const updateUser = async (
+  userId: string,
+  payload: UpdateUserPayload,
+  file?: File,
+) => {
   try {
     const formData = makeFormData("data", payload, "file", file);
     return await _fetch.patch(routes.user(userId), { body: formData });
