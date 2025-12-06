@@ -9,7 +9,7 @@ export default function AuthNavbar() {
 
   const isLogin = pathname === "/login";
   const isRegister = pathname === "/register";
-  const isForgot = pathname === "/forgot-password";
+  // const isForgot = pathname === "/forgot-password";
 
   return (
     <div className="p-4 md:p-8 pb-0 md:pb-0">
