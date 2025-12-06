@@ -5,7 +5,10 @@ export interface RouteConfig {
   patterns: RegExp[];
 }
 
-export const authRoutes = ["/login", "/register", "/forgot-password"];
+export const authRoutes: RouteConfig = {
+  exact: ["/login", "/register"],
+  patterns: [/^\/forgot-password(\/|$)/],
+};
 
 export const commonRoutes: RouteConfig = {
   exact: ["/my-profile"],
@@ -14,21 +17,17 @@ export const commonRoutes: RouteConfig = {
 
 export const guideRoutes: RouteConfig = {
   exact: [],
-  patterns: [/^\/guide(\/|$)/],
+  patterns: [/^\/dashboard\/guide(\/|$)/],
 };
 
 export const adminRoutes: RouteConfig = {
   exact: [],
-  patterns: [/^\/admin(\/|$)/],
+  patterns: [/^\/dashboard\/admin(\/|$)/],
 };
 
 export const touristRoutes: RouteConfig = {
   exact: [],
-  patterns: [/^\/dashboard(\/|$)/],
-};
-
-export const isAuthRoute = (pathname: string): boolean => {
-  return authRoutes.some((route: string) => route === pathname);
+  patterns: [/^\/dashboard\/tourist(\/|$)/],
 };
 
 export const isValidRoute = (
@@ -38,6 +37,10 @@ export const isValidRoute = (
   const exact = routes.exact.includes(pathname);
   const pattern = routes.patterns.some((regex) => regex.test(pathname));
   return exact || pattern || false;
+};
+
+export const isAuthRoute = (pathname: string): boolean => {
+  return isValidRoute(authRoutes, pathname);
 };
 
 export const getRouteOwner = (pathname: string): tRole | "COMMON" | null => {

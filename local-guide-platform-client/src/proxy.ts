@@ -53,6 +53,10 @@ export default async function proxy(request: NextRequest) {
 
   if (routeOwner === "COMMON") return NextResponse.next();
 
+  if (pathname === "/dashboard") {
+    return redirect(getDefaultDashboardRoute(userRole));
+  }
+
   if (
     routeOwner === "ADMIN" ||
     routeOwner === "GUIDE" ||
