@@ -2,10 +2,16 @@
 
 import LoginForm from "@/components/modules/auth/LoginForm";
 
-export default function LoginPage() {
+interface iProps {
+  searchParams?: Promise<{ dest?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: iProps) {
+  const dest = (await searchParams)?.dest;
+
   return (
     <>
-      <LoginForm />
+      <LoginForm dest={dest} />
     </>
   );
 }

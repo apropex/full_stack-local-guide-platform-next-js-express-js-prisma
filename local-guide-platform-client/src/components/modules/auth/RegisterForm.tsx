@@ -1,165 +1,309 @@
+/* eslint-disable react-hooks/incompatible-library */
 "use client";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Password from "@/components/ui/Password";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
+import { Gender } from "@/constants";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { CreateUserPayload, CreateUserSchema } from "@/zod/user.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function RegisterForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [bioLength, setBioLength] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleRegistration = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+  const form = useForm<CreateUserPayload>({
+    resolver: zodResolver(CreateUserSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      gender: Gender.MALE,
+      bio: "",
+      address: "",
+      language: "",
+      country: "Bangladesh",
+      nationality: "Bangladeshi",
+      password: "",
+      confirmPass: "",
+    },
+  });
 
-    if (!name.trim()) {
-      setError("Name is required.");
-      return;
-    }
+  const bio = form.watch("bio");
 
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+  useEffect(() => {
+    setBioLength(bio?.length ?? 0);
+  }, [bio]);
 
-    if (!passwordRegex.test(password)) {
-      setError(
-        "Password must be at least 6 characters, with letters and numbers.",
-      );
-      return;
-    }
+  function onSubmit(values: CreateUserPayload) {
+    console.log(values);
+  }
 
-    setError(null);
-    setLoading(true);
-
-    // const data = await createUser({ name, email, password });
-
-    // if (data.success) {
-    //   router.push("/login");
-    //   return;
-    // }
-
-    setLoading(false);
+  const commonInputStyles = (className?: string) => {
+    return cn(
+      "rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30 focus-visible:border-ring focus-visible:ring-rose-500/30 focus-visible:ring-[2px] focus-visible:border-rose-500/30 ",
+      className,
+    );
   };
 
   return (
     <div className="space-y-4">
-      <div className="space-y-4 overflow-y-auto max-h-[52vh] custom_scrollbar pr-2">
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
+      <Form {...form}>
+        <form
+          id="user_register_form"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 overflow-y-auto max-h-[52vh] custom_scrollbar pl-1 pr-2 pb-2"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="John Doe"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
-          />
-        </div>
+          <div className="relative">
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bio (about you)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter your bio here..."
+                      {...field}
+                      className={commonInputStyles("max-h-30")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
-          />
-        </div>
+            <span
+              className={cn(
+                "absolute right-0 top-0 text-[#4B4458]/70 text-sm",
+                {
+                  "text-red-500": bioLength > 160,
+                },
+              )}
+            >
+              {bioLength}/160
+            </span>
+          </div>
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="john@example.com"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="01800000000"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
-          />
-        </div>
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
 
-        <div>
-          <Label className="mb-1">Full Name</Label>
-          <Input
-            placeholder="John Doe"
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
-          />
-        </div>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger
+                      className={commonInputStyles(
+                        `${form.formState.errors.gender && "border-red-500"} w-full`,
+                      )}
+                    >
+                      <SelectValue placeholder="Select a gender" />
+                    </SelectTrigger>
+                  </FormControl>
 
-        <div>
-          <Label className="mb-1">Email</Label>
-          <Input
-            placeholder="john@example.com"
-            type="email"
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
-          />
-        </div>
+                  <SelectContent>
+                    <SelectItem value="MALE">Male</SelectItem>
+                    <SelectItem value="FEMALE">Female</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
 
-        <div>
-          <Label className="mb-1">Password</Label>
-          <Password
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <div>
-          <Label className="mb-1">Confirm Password</Label>
-          <Password
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            className="rounded-xs bg-white dark:bg-white text-[#4B4458] border-[#4B4458]/30"
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="street, city, state, zip"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-      </div>
+
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Language(s)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Bangla, English, Spanish"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Bangladesh"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="nationality"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nationality</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Bangladeshi"
+                    {...field}
+                    className={commonInputStyles()}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Password {...field} className={commonInputStyles()} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="confirmPass"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Password {...field} className={commonInputStyles()} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/*  */}
+        </form>
+      </Form>
 
       {error && <p className="text-xs sm:text-sm text-red-600/90">{error}</p>}
 
-      <div className="flex justify-end">
+      <div className="flex justify-end pr-2">
         <button
+          form="user_register_form"
           type="submit"
-          onClick={handleRegistration}
           disabled={loading}
           className={cn(
             "bg-rose-500 text-white hover:bg-rose-600 py-2 w-44 rounded-xs flex justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-default",

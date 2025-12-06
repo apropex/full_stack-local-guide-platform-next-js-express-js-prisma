@@ -1,76 +1,69 @@
 "use client";
 
+import { _alert } from "@/components/custom-toast/CustomToast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Password from "@/components/ui/Password";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { login } from "@/services/auth.services";
 
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function LoginForm() {
+export default function LoginForm({ dest }: { dest?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const router = useRouter();
 
   const handleLogin = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      setError(
-        "Password must be at least 6 characters, with letters and numbers.",
-      );
+    if (!password.trim()) {
+      setError("Please enter a password, password is required.");
       return;
     }
 
+    _alert.loading("Trying to logging in", { id: email });
+
     setError(null);
     setLoading(true);
-    setSuccess(false);
 
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+    const result = await login({ email, password });
 
-      if (result?.ok) {
-        setSuccess(true);
-        router.refresh();
-        // router.push("/");
-      }
-
-      if (result?.error) {
-        setError("Invalid email or password");
-      }
-    } catch (error) {
+    _alert.dismiss(email);
+    if (result.success) {
+      _alert.success(
+        "Welcome back to LASV Guides",
+        "You've logged in successfully",
+      );
+      router.push(dest ?? "/");
+    } else {
+      _alert.error(
+        "We are sorry to say that, an error occurred during login",
+        "Try again later or contact to support",
+      );
       console.log(error);
-      setError("An error occurred during login");
-    } finally {
-      setLoading(false);
+      setError(
+        result.message ??
+          "We are sorry to say that, an error occurred during login. Try again later or contact to support",
+      );
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="space-y-4">
-      {success && (
-        <p className="bg-green-600 text-white py-1 px-1.5 rounded">
-          Logged in successfully! wait a few seconds to redirect
-        </p>
-      )}
       <div>
         <Label className="mb-1">Email</Label>
         <Input

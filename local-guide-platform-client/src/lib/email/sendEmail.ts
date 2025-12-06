@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import path from "path";
 import { Resend } from "resend";
 import "server-only";
-import { fileURLToPath } from "url";
 import { ENV } from "../config/env";
 import { AppError } from "../errors/AppError";
 
-// ESM - __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Template map: templateName → React Component
+// Template map: templateName → filename (NOT absolute path)
 const templates = {
-  verify_otp: path.resolve(__dirname, "templates/verify_otp.tsx"),
-  tour_invoice: path.resolve(__dirname, "templates/tour_invoice.tsx"),
-  passwordReset: path.resolve(__dirname, "templates/passwordReset.tsx"),
+  verify_otp: "verify_otp.tsx",
+  tour_invoice: "tour_invoice.tsx",
+  passwordReset: "passwordReset.tsx",
 } as const;
 
 type TemplateName = keyof typeof templates;
@@ -29,15 +23,22 @@ interface SendEmailParams {
 
 const resend = new Resend(ENV.RESEND.API_KEY);
 
-export const sendEmail = async ({ to, subject, templateName, templateData }: SendEmailParams): Promise<void> => {
+export const sendEmail = async ({
+  to,
+  subject,
+  templateName,
+  templateData,
+}: SendEmailParams): Promise<void> => {
   try {
-    // Dynamic import template
-    const templatePath = templates[templateName];
-    if (!templatePath) {
+    const filename = templates[templateName];
+    if (!filename) {
       throw new AppError(400, `Template ${templateName} not found`);
     }
 
-    const { default: TemplateComponent } = await import(templatePath);
+    // ✅ FIX: Use relative dynamic import instead of absolute path
+    const { default: TemplateComponent } = await import(
+      `./templates/${filename}`
+    );
 
     const { data, error } = await resend.emails.send({
       from: ENV.RESEND.FROM,
@@ -62,6 +63,8 @@ export const sendEmail = async ({ to, subject, templateName, templateData }: Sen
       to,
       templateName,
     });
-    throw error instanceof AppError ? error : new AppError(500, "Email sending failed");
+    throw error instanceof AppError
+      ? error
+      : new AppError(500, "Email sending failed");
   }
 };

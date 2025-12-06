@@ -170,3 +170,33 @@
     scrollbar-color: rgba(107, 114, 128, 0.4) transparent;
   }
 }
+
+@keyframes enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes leave {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+.animate-enter {
+  animation: enter 0.22s ease-out;
+}
+
+.animate-leave {
+  animation: leave 0.18s ease-in forwards;
+}
