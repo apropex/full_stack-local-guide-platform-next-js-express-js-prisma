@@ -2,7 +2,7 @@
 
 import { tRole } from "@/constants";
 import { routes } from "@/constants/routes";
-import { deleteCookie, setCookies } from "@/helper/cookie";
+import { deleteCookie, getCookie, setCookies } from "@/helper/cookie";
 import mergeApi from "@/utils/merge-api";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { ENV } from "../config/env";
@@ -70,4 +70,20 @@ export async function setAccessTokenByRefreshToken(
     await deleteCookie("all", isRedirect);
     return null;
   }
+}
+
+// Function overload signatures:
+export function getUserFromJwt(): Promise<JwtPayload | null>;
+export function getUserFromJwt<K extends keyof JwtPayload>(
+  key: K,
+): Promise<JwtPayload[K] | null>;
+
+// Actual implementation:
+export async function getUserFromJwt<K extends keyof JwtPayload>(
+  key?: K,
+): Promise<JwtPayload | JwtPayload[K] | null> {
+  const accessToken = await getCookie("accessToken");
+  const decoded = await checkToken(accessToken, "access");
+  if (!decoded) return null;
+  return key ? decoded[key] : decoded;
 }

@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/Providers/theme-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -24,31 +25,39 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-          gutter={8}
-          toastOptions={{
-            duration: 2800,
-            className:
-              "bg-neutral-900 text-white border border-neutral-800 rounded-xl px-4 py-3 shadow-xl",
-            success: {
-              icon: "✨",
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            gutter={8}
+            toastOptions={{
+              duration: 2800,
               className:
-                "bg-neutral-900 text-green-400 border border-neutral-800 px-4 py-3 rounded-xl",
-            },
-            error: {
-              icon: "❌",
-              className:
-                "bg-neutral-900 text-red-400 border border-neutral-800 px-4 py-3 rounded-xl",
-            },
-          }}
-        />
+                "bg-neutral-900 text-white border border-neutral-800 rounded-xl px-4 py-3 shadow-xl",
+              success: {
+                icon: "✨",
+                className:
+                  "bg-neutral-900 text-green-400 border border-neutral-800 px-4 py-3 rounded-xl",
+              },
+              error: {
+                icon: "❌",
+                className:
+                  "bg-neutral-900 text-red-400 border border-neutral-800 px-4 py-3 rounded-xl",
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

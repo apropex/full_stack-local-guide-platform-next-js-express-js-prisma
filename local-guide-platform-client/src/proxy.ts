@@ -3,10 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tRole } from "./constants";
 import { deleteCookie, getCookie } from "./helper/cookie";
-import {
-  checkToken,
-  setAccessTokenByRefreshToken,
-} from "./lib/jwt/check-token";
+import { checkToken, setAccessTokenByRefreshToken } from "./lib/jwt/jwt";
 import {
   getDefaultDashboardRoute,
   getRouteOwner,

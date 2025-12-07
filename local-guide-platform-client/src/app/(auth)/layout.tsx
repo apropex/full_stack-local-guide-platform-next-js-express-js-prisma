@@ -1,7 +1,7 @@
 import { iChildren } from "@/interfaces";
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
-import AuthNavbar from "../../components/shared/auth-navbar/AuthNavbar";
+import AuthNavbar from "../../components/shared/navbar/auth-navbar/AuthNavbar";
 
 export default function AuthLayout({ children }: iChildren) {
   return (

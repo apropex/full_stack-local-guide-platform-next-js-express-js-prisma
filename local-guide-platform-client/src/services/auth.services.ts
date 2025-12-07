@@ -40,6 +40,18 @@ export const login = async ({
   }
 };
 
+export const logout = async (): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    await deleteCookie("all");
+    return { success: true };
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
+
 export const resetPassword = async ({
   oldPassword,
   newPassword,
