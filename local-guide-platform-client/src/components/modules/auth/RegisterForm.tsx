@@ -74,6 +74,8 @@ export default function RegisterForm({ dest }: { dest?: string }) {
 
     const result = await createUser(values, file);
 
+    console.log(result);
+
     _alert.dismiss(values.email);
     if (!result.success) {
       _alert.error(
@@ -109,7 +111,7 @@ export default function RegisterForm({ dest }: { dest?: string }) {
         </p>
       )}
 
-      <div className="space-y-4 overflow-y-auto max-h-[52vh] custom_scrollbar pl-1 pr-2 pb-2">
+      <div className="space-y-4 overflow-y-auto max-h-[52vh] custom_scrollbar pl-1 pr-2 py-2">
         <AvatarUpload setAvatar={setFile} />
 
         <Form {...form}>

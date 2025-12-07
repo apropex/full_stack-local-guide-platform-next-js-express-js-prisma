@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { forgotPassword } from "@/services/auth.services";
+import { forgotPasswordSetOtp } from "@/services/auth.services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,7 +26,7 @@ export default function ForgotPassword() {
     setError(null);
     setLoading(true);
 
-    const result = await forgotPassword.setOtp(email);
+    const result = await forgotPasswordSetOtp(email);
 
     if (result.success) {
       router.push("/forgot-password/otp");

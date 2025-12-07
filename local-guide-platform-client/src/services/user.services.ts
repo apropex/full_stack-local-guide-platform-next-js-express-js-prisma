@@ -24,6 +24,7 @@ export const createUser = async (
         password: payload.password,
       });
 
+      console.log("result form backend", result, loginRes);
       if (loginRes.success) return loginRes;
     }
 

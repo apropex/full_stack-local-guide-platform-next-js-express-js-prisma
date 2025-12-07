@@ -45,7 +45,7 @@ export const logout = async (): Promise<{
   message?: string;
 }> => {
   try {
-    await deleteCookie("all");
+    await deleteCookie("all", false);
     return { success: true };
   } catch (error) {
     return errorResponse(error);
@@ -65,107 +65,103 @@ export const resetPassword = async ({
   }
 };
 
-export const verifyUser = {
-  setOtp: async (email: string) => {
-    try {
-      const { success, message, data } = await _fetch.post(
-        routes.auth("verify"),
-        {
-          data: {
-            email,
-            option: otpOptions.setOtp,
-          },
+export const verifyUserSetOtp = async (email: string) => {
+  try {
+    const { success, message, data } = await _fetch.post(
+      routes.auth("verify"),
+      {
+        data: {
+          email,
+          option: otpOptions.setOtp,
         },
-      );
+      },
+    );
 
-      if (success) {
-        const otp = (data as any).otp; // TODO: set opt by resend
+    if (success) {
+      const otp = (data as any).otp; // TODO: set opt by resend
 
-        await sendEmail({
-          to: email,
-          subject: "Verify OTP | LASV Guides",
-          templateName: "verify_otp",
-          templateData: { otp },
-        });
-      }
-
-      return { success, message };
-    } catch (error) {
-      return errorResponse(error);
-    }
-  },
-
-  verifyOtp: async (email: string, otp: string) => {
-    try {
-      return await _fetch.post(routes.auth("verify"), {
-        data: { email, option: otpOptions.verifyOtp, otp },
+      await sendEmail({
+        to: email,
+        subject: "Verify OTP | LASV Guides",
+        templateName: "verify_otp",
+        templateData: { otp },
       });
-    } catch (error) {
-      return errorResponse(error);
     }
-  },
+
+    return { success, message };
+  } catch (error) {
+    return errorResponse(error);
+  }
 };
 
-export const forgotPassword = {
-  setOtp: async (email: string) => {
-    try {
-      const { success, message, data } = await _fetch.post(
-        routes.auth("forgot-password"),
-        {
-          data: { email, option: otpOptions.setOtp },
-        },
-      );
+export const verifyUserVerifyOtp = async (email: string, otp: string) => {
+  try {
+    return await _fetch.post(routes.auth("verify"), {
+      data: { email, option: otpOptions.verifyOtp, otp },
+    });
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
 
-      if (success) {
-        const otp = (data as any).otp;
+export const forgotPasswordSetOtp = async (email: string) => {
+  try {
+    const { success, message, data } = await _fetch.post(
+      routes.auth("forgot-password"),
+      {
+        data: { email, option: otpOptions.setOtp },
+      },
+    );
 
-        await sendEmail({
-          to: email,
-          subject: "Reset Password OTP | LASV Guides",
-          templateName: "passwordReset",
-          templateData: { otp },
-        });
+    if (success) {
+      const otp = (data as any).otp;
 
-        (await cookies()).set("reset_email", email, {
-          httpOnly: true,
-          secure: true,
-          path: "/",
-          maxAge: 300, // 5 min
-        });
-      }
+      await sendEmail({
+        to: email,
+        subject: "Reset Password OTP | LASV Guides",
+        templateName: "passwordReset",
+        templateData: { otp },
+      });
 
-      return { success, message };
-    } catch (error) {
-      return errorResponse(error);
+      (await cookies()).set("reset_email", email, {
+        httpOnly: true,
+        secure: true,
+        path: "/",
+        maxAge: 300, // 5 min
+      });
     }
-  },
 
-  verifyOtp: async (otp: string) => {
-    try {
-      const email = (await cookies()).get("reset_email")?.value;
-      const res = await fetch(
-        join(ENV.BASE_URL, routes.auth("forgot-password")),
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, option: otpOptions.verifyOtp, otp }),
-        },
-      );
+    return { success, message };
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        return errorResponse({
-          message: `HTTP error ${res.status}: ${errorText} | api: /auth/verify`,
-        });
-      }
+export const forgotPasswordVerifyOtp = async (otp: string) => {
+  try {
+    const email = (await cookies()).get("reset_email")?.value;
+    const res = await fetch(
+      join(ENV.BASE_URL, routes.auth("forgot-password")),
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, option: otpOptions.verifyOtp, otp }),
+      },
+    );
 
-      await setTempToken(res);
-
-      return await res.json();
-    } catch (error) {
-      return errorResponse(error);
+    if (!res.ok) {
+      const errorText = await res.text();
+      return errorResponse({
+        message: `HTTP error ${res.status}: ${errorText} | api: /auth/verify`,
+      });
     }
-  },
+
+    await setTempToken(res);
+
+    return await res.json();
+  } catch (error) {
+    return errorResponse(error);
+  }
 };
 
 export const resetForgotPassword = async (newPassword: string) => {

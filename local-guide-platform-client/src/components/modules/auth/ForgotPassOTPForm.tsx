@@ -7,7 +7,10 @@ import {
 } from "@/components/ui/input-otp";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { forgotPassword } from "@/services/auth.services";
+import {
+  forgotPasswordSetOtp,
+  forgotPasswordVerifyOtp,
+} from "@/services/auth.services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,7 +55,7 @@ export default function ForgotPassOTPForm({ email }: { email: string }) {
     setError(null);
     setLoading(true);
 
-    const result = await forgotPassword.verifyOtp(value);
+    const result = await forgotPasswordVerifyOtp(value);
 
     if (result.success) {
       router.push("/forgot-password/new-password");
@@ -63,7 +66,7 @@ export default function ForgotPassOTPForm({ email }: { email: string }) {
 
   const handleResend = async () => {
     setSeconds(INITIAL_TIME); // restart timer
-    await forgotPassword.setOtp(storedEmail);
+    await forgotPasswordSetOtp(storedEmail);
   };
 
   return (

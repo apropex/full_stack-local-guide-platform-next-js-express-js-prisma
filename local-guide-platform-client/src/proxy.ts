@@ -33,9 +33,12 @@ export default async function proxy(request: NextRequest) {
 
   // 2. If no valid access token, try refresh token
   if (!userRole && refreshToken) {
-    const role = await setAccessTokenByRefreshToken(refreshToken);
-    if (role) userRole = role;
-    else return redirect("/login");
+    const result = await setAccessTokenByRefreshToken(refreshToken);
+    if (result.success && result.accessToken) {
+      const decoded = await checkToken(result.accessToken, "access");
+      if (!decoded) return redirect("/login");
+      userRole = decoded.role;
+    } else return redirect("/login");
   }
 
   if (isAuthRoute(pathname) && userRole) {

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/*
 import { setCookies } from "@/helper/cookie";
 import { iUser } from "@/interfaces/user.interfaces";
 import { ENV } from "@/lib/config/env";
@@ -78,3 +80,4 @@ export const authOptions: NextAuthOptions = {
     error: "/login",
   },
 };
+*/

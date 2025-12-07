@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { tRole } from "@/constants";
 import { routes } from "@/constants/routes";
 import { deleteCookie, getCookie, setCookies } from "@/helper/cookie";
 import mergeApi from "@/utils/merge-api";
@@ -39,7 +38,11 @@ export const checkToken = async (
 export async function setAccessTokenByRefreshToken(
   refreshToken: string,
   isRedirect = false,
-): Promise<tRole | null> {
+): Promise<{
+  success: boolean;
+  accessToken?: string;
+  refreshToken?: string | null;
+}> {
   try {
     const response = await fetch(mergeApi(routes.auth("refresh")), {
       method: "POST",
@@ -50,25 +53,24 @@ export async function setAccessTokenByRefreshToken(
 
     if (!response.ok) {
       await deleteCookie("all", isRedirect);
-      return null;
+      return { success: false };
     }
 
     const result = await setCookies(response);
+
     if (!result.success || !result.accessToken) {
       await deleteCookie("all", isRedirect);
-      return null;
+      return { success: false };
     }
 
-    const decoded = await checkToken(result.accessToken, "access");
-    if (!decoded?.role) {
-      await deleteCookie("accessToken", isRedirect);
-      return null;
-    }
-
-    return decoded.role as tRole;
+    return {
+      success: true,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+    };
   } catch {
     await deleteCookie("all", isRedirect);
-    return null;
+    return { success: false };
   }
 }
 

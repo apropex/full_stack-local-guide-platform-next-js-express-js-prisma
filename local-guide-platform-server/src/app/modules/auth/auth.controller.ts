@@ -130,12 +130,14 @@ export const getAccessTokenByRefreshToken = catchAsync(async (req, res) => {
     setCookie.clearCookies(res);
     throw new ApiError(sCode.UNAUTHORIZED, "User not found");
   }
-  if (!user.isDeleted) {
+
+  if (user.isDeleted) {
     throw new ApiError(
       sCode.BAD_REQUEST,
       "User account was deleted, contact to support",
     );
   }
+
   if (user.status === UserStatus.BANNED) {
     throw new ApiError(
       sCode.BAD_REQUEST,

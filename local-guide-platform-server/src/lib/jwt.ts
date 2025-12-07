@@ -23,6 +23,7 @@ const payloadMaker = (user: iJwtPayloadMaker) => {
   if (user.admin) payload.adminId = user.admin.id;
 
   if (user.id) payload.id = user.id;
+  if (user.role) payload.role = user.role;
   if (user.name) payload.name = user.name;
   if (user.email) payload.email = user.email;
   if (user.phone) payload.phone = user.phone;
