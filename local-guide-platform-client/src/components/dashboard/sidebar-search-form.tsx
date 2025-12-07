@@ -1,0 +1,23 @@
+import { Label } from "@/components/ui/label";
+import { SidebarGroup, SidebarGroupContent, SidebarInput } from "@/components/ui/sidebar";
+import { Search } from "lucide-react";
+
+export function SidebarSearchForm({ ...props }: React.ComponentProps<"form">) {
+  return (
+    <form {...props} className="w-full max-w-xs md:max-w-xl">
+      <SidebarGroup className="py-0 ">
+        <SidebarGroupContent className="relative">
+          <Label htmlFor="search" className="sr-only">
+            Search
+          </Label>
+          <SidebarInput
+            id="search"
+            placeholder="Search the docs..."
+            className="pl-8 w-full"
+          />
+          <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </form>
+  );
+}
