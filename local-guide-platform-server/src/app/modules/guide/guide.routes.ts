@@ -9,9 +9,9 @@ import { GuideSchema } from "./guide.validation";
 
 const router = Router();
 
-router.get("/:id", roleVerifier(adminAccess), guideController.getGuideById);
-
 router.get("/all", roleVerifier(adminAccess), guideController.getAllGuides);
+
+router.get("/:id", roleVerifier(adminAccess), guideController.getGuideById);
 
 router.post(
   "/",

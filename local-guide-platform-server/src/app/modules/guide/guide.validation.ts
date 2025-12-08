@@ -1,4 +1,5 @@
 import z from "zod";
+import { VerificationDocs } from "../../../shared/common-zod-schema";
 
 export const GuideSchema = z.object({
   expertise: z.array(z.string()).optional(),
@@ -11,7 +12,7 @@ export const GuideSchema = z.object({
   country: z.string(),
   dailyRate: z.number({ error: "Daily rate must be number type" }),
   hourlyRate: z.number({ error: "Hourly rate must be number type" }),
-  verificationDocs: z.array(z.string()).optional(),
+  verificationDocs: VerificationDocs.optional(),
   dob: z.string(),
   nid: z.string(),
 });

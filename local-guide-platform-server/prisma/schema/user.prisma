@@ -67,8 +67,8 @@ model Guide {
   dailyRate  Float
   hourlyRate Float
 
-  isVerifiedGuide  Boolean  @default(false)
-  verificationDocs String[]
+  isVerifiedGuide  Boolean @default(false)
+  verificationDocs Json?
 
   dob DateTime
   nid String
@@ -94,7 +94,7 @@ model Admin {
 
   permissions      String[] // MANAGE_USERS, DELETE_TOURS etc.
   isVerifiedAdmin  Boolean  @default(false)
-  verificationDocs String[]
+  verificationDocs Json?
 
   createdAt DateTime @default(now())
 

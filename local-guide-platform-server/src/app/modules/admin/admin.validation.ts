@@ -1,7 +1,8 @@
 import z from "zod";
+import { VerificationDocs } from "../../../shared/common-zod-schema";
 
 export const AdminSchema = z.object({
-  verificationDocs: z.array(z.string()).optional(),
+  verificationDocs: VerificationDocs.optional(),
   dob: z.string(),
   nid: z.string(),
 });

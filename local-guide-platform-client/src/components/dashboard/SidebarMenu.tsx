@@ -5,6 +5,8 @@ import { join } from "@/utils";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import CreateAdminForm from "../modules/Admin/adminManagement/CreateAdminForm";
+import CreateGuideForm from "../modules/Admin/guideManagement/CreateGuideForm";
 import {
   Collapsible,
   CollapsibleContent,
@@ -86,6 +88,15 @@ export default function SidebarMenuComponent({ role }: { role: tRole }) {
           </SidebarGroup>
         </Collapsible>
       ))}
+
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <CreateAdminForm />
+            <CreateGuideForm />
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
     </>
   );
 }

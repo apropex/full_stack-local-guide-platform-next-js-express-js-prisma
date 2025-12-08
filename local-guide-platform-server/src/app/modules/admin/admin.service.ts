@@ -1,4 +1,4 @@
-import { Admin, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import ApiError from "../../../lib/ApiError";
 import prisma from "../../../lib/prisma";
 import { iQuery } from "../../../shared/global-query-interfaces";
@@ -10,7 +10,10 @@ import { parseValidDate } from "../../../utils/dateCustomization";
 import { adminFilterFields, adminSearchFields } from "./admin.constants";
 
 //* CREATE A NEW GUIDE *\\
-export const createAdmin = async (userId: string, payload: Admin) => {
+export const createAdmin = async (
+  userId: string,
+  payload: Prisma.AdminCreateInput,
+) => {
   const existingAdmin = await prisma.admin.findUnique({
     where: { userId },
   });

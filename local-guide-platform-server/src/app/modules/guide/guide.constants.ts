@@ -11,7 +11,6 @@ export const guideFilterFields: iGuide = [
   "dailyRate",
   "hourlyRate",
   "isVerifiedGuide",
-  "verificationDocs",
   "dob",
   "averageRating",
   "totalReviews",

@@ -24,7 +24,7 @@ export default function CustomButton({
     >
       {Icon && !iconRight && <Icon className={iconClass} />}
       {children && (
-        <span className={cn("inline-block mt-0.5", textClass)}>{children}</span>
+        <span className={cn("inline-block", textClass)}>{children}</span>
       )}
       {Icon && iconRight && <Icon className={iconClass} />}
     </Button>

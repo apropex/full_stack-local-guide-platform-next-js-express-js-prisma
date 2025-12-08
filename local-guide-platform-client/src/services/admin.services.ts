@@ -6,16 +6,40 @@ import { join } from "@/utils";
 import { AdminPayload } from "@/zod/admin.schema";
 
 export const createAdmin = async (payload: AdminPayload) => {
+  const { father, fathersNid, ...rest } = payload;
+
+  const verificationDocs = {
+    father: father ?? "",
+    fathersNid: fathersNid ?? "",
+  };
+
   try {
-    return await _fetch.post(routes.admin(), { data: payload });
+    return await _fetch.post(routes.admin(), {
+      data: {
+        ...rest,
+        verificationDocs,
+      },
+    });
   } catch (error) {
     return errorResponse(error);
   }
 };
 
 export const updateAdmin = async (adminId: string, payload: AdminPayload) => {
+  const { father, fathersNid, ...rest } = payload;
+
+  const verificationDocs = {
+    father: father ?? "",
+    fathersNid: fathersNid ?? "",
+  };
+
   try {
-    return await _fetch.patch(routes.admin(adminId), { data: payload });
+    return await _fetch.patch(routes.admin(adminId), {
+      data: {
+        ...rest,
+        verificationDocs,
+      },
+    });
   } catch (error) {
     return errorResponse(error);
   }

@@ -40,12 +40,12 @@ export default function LoadingButton({
               <Loader className={cn("animate-spin", iconClass)} />
             )}
           </span>
-          <span className="inline-block mt-1">{loadingText}</span>
+          <span className="inline-block ">{loadingText}</span>
         </>
       ) : (
         <>
           {Icon && !iconRight && <Icon className={iconClass} />}
-          <span className="inline-block mt-1">{children}</span>
+          <span className="inline-block ">{children}</span>
           {Icon && iconRight && <Icon className={iconClass} />}
         </>
       )}

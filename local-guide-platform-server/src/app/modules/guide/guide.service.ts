@@ -1,4 +1,4 @@
-import { Guide, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import ApiError from "../../../lib/ApiError";
 import prisma from "../../../lib/prisma";
 import { iQuery } from "../../../shared/global-query-interfaces";
@@ -14,7 +14,10 @@ import {
 } from "./guide.constants";
 
 //* CREATE A NEW GUIDE *\\
-export const createGuide = async (userId: string, payload: Guide) => {
+export const createGuide = async (
+  userId: string,
+  payload: Prisma.GuideCreateInput,
+) => {
   const existingGuide = await prisma.guide.findUnique({
     where: { userId },
   });
@@ -72,7 +75,6 @@ export const getAllGuides = async (query: iQuery) => {
   const {
     expertise,
     languages,
-    verificationDocs,
     experienceYears,
     dailyRate,
     hourlyRate,
@@ -100,12 +102,6 @@ export const getAllGuides = async (query: iQuery) => {
       .split(" ")
       .filter((s) => s.trim().length > 0);
     where.AND.push({ languages: { hasSome: languagesArray } });
-  }
-  if (verificationDocs && typeof verificationDocs === "string") {
-    const verificationDocsArray = verificationDocs
-      .split(" ")
-      .filter((s) => s.trim().length > 0);
-    where.AND.push({ verificationDocs: { hasSome: verificationDocsArray } });
   }
   if (experienceYears && typeof experienceYears === "number") {
     where.AND.push({ experienceYears: { gte: experienceYears } });

@@ -38,3 +38,8 @@ export const DateSchema = z
 
 // const a = DateSchema.parse("2024-12-03"); // OK
 // const b = DateSchema.parse("abc");        // throws
+
+export const VerificationDocs = z.object({
+  father: z.string().min(1, "Father name is required"),
+  fathersNid: z.string().min(1, "Father's NID is required"),
+});

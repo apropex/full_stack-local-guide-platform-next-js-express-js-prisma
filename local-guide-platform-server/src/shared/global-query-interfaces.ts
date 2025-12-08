@@ -47,7 +47,6 @@ export interface iGuideSearchQuery extends iPaginationAndSearchQuery {
   dailyRate: string;
   hourlyRate: string;
   isVerifiedGuide: string;
-  verificationDocs: string;
   dob: string;
   nid: string;
   averageRating: string;
