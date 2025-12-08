@@ -7,9 +7,13 @@ interface UserInfoCellProps {
   avatar?: string;
 }
 
-export default function UserInfoCell({ name, email, avatar }: UserInfoCellProps) {
+export default function UserInfoCell({
+  name,
+  email,
+  avatar,
+}: UserInfoCellProps) {
   return (
-    <div className="flex text-center justify-start gap-1 w-auto">
+    <div className="flex items-center justify-start gap-1.5 w-auto">
       {avatar ? (
         <Image
           placeholder="blur"

@@ -1,11 +1,15 @@
 "use client";
 
-import { tUserRole } from "@/constants";
-import join from "@/utility/joinText";
+import { tRole } from "@/constants";
+import { join } from "@/utils";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -16,13 +20,17 @@ import {
 } from "../ui/sidebar";
 import SidebarRoutes from "./SidebarRoutes";
 
-export default function SidebarMenuComponent({ role }: { role: tUserRole }) {
+export default function SidebarMenuComponent({ role }: { role: tRole }) {
   const pathname = usePathname();
   const routes = SidebarRoutes(role);
 
   const isActive = (url: string): boolean => {
     if (pathname === url) return true;
-    return url !== "/admin/dashboard" && pathname.startsWith(url);
+    return (
+      !["/dashboard/admin", "/dashboard/guide", "/dashboard/tourist"].includes(
+        url,
+      ) && pathname.startsWith(url)
+    );
   };
 
   return (

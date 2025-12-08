@@ -52,9 +52,10 @@ export const getRouteOwner = (pathname: string): tRole | "COMMON" | null => {
 };
 
 export const getDefaultDashboardRoute = (role: tRole): string => {
-  if (role === "ADMIN") return "/admin/dashboard";
-  if (role === "GUIDE") return "/guide/dashboard";
-  if (role === "TOURIST") return "/dashboard";
+  if (role === "ADMIN") return "/dashboard/admin";
+  if (role === "SUPER_ADMIN") return "/dashboard/admin";
+  if (role === "GUIDE") return "/dashboard/guide";
+  if (role === "TOURIST") return "/dashboard/tourist";
 
   return "/";
 };

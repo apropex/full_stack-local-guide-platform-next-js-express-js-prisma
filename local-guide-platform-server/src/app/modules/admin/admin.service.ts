@@ -75,8 +75,13 @@ export const getAllAdmins = async (query: iQuery) => {
     where.AND.push({ dob: { gte: validDob } });
   }
 
+  const include = {
+    user: { include: { avatar: true } },
+    verifier: { include: { user: true } },
+  };
+
   const [admins, total_records, filtered_records] = await Promise.all([
-    prisma.admin.findMany({ where, orderBy, skip, take }),
+    prisma.admin.findMany({ where, orderBy, skip, take, include }),
     prisma.admin.count(),
     prisma.admin.count({ where }),
   ]);

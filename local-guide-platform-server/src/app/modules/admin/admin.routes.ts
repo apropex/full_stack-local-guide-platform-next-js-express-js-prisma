@@ -9,9 +9,8 @@ import { AdminSchema } from "./admin.validation";
 
 const router = Router();
 
-router.get("/:id", roleVerifier(adminAccess), adminController.getAdminById);
-
 router.get("/all", roleVerifier(adminAccess), adminController.getAllAdmins);
+router.get("/:id", roleVerifier(adminAccess), adminController.getAdminById);
 
 router.post(
   "/",

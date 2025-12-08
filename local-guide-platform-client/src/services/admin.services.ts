@@ -1,5 +1,6 @@
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
+import { iAdmin } from "@/interfaces/user.interfaces";
 import { _fetch } from "@/lib/custom-fetch";
 import { join } from "@/utils";
 import { AdminPayload } from "@/zod/admin.schema";
@@ -31,7 +32,7 @@ export const getAdminById = async (adminId: string) => {
 export const getAllAdmins = async (query?: string) => {
   try {
     const api = join(routes.admin("all"), query ? join("?", query) : "");
-    return await _fetch.get(api);
+    return await _fetch.get<iAdmin[]>(api);
   } catch (error) {
     return errorResponse(error);
   }

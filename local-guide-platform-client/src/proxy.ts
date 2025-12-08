@@ -47,15 +47,18 @@ export default async function proxy(request: NextRequest) {
 
   const routeOwner = getRouteOwner(pathname);
 
-  if (routeOwner === null) return NextResponse.next();
+  if (routeOwner === null) {
+    if (pathname === "/dashboard" && userRole) {
+      return redirect(getDefaultDashboardRoute(userRole));
+    }
+
+    return NextResponse.next();
+  }
 
   if (!userRole) return redirect("/login");
 
+  if (userRole === "SUPER_ADMIN") return NextResponse.next();
   if (routeOwner === "COMMON") return NextResponse.next();
-
-  if (pathname === "/dashboard") {
-    return redirect(getDefaultDashboardRoute(userRole));
-  }
 
   if (
     routeOwner === "ADMIN" ||
