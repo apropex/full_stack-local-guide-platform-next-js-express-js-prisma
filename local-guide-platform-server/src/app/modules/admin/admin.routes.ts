@@ -34,4 +34,10 @@ router.patch(
   adminController.verifyGuide,
 );
 
+router.patch(
+  "/verify-admin/:id",
+  roleVerifier(adminAccess),
+  adminController.verifyAdmin,
+);
+
 export default router;

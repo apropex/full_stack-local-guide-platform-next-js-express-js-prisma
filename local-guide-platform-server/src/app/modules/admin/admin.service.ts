@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Role } from "@prisma/client";
 import ApiError from "../../../lib/ApiError";
 import prisma from "../../../lib/prisma";
 import { iQuery } from "../../../shared/global-query-interfaces";
@@ -112,6 +112,7 @@ export const getAllAdmins = async (query: iQuery) => {
 export const verifyGuide = async (guideId: string, adminId: string) => {
   const guide = await prisma.guide.findUniqueOrThrow({
     where: { id: guideId },
+    include: { user: true },
   });
 
   if (guide.isVerifiedGuide === true) {
@@ -121,8 +122,42 @@ export const verifyGuide = async (guideId: string, adminId: string) => {
     });
   }
 
-  return await prisma.guide.update({
-    where: { id: guide.id },
-    data: { isVerifiedGuide: true, verifierId: adminId },
+  return await prisma.$transaction(async (trx) => {
+    trx.user.update({
+      where: { id: guide.user.id },
+      data: { role: Role.GUIDE },
+    });
+
+    return await trx.guide.update({
+      where: { id: guide.id },
+      data: { isVerifiedGuide: true, verifierId: adminId },
+    });
+  });
+};
+
+//* VERIFY ADMIN *\\
+export const verifyAdmin = async (rAdminId: string, adminId: string) => {
+  const admin = await prisma.admin.findUniqueOrThrow({
+    where: { id: rAdminId },
+    include: { user: true },
+  });
+
+  if (admin.isVerifiedAdmin === true) {
+    return await prisma.admin.update({
+      where: { id: admin.id },
+      data: { isVerifiedAdmin: false },
+    });
+  }
+
+  return await prisma.$transaction(async (trx) => {
+    trx.user.update({
+      where: { id: admin.user.id },
+      data: { role: Role.ADMIN },
+    });
+
+    return await trx.admin.update({
+      where: { id: admin.id },
+      data: { isVerifiedAdmin: true, verifierId: adminId },
+    });
   });
 };

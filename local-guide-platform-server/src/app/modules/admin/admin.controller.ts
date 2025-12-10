@@ -86,3 +86,17 @@ export const verifyGuide = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+//* VERIFY ADMIN *\\
+export const verifyAdmin = catchAsync(async (req, res) => {
+  const adminId = checkString(
+    req.decoded?.adminId,
+    "Admin ID (who are trying to update) not found, login again.",
+  );
+  const result = await adminService.verifyAdmin(req.params.id, adminId);
+
+  _response(res, {
+    message: "Admin updated successfully!",
+    data: result,
+  });
+});
