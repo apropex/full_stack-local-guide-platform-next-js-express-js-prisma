@@ -1,6 +1,6 @@
 "use client";
 
-import { tRole } from "@/constants";
+import { Role, tRole } from "@/constants";
 import { join } from "@/utils";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -92,8 +92,10 @@ export default function SidebarMenuComponent({ role }: { role: tRole }) {
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            <CreateAdminForm />
-            <CreateGuideForm />
+            {(role === Role.GUIDE || role === Role.TOURIST) && (
+              <CreateAdminForm />
+            )}
+            {role === Role.TOURIST && <CreateGuideForm />}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

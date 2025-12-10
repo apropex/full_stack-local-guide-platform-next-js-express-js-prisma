@@ -6,6 +6,7 @@ import {
   CreditCard,
   Map,
   MapPinned,
+  PlusIcon,
   Receipt,
   ShieldCheck,
   Users,
@@ -87,14 +88,24 @@ const GUIDE: iSidebarMenu = {
       url: "/dashboard/guide",
       icon: BarChart3,
     },
-    {
-      title: "My Tours",
-      url: "/dashboard/guide/my-tours",
-      icon: Map,
-    },
   ],
 
   group: [
+    {
+      title: "Tour Management",
+      items: [
+        {
+          title: "Create Tour",
+          url: "/dashboard/guide/create-tour",
+          icon: PlusIcon,
+        },
+        {
+          title: "My Tours",
+          url: "/dashboard/guide/my-tours",
+          icon: Map,
+        },
+      ],
+    },
     {
       title: "Docs Management",
       items: [
