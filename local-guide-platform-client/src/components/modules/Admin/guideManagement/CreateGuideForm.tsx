@@ -91,7 +91,7 @@ export default function CreateGuideForm() {
   });
 
   async function onSubmit(values: GuidePayload) {
-    const id = _alert.loading("Creating guide...", {
+    const id = _alert.loading("Applying for a guide...", {
       id: urid(),
     });
 
@@ -103,10 +103,10 @@ export default function CreateGuideForm() {
     _alert.dismiss(id);
 
     if (result.success) {
-      setOpen(false);
+      setOpenDialog(false);
       setDate(undefined);
       form.reset();
-      _alert.success("You applied for guide successfully");
+      _alert.success("You successfully applied for a guide");
     } else {
       setError(result.message);
       _alert.error("Application failed.", result.message);

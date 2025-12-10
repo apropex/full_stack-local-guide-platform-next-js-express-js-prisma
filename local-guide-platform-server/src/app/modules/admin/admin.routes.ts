@@ -10,11 +10,11 @@ import { AdminSchema } from "./admin.validation";
 const router = Router();
 
 router.get("/all", roleVerifier(adminAccess), adminController.getAllAdmins);
-router.get("/:id", roleVerifier(adminAccess), adminController.getAdminById);
+router.get("/:id", tokenVerifier, adminController.getAdminById);
 
 router.post(
-  "/",
-  roleVerifier(adminAccess),
+  "/create-admin",
+  tokenVerifier,
   userAccessVerifier,
   validateRequest(AdminSchema),
   adminController.createAdmin,

@@ -22,7 +22,12 @@ export const createAdmin = async (
   }
 
   return await prisma.admin.create({
-    data: payload,
+    data: {
+      ...payload,
+      user: {
+        connect: { id: userId },
+      },
+    },
   });
 };
 

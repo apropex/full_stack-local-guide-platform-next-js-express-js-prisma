@@ -1,3 +1,5 @@
+"use server";
+
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
 import { iAdmin } from "@/interfaces/user.interfaces";

@@ -28,10 +28,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { createAdmin } from "@/services/admin.services";
+import { urid } from "@/utils";
 import { AdminPayload, AdminSchema } from "@/zod/admin.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon, Shield } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function CreateAdminForm() {
@@ -51,13 +54,34 @@ export default function CreateAdminForm() {
     },
   });
 
+  const dobError = useMemo(
+    () => (date ? null : (form.formState.errors.dob?.message ?? null)),
+    [form.formState.errors.dob?.message, date],
+  );
+
   async function onSubmit(values: AdminPayload) {
-    _alert.success("success");
-    setError("Date of birth is required, select a date.");
-    if (!date) {
-      setError("Date of birth is required, select a date.");
-      return null;
+    setError(null);
+    setLoading(true);
+
+    const id = _alert.loading("Applying for an admin...", {
+      id: urid(),
+    });
+
+    const result = await createAdmin(values);
+
+    _alert.dismiss(id);
+
+    if (result.success) {
+      setOpenDialog(false);
+      setDate(undefined);
+      form.reset();
+      _alert.success("You successfully applied for an admin");
+    } else {
+      setError(result.message);
+      _alert.error("Application failed.", result.message);
     }
+
+    setLoading(false);
   }
 
   //
@@ -94,7 +118,12 @@ export default function CreateAdminForm() {
 
               {/*  */}
               <div className="flex flex-col gap-3">
-                <Label htmlFor="date" className="px-1">
+                <Label
+                  htmlFor="date"
+                  className={cn("px-1", {
+                    "text-destructive": !!dobError,
+                  })}
+                >
                   Date of birth
                 </Label>
                 <Popover open={open} onOpenChange={setOpen}>
@@ -103,7 +132,10 @@ export default function CreateAdminForm() {
                       variant="outline"
                       type="button"
                       id="date"
-                      className="justify-between font-normal"
+                      className={cn("justify-between font-normal", {
+                        "border-destructive dark:border-destructive":
+                          !!dobError,
+                      })}
                     >
                       {date ? date.toLocaleDateString() : "Select date"}
                       <ChevronDownIcon />
@@ -120,12 +152,17 @@ export default function CreateAdminForm() {
                       onSelect={(date) => {
                         setDate(date);
                         form.setValue("dob", date?.toISOString() ?? "");
+
                         setOpen(false);
                       }}
                       disabled={{ after: new Date() }}
                     />
                   </PopoverContent>
                 </Popover>
+
+                {dobError && (
+                  <p className="text-sm text-destructive">{dobError}</p>
+                )}
               </div>
 
               <FormField
