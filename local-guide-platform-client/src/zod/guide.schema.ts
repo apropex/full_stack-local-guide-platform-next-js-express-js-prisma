@@ -11,8 +11,8 @@ export const GuideSchema = z.object({
   hourlyRate: z.string().trim().min(1, "Hourly rate is required"),
   father: z.string().trim().min(1, "Father name is required"),
   fathersNid: z.string().trim().min(1, "Father's NID is required"),
-  dob: z.string(),
-  nid: z.string(),
+  dob: z.string().min(1, "Date of birth is required"),
+  nid: z.string().min(1, "NID is required"),
 });
 
 export type GuidePayload = z.infer<typeof GuideSchema>;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adminAccess, guideAccess } from "../../constants";
+import { adminAccess } from "../../constants";
 import { roleVerifier } from "../../middlewares/roleVerifier";
 import { tokenVerifier } from "../../middlewares/tokenVerifier";
 import { userAccessVerifier } from "../../middlewares/userAccessVerifier";
@@ -11,11 +11,11 @@ const router = Router();
 
 router.get("/all", roleVerifier(adminAccess), guideController.getAllGuides);
 
-router.get("/:id", roleVerifier(adminAccess), guideController.getGuideById);
+router.get("/:id", tokenVerifier, guideController.getGuideById);
 
 router.post(
-  "/",
-  roleVerifier(guideAccess),
+  "/create-guide",
+  tokenVerifier,
   userAccessVerifier,
   validateRequest(GuideSchema),
   guideController.createGuide,

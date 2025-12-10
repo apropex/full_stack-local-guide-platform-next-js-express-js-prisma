@@ -14,7 +14,7 @@ export const createAdmin = async (payload: AdminPayload) => {
   };
 
   try {
-    return await _fetch.post(routes.admin(), {
+    return await _fetch.post(routes.admin("create-admin"), {
       data: {
         ...rest,
         verificationDocs,

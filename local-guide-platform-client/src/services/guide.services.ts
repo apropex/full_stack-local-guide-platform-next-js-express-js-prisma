@@ -1,3 +1,5 @@
+"use server";
+
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
 import { _fetch } from "@/lib/custom-fetch";
@@ -28,7 +30,7 @@ export const createGuide = async (payload: GuidePayload) => {
   const experienceYears = number(payload.experienceYears);
 
   try {
-    return await _fetch.post(routes.guide(), {
+    return await _fetch.post(routes.guide("create-guide"), {
       data: {
         ...rest,
         expertise,

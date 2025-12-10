@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 import { getUserFromJwt } from "@/lib/jwt/jwt";
 import Link from "next/link";
 import PublicProfileMenu from "../PublicProfileMenu";
+import NavMenuItems from "./NavMenuItems";
+
+export const navItems = [
+  { href: "/", name: "Home" },
+  { href: "/tours", name: "Tours" },
+  { href: "/about", name: "About" },
+  { href: "/support", name: "Support" },
+  { href: "/blogs", name: "Blogs" },
+  { href: "/dashboard", name: "Dashboard" },
+];
 
 export default async function PublicNavbar() {
   const user = await getUserFromJwt();
@@ -13,13 +23,13 @@ export default async function PublicNavbar() {
       <div className="rounded bg-background/80 backdrop-blur-xs w-full py-2 px-3 flex items-center justify-between">
         {/* LEFT SIDE */}
         <div>
-          <Link href={"/"} className="text-xl md:text-2xl font-bold uppercase">
+          <Link href={"/"} className="text-lg font-bold uppercase">
             LASV Guides
           </Link>
         </div>
 
         {/* MIDDLE */}
-        <div></div>
+        <NavMenuItems />
 
         {/* RIGHT SIDE */}
         <div>

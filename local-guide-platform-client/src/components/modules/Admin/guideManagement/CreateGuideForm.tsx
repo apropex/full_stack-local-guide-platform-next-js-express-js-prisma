@@ -31,6 +31,8 @@ import {
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { createGuide } from "@/services/guide.services";
+import { urid } from "@/utils";
 import { GuidePayload, GuideSchema } from "@/zod/guide.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon, Map, Plus, X } from "lucide-react";
@@ -44,6 +46,7 @@ export default function CreateGuideForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [aboutLength, setAboutLength] = useState(0);
+  const [dobError, setDobError] = useState<string | null>(null);
 
   const form = useForm<GuidePayload>({
     resolver: zodResolver(GuideSchema),
@@ -88,13 +91,33 @@ export default function CreateGuideForm() {
   });
 
   async function onSubmit(values: GuidePayload) {
-    _alert.success("success");
-    setError("Date of birth is required, select a date.");
-    if (!date) {
-      setError("Date of birth is required, select a date.");
-      return null;
+    const id = _alert.loading("Creating guide...", {
+      id: urid(),
+    });
+
+    setError(null);
+    setLoading(true);
+
+    const result = await createGuide(values);
+
+    _alert.dismiss(id);
+
+    if (result.success) {
+      setOpen(false);
+      setDate(undefined);
+      form.reset();
+      _alert.success("You applied for guide successfully");
+    } else {
+      setError(result.message);
+      _alert.error("Application failed.", result.message);
     }
+
+    setLoading(false);
   }
+
+  useEffect(() => {
+    setDobError(form.formState.errors.dob?.message ?? null);
+  }, [form.formState.errors.dob?.message]);
 
   //
   return (
@@ -118,7 +141,7 @@ export default function CreateGuideForm() {
               </DialogDescription>
             </DialogHeader>
             <form
-              id="admin_register_form"
+              id="guide_register_form"
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 "
             >
@@ -130,7 +153,12 @@ export default function CreateGuideForm() {
 
               {/*  */}
               <div className="flex flex-col gap-3">
-                <Label htmlFor="date" className="px-1">
+                <Label
+                  htmlFor="date"
+                  className={cn("px-1", {
+                    "text-destructive": !!dobError,
+                  })}
+                >
                   Date of birth
                 </Label>
                 <Popover open={open} onOpenChange={setOpen}>
@@ -139,7 +167,10 @@ export default function CreateGuideForm() {
                       variant="outline"
                       type="button"
                       id="date"
-                      className="justify-between font-normal"
+                      className={cn("justify-between font-normal", {
+                        "border-destructive dark:border-destructive":
+                          !!dobError,
+                      })}
                     >
                       {date ? date.toLocaleDateString() : "Select date"}
                       <ChevronDownIcon />
@@ -156,12 +187,17 @@ export default function CreateGuideForm() {
                       onSelect={(date) => {
                         setDate(date);
                         form.setValue("dob", date?.toISOString() ?? "");
+                        setDobError(null);
                         setOpen(false);
                       }}
                       disabled={{ after: new Date() }}
                     />
                   </PopoverContent>
                 </Popover>
+
+                {dobError && (
+                  <p className="text-sm text-destructive">{dobError}</p>
+                )}
               </div>
 
               <FormField
@@ -393,7 +429,7 @@ export default function CreateGuideForm() {
               </CustomButton>
 
               <LoadingButton
-                form="admin_register_form"
+                form="guide_register_form"
                 type="submit"
                 size={"sm"}
                 isLoading={loading}

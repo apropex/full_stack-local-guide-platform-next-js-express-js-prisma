@@ -1,7 +1,11 @@
 import { iResponse } from "@/interfaces";
-import { ENV } from "./config/env";
+import { extractJSONError } from "@/utils/extractJSONError";
+import { ENV, isProd } from "./config/env";
 
-type Options<TRequest> = Omit<RequestInit, "body"> & { body?: FormData; data?: TRequest };
+type Options<TRequest> = Omit<RequestInit, "body"> & {
+  body?: FormData;
+  data?: TRequest;
+};
 
 /**
  *! fetchHelper Rules:
@@ -17,7 +21,7 @@ const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 
 export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
   api: string,
-  requestInit: Options<TRequest> = {}
+  requestInit: Options<TRequest> = {},
 ): Promise<iResponse<TResponse>> {
   const options = requestInit as RequestInit & { data?: TRequest };
   const data = options.data;
@@ -37,7 +41,7 @@ export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
       // JSON payload cannot be placed in options.body
       if (options.body && !(options.body instanceof FormData)) {
         throw new Error(
-          "The 2nd parameter (options.body) must be FormData. For JSON/raw payload, use the 3rd parameter."
+          "The 2nd parameter (options.body) must be FormData. For JSON/raw payload, use the 3rd parameter.",
         );
       }
 
@@ -55,7 +59,7 @@ export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
   let baseUrl = "";
   const isServer = typeof window === "undefined";
   if (isServer) {
-    baseUrl = ENV.BASE_URL || "http://localhost:3000"; // TODO: remove fallback
+    baseUrl = ENV.BASE_URL;
     const { headers } = await import("next/headers");
     tokens = (await headers()).get("cookie") ?? "";
   }
@@ -74,7 +78,11 @@ export async function fetchHelper<TResponse = unknown, TRequest = unknown>(
   // --- Error handling ---
   if (!res.ok) {
     const errorText = await res.text();
-    throw new Error(`HTTP error ${res.status}: ${errorText} | api: ${api}`);
+
+    if (!isProd) console.log("🚨🚨🚨", errorText, "🚨🚨🚨");
+
+    return (await extractJSONError(errorText)) as iResponse<TResponse>;
+    // throw new Error(`HTTP error ${res.status}: ${errorText} | api: ${api}`);
   }
 
   // --- Safe JSON parse ---
@@ -90,9 +98,9 @@ export const _fetch = Object.fromEntries(
     method.toLowerCase(),
     async <TResponse = unknown, TRequest = unknown>(
       api: string,
-      options: Options<TRequest> = {}
+      options: Options<TRequest> = {},
     ): Promise<iResponse<TResponse>> => {
       return fetchHelper<TResponse, TRequest>(api, { ...options, method });
     },
-  ])
+  ]),
 ) as Record<Lowercase<(typeof methods)[number]>, typeof fetchHelper>;

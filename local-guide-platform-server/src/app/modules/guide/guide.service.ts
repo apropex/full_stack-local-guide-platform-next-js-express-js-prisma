@@ -26,7 +26,12 @@ export const createGuide = async (
   }
 
   return await prisma.guide.create({
-    data: payload,
+    data: {
+      ...payload,
+      user: {
+        connect: { id: userId },
+      },
+    },
   });
 };
 
