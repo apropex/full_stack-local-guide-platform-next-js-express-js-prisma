@@ -72,3 +72,17 @@ export const getAllAdmins = catchAsync(async (req, res) => {
     meta,
   });
 });
+
+//* VERIFY GUIDE *\\
+export const verifyGuide = catchAsync(async (req, res) => {
+  const adminId = checkString(
+    req.decoded?.adminId,
+    "Admin ID not found, login again.",
+  );
+  const result = await adminService.verifyGuide(req.params.id, adminId);
+
+  _response(res, {
+    message: "Guide updated successfully!",
+    data: result,
+  });
+});

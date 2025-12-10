@@ -63,3 +63,11 @@ export const getAllAdmins = async (query?: string) => {
     return errorResponse(error);
   }
 };
+
+export const verifyGuide = async (id: string) => {
+  try {
+    return await _fetch.patch(routes.admin("verify-guide", id));
+  } catch (error) {
+    return errorResponse(error);
+  }
+};

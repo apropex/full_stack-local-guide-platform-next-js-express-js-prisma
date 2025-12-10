@@ -45,12 +45,15 @@ export const guideColumns: iTableColumns<iGuide>[] = [
   },
   {
     header: "Verifier",
-    accessor: (guide) => (
-      <UserInfoCell
-        name={guide.verifier?.user?.name ?? ""}
-        email={guide.verifier?.user?.email ?? ""}
-      />
-    ),
+    accessor: (guide) =>
+      guide.verifier ? (
+        <UserInfoCell
+          name={guide.verifier?.user?.name ?? ""}
+          email={guide.verifier?.user?.email ?? ""}
+        />
+      ) : (
+        <span>Not verified yet</span>
+      ),
   },
   {
     header: "Status",

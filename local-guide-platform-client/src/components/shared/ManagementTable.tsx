@@ -22,6 +22,7 @@ import {
   EditIcon,
   EllipsisVertical,
   EyeIcon,
+  ShieldCheckIcon,
   Trash2Icon,
 } from "lucide-react";
 
@@ -38,6 +39,7 @@ interface iManagementTable<T> {
   onView?: (row: T) => void;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
+  onVerify?: (row: T) => void;
   rowKey: (row: T) => string;
   isRefresh: boolean;
   emptyMessage?: string;
@@ -49,6 +51,7 @@ export default function ManagementTable<T>({
   onView,
   onEdit,
   onDelete,
+  onVerify,
   rowKey,
   emptyMessage,
 }: iManagementTable<T>) {
@@ -129,6 +132,12 @@ export default function ManagementTable<T>({
                             <DropdownMenuItem onClick={() => onView(item)}>
                               <EyeIcon className="size-4" />
                               View
+                            </DropdownMenuItem>
+                          )}
+                          {onVerify && (
+                            <DropdownMenuItem onClick={() => onVerify(item)}>
+                              <ShieldCheckIcon className="size-4" />
+                              Verify
                             </DropdownMenuItem>
                           )}
                           {onEdit && (

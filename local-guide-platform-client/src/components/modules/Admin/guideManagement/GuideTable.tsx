@@ -1,10 +1,10 @@
 "use client";
 
 import { _alert } from "@/components/custom-toast/CustomToast";
-import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 import ManagementTable from "@/components/shared/ManagementTable";
+import VerifyConfirmationDialog from "@/components/shared/VerifyConfirmationDialog";
 import { iGuide } from "@/interfaces/user.interfaces";
-import { softDeleteUser } from "@/services/user.services";
+import { verifyGuide } from "@/services/admin.services";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { guideColumns } from "./GuideColumns";
@@ -14,32 +14,47 @@ interface GuideTableProps {
 }
 
 export default function GuideTable({ guides }: GuideTableProps) {
+  console.log(guides);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, startTransition] = useTransition();
-  const router = useRouter();
-  const [deletingAdmin, setDeleteAdmin] = useState<iGuide | null>(null);
-  const [deleting, setDeleting] = useState<boolean>(false);
 
-  const confirmDelete = async () => {
-    if (!deletingAdmin) return;
-    setDeleting(true);
-    const result = await softDeleteUser(deletingAdmin.id);
-    setDeleting(false);
+  const [verifyingDialog, setVerifyingDialog] = useState(false);
+  const [verifyingGuide, setVerifyingGuide] = useState<iGuide | null>(null);
+
+  const router = useRouter();
+
+  const handleVerify = async () => {
+    if (!verifyingGuide)
+      return _alert.error("Guide not found, refresh the page and try again.");
+
+    const iv = verifyingGuide.isVerifiedGuide;
+
+    const vm = "The guide verified successfully!";
+    const rm = "The verification removed successfully!";
+
+    setVerifyingDialog(true);
+    const result = await verifyGuide(verifyingGuide.id);
+    setVerifyingDialog(false);
 
     if (result.success) {
-      _alert.success(result.message || "Admin deleted successfully!");
-      setDeleteAdmin(null);
+      _alert.success(iv ? rm : vm);
+      setVerifyingGuide(null);
       startTransition(() => {
         router.refresh();
       });
-    } else _alert.error(result.message || "Failed to delete admin");
+    } else
+      _alert.error(
+        iv ? "Failed to verify guide." : "Failed to remove verification.",
+        result.message,
+      );
   };
+
   return (
     <>
       <ManagementTable
         data={guides}
         columns={guideColumns}
-        onDelete={setDeleteAdmin}
+        onVerify={setVerifyingGuide}
         onEdit={({ id }) =>
           router.push(`/admin/dashboard/manage-admin/update-admin?id=${id}`)
         }
@@ -47,11 +62,18 @@ export default function GuideTable({ guides }: GuideTableProps) {
         emptyMessage="No admins found"
         isRefresh={false}
       />
-      <DeleteConfirmationDialog
-        open={!!deletingAdmin}
-        onOpenChange={(open) => !open && setDeleteAdmin(null)}
-        onConfirm={confirmDelete}
-        isDeleting={deleting}
+
+      <VerifyConfirmationDialog
+        isVerified={!!verifyingGuide?.isVerifiedGuide}
+        open={!!verifyingGuide}
+        onOpenChange={(open) => !open && setVerifyingGuide(null)}
+        onConfirm={handleVerify}
+        isUpdating={verifyingDialog}
+        description={
+          verifyingGuide?.isVerifiedGuide
+            ? "Your are going to remove verification of this guide."
+            : "Your are going to verify this guide."
+        }
       />
     </>
   );

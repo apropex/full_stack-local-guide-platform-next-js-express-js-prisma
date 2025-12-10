@@ -124,8 +124,13 @@ export const getAllGuides = async (query: iQuery) => {
     where.AND.push({ totalReviews: { gte: totalReviews } });
   }
 
+  const include = {
+    user: { include: { avatar: true } },
+    verifier: { include: { user: true } },
+  };
+
   const [guides, total_records, filtered_records] = await Promise.all([
-    prisma.guide.findMany({ where, orderBy, skip, take }),
+    prisma.guide.findMany({ where, orderBy, skip, take, include }),
     prisma.guide.count(),
     prisma.guide.count({ where }),
   ]);

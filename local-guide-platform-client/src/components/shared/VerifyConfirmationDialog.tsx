@@ -10,60 +10,57 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Trash2Icon, XIcon } from "lucide-react";
+import { EditIcon, Trash2Icon, XIcon } from "lucide-react";
 import CustomButton from "../buttons/CustomButton";
 import LoadingButton from "../buttons/LoadingButton";
 
 interface ConfirmationDialogProps {
+  isVerified?: boolean;
   open?: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   title?: string;
   description?: string;
-  itemName?: string;
-  isDeleting: boolean;
+  isUpdating: boolean;
 }
 
-export default function DeleteConfirmationDialog({
+export default function VerifyConfirmationDialog({
+  isVerified,
   open,
   onOpenChange,
   onConfirm,
   title = "Are you absolutely sure?",
   description,
-  itemName,
-  isDeleting,
+  isUpdating,
 }: ConfirmationDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription asChild>
-            {description || (
-              <p>
-                This action cannot be undone. This will permanently delete your{" "}
-                <strong>{itemName || "item"}</strong> and remove from our
-                server.
-              </p>
-            )}
-          </AlertDialogDescription>
+          <AlertDialogDescription>{description || ""}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
-            <CustomButton size="sm" icon={XIcon} disabled={isDeleting}>
+            <CustomButton
+              size="sm"
+              icon={XIcon}
+              disabled={isUpdating}
+              variant="outline"
+            >
               Cancel
             </CustomButton>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
             <LoadingButton
+              variant={isVerified ? "destructive" : "default"}
               onClick={onConfirm}
-              disabled={isDeleting}
-              isLoading={isDeleting}
-              loadingText="Deleting..."
-              icon={Trash2Icon}
-              variant="destructive"
+              disabled={isUpdating}
+              isLoading={isUpdating}
+              loadingText={isVerified ? "Removing..." : "Verifying..."}
+              icon={isVerified ? Trash2Icon : EditIcon}
             >
-              Delete
+              {isVerified ? "Remove" : "Verify"}
             </LoadingButton>
           </AlertDialogAction>
         </AlertDialogFooter>

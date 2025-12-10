@@ -107,3 +107,22 @@ export const getAllAdmins = async (query: iQuery) => {
     },
   };
 };
+
+//* VERIFY GUIDE *\\
+export const verifyGuide = async (guideId: string, adminId: string) => {
+  const guide = await prisma.guide.findUniqueOrThrow({
+    where: { id: guideId },
+  });
+
+  if (guide.isVerifiedGuide === true) {
+    return await prisma.guide.update({
+      where: { id: guide.id },
+      data: { isVerifiedGuide: false },
+    });
+  }
+
+  return await prisma.guide.update({
+    where: { id: guide.id },
+    data: { isVerifiedGuide: true, verifierId: adminId },
+  });
+};
