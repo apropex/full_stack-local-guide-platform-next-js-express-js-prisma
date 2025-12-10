@@ -177,6 +177,5 @@ export const updateUserByAdmin = async (
   id: string,
   payload: UpdateUserByAdminPayload,
 ) => {
-  console.log("UpdateUserByAdminPayload", payload);
   return await prisma.user.update({ where: { id }, data: payload });
 };

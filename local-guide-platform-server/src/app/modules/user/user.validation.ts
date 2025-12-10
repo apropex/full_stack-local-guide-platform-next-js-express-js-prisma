@@ -24,6 +24,7 @@ export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;
 
 export const UpdateUserByAdminSchema = z.object({
   status: z.enum(["ACTIVE", "INACTIVE", "BANNED"]),
+  isDeleted: z.boolean(),
   isVerified: z.boolean(),
 });
 

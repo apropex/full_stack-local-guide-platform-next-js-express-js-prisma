@@ -66,6 +66,7 @@ export default function UpdateUserByAdmin({
     resolver: zodResolver(UpdateUserByAdminSchema),
     defaultValues: {
       status: user?.status ?? "ACTIVE",
+      isDeleted: user?.isDeleted ?? false,
       isVerified: user?.isVerified ?? true,
     },
   });
@@ -74,6 +75,7 @@ export default function UpdateUserByAdmin({
     if (!user) return;
     form.setValue("status", user.status);
     form.setValue("isVerified", user.isVerified);
+    form.setValue("isDeleted", user.isDeleted);
   }, [user, form]);
 
   async function onSubmit(values: UpdateUserByAdminPayload) {
@@ -170,9 +172,39 @@ export default function UpdateUserByAdmin({
                   >
                     <FormControl>
                       <SelectTrigger
-                        className={`${form.formState.errors.status && "border-red-500"} w-full`}
+                        className={`${form.formState.errors.isVerified && "border-red-500"} w-full`}
                       >
                         <SelectValue placeholder="Select a verify status" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      <SelectItem value={"true"}>True</SelectItem>
+                      <SelectItem value={"false"}>False</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isDeleted"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Deleted</FormLabel>
+
+                  <Select
+                    onValueChange={(v) => field.onChange(v === "true")}
+                    defaultValue={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger
+                        className={`${form.formState.errors.isDeleted && "border-red-500"} w-full`}
+                      >
+                        <SelectValue placeholder="Select a delete status" />
                       </SelectTrigger>
                     </FormControl>
 

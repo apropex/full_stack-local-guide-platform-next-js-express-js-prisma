@@ -36,6 +36,7 @@ export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;
 
 export const UpdateUserByAdminSchema = z.object({
   status: z.enum(Object.values(UserStatus)),
+  isDeleted: z.coerce.boolean<boolean>(),
   isVerified: z.coerce.boolean<boolean>(),
 });
 

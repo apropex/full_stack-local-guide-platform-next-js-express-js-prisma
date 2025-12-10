@@ -75,7 +75,7 @@ export const getMe = catchAsync(async (req, res) => {
 export const softDeleteUser = catchAsync(async (req, res) => {
   const user = req.decoded ?? ({} as JwtPayload);
   const { id } = req.params;
-  if (user.id !== id && user.role !== "admin") {
+  if (user.id !== id && !adminAccess.includes(user.role)) {
     throw new ApiError(
       403,
       "Forbidden: You don't have permission to delete this user",
