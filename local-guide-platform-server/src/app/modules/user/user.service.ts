@@ -14,6 +14,7 @@ import {
   userFilterFields,
   userSearchFields,
 } from "./user.constants";
+import { UpdateUserByAdminPayload } from "./user.validation";
 
 //* CREATE A NEW USER *\\
 export const createUser = async (payload: User, file: CloudFile) => {
@@ -170,4 +171,12 @@ export const getAllUsers = async (query: iQuery) => {
       limit: take,
     },
   };
+};
+
+export const updateUserByAdmin = async (
+  id: string,
+  payload: UpdateUserByAdminPayload,
+) => {
+  console.log("UpdateUserByAdminPayload", payload);
+  return await prisma.user.update({ where: { id }, data: payload });
 };

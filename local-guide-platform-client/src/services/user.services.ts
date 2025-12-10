@@ -6,7 +6,11 @@ import { iUser } from "@/interfaces/user.interfaces";
 import { _fetch } from "@/lib/custom-fetch";
 import { join } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
-import { CreateUserPayload_server, UpdateUserPayload } from "@/zod/user.schema";
+import {
+  CreateUserPayload_server,
+  UpdateUserByAdminPayload,
+  UpdateUserPayload,
+} from "@/zod/user.schema";
 import { login } from "./auth.services";
 
 export const createUser = async (
@@ -75,6 +79,19 @@ export const getAllUsers = async (query?: string) => {
   try {
     const api = join(routes.user("all"), query ? join("?", query) : "");
     return await _fetch.get(api);
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
+
+export const updateUserByAdmin = async (
+  id: string,
+  payload: UpdateUserByAdminPayload,
+) => {
+  try {
+    return await _fetch.post(routes.user("update-user-by-admin", id), {
+      data: payload,
+    });
   } catch (error) {
     return errorResponse(error);
   }

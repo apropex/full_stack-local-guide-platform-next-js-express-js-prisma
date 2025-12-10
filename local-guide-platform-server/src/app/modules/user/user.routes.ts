@@ -3,23 +3,35 @@ import { singleFileUploader } from "../../../lib/config/cloudinary/multer.contro
 import { adminAccess } from "../../constants";
 import { roleVerifier } from "../../middlewares/roleVerifier";
 import { tokenVerifier } from "../../middlewares/tokenVerifier";
+import { userAccessVerifier } from "../../middlewares/userAccessVerifier";
 import validateRequest from "../../middlewares/validateRequest";
 import * as userController from "./user.controller";
-import { CreateUserSchema, UpdateUserSchema } from "./user.validation";
+import {
+  CreateUserSchema,
+  UpdateUserByAdminSchema,
+  UpdateUserSchema,
+} from "./user.validation";
 
 const router = Router();
 
-router.get("/me", tokenVerifier, userController.getMe);
-
-router.get("/:id", tokenVerifier, userController.getUserById);
+router.get("/me", tokenVerifier, userAccessVerifier, userController.getMe);
 
 router.get("/all", roleVerifier(adminAccess), userController.getAllUsers);
+
+router.get("/:id", tokenVerifier, userController.getUserById);
 
 router.post(
   "/",
   singleFileUploader,
   validateRequest(CreateUserSchema),
   userController.createUser,
+);
+
+router.post(
+  "/update-user-by-admin/:id",
+  roleVerifier(adminAccess),
+  validateRequest(UpdateUserByAdminSchema),
+  userController.updateUserByAdmin,
 );
 
 router.patch(

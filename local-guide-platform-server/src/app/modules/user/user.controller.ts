@@ -99,3 +99,12 @@ export const getAllUsers = catchAsync(async (req, res) => {
     meta,
   });
 });
+
+export const updateUserByAdmin = catchAsync(async (req, res) => {
+  const result = await userService.updateUserByAdmin(req.params.id, req.body);
+
+  _response(res, {
+    message: "User updated successfully!",
+    data: result,
+  });
+});

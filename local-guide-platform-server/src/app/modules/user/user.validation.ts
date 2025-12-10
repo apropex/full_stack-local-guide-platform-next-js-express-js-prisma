@@ -21,3 +21,10 @@ export const CreateUserSchema = z
 
 export type CreateUserPayload = z.infer<typeof CreateUserSchema>;
 export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;
+
+export const UpdateUserByAdminSchema = z.object({
+  status: z.enum(["ACTIVE", "INACTIVE", "BANNED"]),
+  isVerified: z.boolean(),
+});
+
+export type UpdateUserByAdminPayload = z.infer<typeof UpdateUserByAdminSchema>;

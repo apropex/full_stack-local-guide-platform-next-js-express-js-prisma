@@ -79,3 +79,11 @@ export const verifyAdmin = async (id: string) => {
     return errorResponse(error);
   }
 };
+
+export const verifyUser = async (id: string) => {
+  try {
+    return await _fetch.patch(routes.admin("verify-user", id));
+  } catch (error) {
+    return errorResponse(error);
+  }
+};

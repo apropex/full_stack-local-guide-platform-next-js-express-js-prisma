@@ -14,7 +14,6 @@ interface GuideTableProps {
 }
 
 export default function GuideTable({ guides }: GuideTableProps) {
-  console.log(guides);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, startTransition] = useTransition();
 

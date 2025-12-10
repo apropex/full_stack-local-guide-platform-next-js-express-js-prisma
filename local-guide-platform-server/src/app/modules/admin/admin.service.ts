@@ -116,23 +116,30 @@ export const verifyGuide = async (guideId: string, adminId: string) => {
   });
 
   if (guide.isVerifiedGuide === true) {
-    return await prisma.guide.update({
-      where: { id: guide.id },
-      data: { isVerifiedGuide: false },
+    return await prisma.$transaction(async (trx) => {
+      await trx.user.update({
+        where: { id: guide.user.id },
+        data: { role: Role.TOURIST },
+      });
+
+      return await trx.guide.update({
+        where: { id: guide.id },
+        data: { isVerifiedGuide: false, verifierId: adminId },
+      });
+    });
+  } else {
+    return await prisma.$transaction(async (trx) => {
+      await trx.user.update({
+        where: { id: guide.user.id },
+        data: { role: Role.GUIDE },
+      });
+
+      return await trx.guide.update({
+        where: { id: guide.id },
+        data: { isVerifiedGuide: true, verifierId: adminId },
+      });
     });
   }
-
-  return await prisma.$transaction(async (trx) => {
-    trx.user.update({
-      where: { id: guide.user.id },
-      data: { role: Role.GUIDE },
-    });
-
-    return await trx.guide.update({
-      where: { id: guide.id },
-      data: { isVerifiedGuide: true, verifierId: adminId },
-    });
-  });
 };
 
 //* VERIFY ADMIN *\\
@@ -142,22 +149,33 @@ export const verifyAdmin = async (rAdminId: string, adminId: string) => {
     include: { user: true },
   });
 
-  if (admin.isVerifiedAdmin === true) {
-    return await prisma.admin.update({
-      where: { id: admin.id },
-      data: { isVerifiedAdmin: false },
-    });
+  if (admin.user.role === Role.SUPER_ADMIN) {
+    throw new ApiError(sCode.BAD_REQUEST, "Super Admin can not be update!");
   }
 
-  return await prisma.$transaction(async (trx) => {
-    trx.user.update({
-      where: { id: admin.user.id },
-      data: { role: Role.ADMIN },
-    });
+  if (admin.isVerifiedAdmin === true) {
+    return await prisma.$transaction(async (trx) => {
+      await trx.user.update({
+        where: { id: admin.user.id },
+        data: { role: Role.TOURIST },
+      });
 
-    return await trx.admin.update({
-      where: { id: admin.id },
-      data: { isVerifiedAdmin: true, verifierId: adminId },
+      return await trx.admin.update({
+        where: { id: admin.id },
+        data: { isVerifiedAdmin: false, verifierId: adminId },
+      });
     });
-  });
+  } else {
+    return await prisma.$transaction(async (trx) => {
+      await trx.user.update({
+        where: { id: admin.user.id },
+        data: { role: Role.ADMIN },
+      });
+
+      return await trx.admin.update({
+        where: { id: admin.id },
+        data: { isVerifiedAdmin: true, verifierId: adminId },
+      });
+    });
+  }
 };

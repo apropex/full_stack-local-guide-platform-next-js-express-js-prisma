@@ -1,3 +1,4 @@
+import { UserStatus } from "@/constants";
 import z from "zod";
 import { PasswordSchema } from "./common-zod-schema";
 
@@ -32,3 +33,10 @@ export const UpdateUserSchema = CreateUserSchema.omit({
 export type CreateUserPayload = z.infer<typeof CreateUserSchema>;
 export type CreateUserPayload_server = z.infer<typeof CreateUserSchema_server>;
 export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;
+
+export const UpdateUserByAdminSchema = z.object({
+  status: z.enum(Object.values(UserStatus)),
+  isVerified: z.coerce.boolean<boolean>(),
+});
+
+export type UpdateUserByAdminPayload = z.infer<typeof UpdateUserByAdminSchema>;
