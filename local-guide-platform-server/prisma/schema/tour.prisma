@@ -23,7 +23,7 @@ model Tour {
 
   approveStatus TourStatus @default(PENDING)
 
-  isActive  Boolean @default(true)
+  isActive  Boolean @default(false)
   isDeleted Boolean @default(false)
   deletedBy String?
 

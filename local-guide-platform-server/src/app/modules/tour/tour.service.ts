@@ -16,6 +16,7 @@ import {
   tourNumberFields,
   tourSearchFields,
 } from "./tour.constants";
+import { UpdateTourByAdminPayload } from "./tour.validation";
 
 //* CREATE TOUR (No Transaction) *\\
 export const createTour = async (
@@ -216,4 +217,12 @@ export const tourSoftDelete = async (userId: string, tourId: string) => {
 //* HARD DELETE TOUR *\\
 export const tourHardDelete = async (id: string) => {
   await prisma.tour.delete({ where: { id } });
+};
+
+//* UPDATE TOUR BY ADMIN *\\
+export const updateTourByAdmin = async (
+  id: string,
+  payload: UpdateTourByAdminPayload,
+) => {
+  return await prisma.tour.update({ where: { id }, data: payload });
 };

@@ -1,4 +1,4 @@
-import { Difficulty, TourDurationType } from "@/constants";
+import { Difficulty, TourDurationType, TourStatus } from "@/constants";
 import z from "zod";
 
 export const CreateTourSchema = z.object({
@@ -82,3 +82,11 @@ export const UpdateTourSchema = z
 
 export type CreateTourPayload = z.infer<typeof CreateTourSchema>;
 export type UpdateTourPayload = z.infer<typeof UpdateTourSchema>;
+
+export const UpdateTourByAdminSchema = z.object({
+  approveStatus: z.enum(Object.values(TourStatus)),
+  isActive: z.coerce.boolean<boolean>(),
+  isDeleted: z.coerce.boolean<boolean>(),
+});
+
+export type UpdateTourByAdminPayload = z.infer<typeof UpdateTourByAdminSchema>;

@@ -93,3 +93,12 @@ export const tourHardDelete = catchAsync(async (req, res) => {
     message: "Tour deleted successfully!",
   });
 });
+
+export const updateTourByAdmin = catchAsync(async (req, res) => {
+  const result = await tourServices.updateTourByAdmin(req.params.id, req.body);
+
+  _response(res, {
+    message: "Tour updated successfully!",
+    data: result,
+  });
+});

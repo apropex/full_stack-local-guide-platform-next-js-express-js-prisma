@@ -1,4 +1,4 @@
-import { Difficulty, TourDurationType } from "@prisma/client";
+import { Difficulty, TourDurationType, TourStatus } from "@prisma/client";
 import z from "zod";
 
 export const CreateTourPayloadSchema = z.object({
@@ -71,3 +71,11 @@ export const UpdateTourPayloadSchema = z
     deletedImages: z.array(z.string()).optional(),
   })
   .extend(CreateTourPayloadSchema.shape);
+
+export const UpdateTourByAdminSchema = z.object({
+  approveStatus: z.enum(Object.values(TourStatus)),
+  isActive: z.boolean(),
+  isDeleted: z.boolean(),
+});
+
+export type UpdateTourByAdminPayload = z.infer<typeof UpdateTourByAdminSchema>;

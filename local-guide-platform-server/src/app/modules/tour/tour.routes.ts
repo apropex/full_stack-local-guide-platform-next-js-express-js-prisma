@@ -8,6 +8,7 @@ import validateRequest from "../../middlewares/validateRequest";
 import * as tourControllers from "./tour.controller";
 import {
   CreateTourPayloadSchema,
+  UpdateTourByAdminSchema,
   UpdateTourPayloadSchema,
 } from "./tour.validation";
 
@@ -27,12 +28,19 @@ router.post(
   tourControllers.createTour,
 );
 
-router.post(
+router.patch(
   "/update/:id",
   roleVerifier(guideAccess),
   multiFileUploader,
   validateRequest(UpdateTourPayloadSchema),
   tourControllers.updateTour,
+);
+
+router.patch(
+  "/update-tour-by-admin/:id",
+  roleVerifier(adminAccess),
+  validateRequest(UpdateTourByAdminSchema),
+  tourControllers.updateTourByAdmin,
 );
 
 router.delete(

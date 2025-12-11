@@ -1,5 +1,5 @@
 import RefreshButton from "@/components/buttons/RefreshButton";
-import MyTourTable from "@/components/modules/guide/tour/MyTourTable";
+import TourTable from "@/components/modules/Admin/tourManagement/TourTable";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import SearchFilter from "@/components/shared/SearchFilter";
 import SelectFilter from "@/components/shared/SelectFilter";
@@ -26,8 +26,8 @@ export default async function MyToursPage({ searchParams }: MyToursProps) {
   return (
     <div className="space-y-5">
       <ManagementPageHeader
-        title="Tourist Management"
-        description="Manage tourist information and details"
+        title="Tour Management"
+        description="Manage tours information and details"
       />
 
       <div className="flex items-center flex-wrap gap-4">
@@ -45,7 +45,7 @@ export default async function MyToursPage({ searchParams }: MyToursProps) {
       </div>
 
       <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-        <MyTourTable tours={result.data || []} />
+        <TourTable tours={result.data || []} />
       </Suspense>
     </div>
   );

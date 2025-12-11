@@ -6,7 +6,11 @@ import { iImage } from "@/interfaces";
 import { _fetch } from "@/lib/custom-fetch";
 import { join, modifiedArray, stringToArray } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
-import { CreateTourPayload, UpdateTourPayload } from "@/zod/tour.schema";
+import {
+  CreateTourPayload,
+  UpdateTourByAdminPayload,
+  UpdateTourPayload,
+} from "@/zod/tour.schema";
 
 export const createTour = async (payload: CreateTourPayload, files: File[]) => {
   const highlights = modifiedArray(payload.highlights);
@@ -62,7 +66,7 @@ export const updateTour = async (
 
   try {
     const formData = makeFormData("data", safePayload, "files", files);
-    return await _fetch.post(routes.tour("update", id), { body: formData });
+    return await _fetch.patch(routes.tour("update", id), { body: formData });
   } catch (error) {
     return errorResponse(error);
   }
@@ -105,6 +109,19 @@ export const getAllTours = async (query?: string) => {
   try {
     const api = join(routes.tour("all"), query ? join("?", query) : "");
     return await _fetch.get(api);
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
+
+export const updateTourByAdmin = async (
+  id: string,
+  payload: UpdateTourByAdminPayload,
+) => {
+  try {
+    return await _fetch.patch(routes.tour("update-tour-by-admin", id), {
+      data: payload,
+    });
   } catch (error) {
     return errorResponse(error);
   }

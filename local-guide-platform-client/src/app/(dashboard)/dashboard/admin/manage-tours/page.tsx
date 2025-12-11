@@ -1,9 +1,52 @@
-//
+import RefreshButton from "@/components/buttons/RefreshButton";
+import MyTourTable from "@/components/modules/Admin/tourManagement/TourTable";
+import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
+import SearchFilter from "@/components/shared/SearchFilter";
+import SelectFilter from "@/components/shared/SelectFilter";
+import TableSkeleton from "@/components/shared/TableSkeleton";
+import { iResponse } from "@/interfaces";
+import { iTour } from "@/interfaces/tour.interfaces";
+import { getAllTours } from "@/services/tour.services";
+import { queryFormatter } from "@/utils/queryFormatter";
+import { Suspense } from "react";
 
-export default function ManageToursPage() {
+interface MyToursProps {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function ManageTourPage({ searchParams }: MyToursProps) {
+  const params = await searchParams;
+  const query = queryFormatter(params);
+
+  const result = (await getAllTours(query)) as iResponse<iTour[]>;
+
+  const totalPage = result.meta?.total_pages || 1;
+  const currentPage = result.meta?.present_page || 1;
+
   return (
-    <div className="">
-      <h1 className="">This is ManageToursPage component</h1>
+    <div className="space-y-5">
+      <ManagementPageHeader
+        title="Tour Management"
+        description="Manage tours information and details"
+      />
+
+      <div className="flex items-center flex-wrap gap-4">
+        <SearchFilter />
+        <SelectFilter
+          placeholder="Find deleted or active admins"
+          paramName="isDeleted"
+          options={[
+            { label: "All", value: "all" },
+            { label: "Deleted", value: "true" },
+            { label: "Active", value: "false" },
+          ]}
+        />
+        <RefreshButton variant="outline">Refresh</RefreshButton>
+      </div>
+
+      <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+        <MyTourTable tours={result.data || []} />
+      </Suspense>
     </div>
   );
 }
