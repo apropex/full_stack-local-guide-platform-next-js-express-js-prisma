@@ -22,28 +22,24 @@ const processPaymentStatusUpdate = async ({
   bookingStatus,
   success,
   message,
-  // paymentInfo = {},
 }: UpdateStatusParams) => {
-  return await prisma.$transaction(async (trx) => {
-    const payment = await trx.payment.update({
-      where: { trxId },
-      data: { status: paymentStatus },
-      include: { booking: true },
-    });
-
-    if (!payment) throw new ApiError(sCode.NOT_FOUND, "Payment not found");
-
-    if (!payment.booking || !payment.booking.id)
-      throw new ApiError(404, "Booking not found");
-
-    await trx.booking.update({
-      where: { id: payment.booking.id },
-      data: { status: bookingStatus },
-      include: { tour: true },
-    });
-
-    return { success, message };
+  // STEP-1: Update payment
+  const payment = await prisma.payment.update({
+    where: { trxId },
+    data: { status: paymentStatus },
+    include: { booking: true },
   });
+
+  if (!payment) throw new ApiError(404, "Payment not found");
+  if (!payment.booking?.id) throw new ApiError(404, "Booking not found");
+
+  // STEP-2: Update booking
+  await prisma.booking.update({
+    where: { id: payment.booking.id },
+    data: { status: bookingStatus },
+  });
+
+  return { success, message };
 };
 
 export const successPayment = async (trxId: string) => {

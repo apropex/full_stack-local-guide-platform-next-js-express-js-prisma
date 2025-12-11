@@ -49,6 +49,9 @@ export default function MyTourTable({ tours }: MyTourTableProps) {
         onEdit={({ id }) =>
           router.push(join("/dashboard/guide/edit-tour?id=", id))
         }
+        onView={({ id }) =>
+          router.push(join("/dashboard/guide/my-tours/tour-details?id=", id))
+        }
         rowKey={({ id }) => id}
         emptyMessage="No tours found"
         isRefresh={false}

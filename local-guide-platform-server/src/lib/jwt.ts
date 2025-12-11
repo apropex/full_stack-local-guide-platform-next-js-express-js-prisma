@@ -27,6 +27,7 @@ const payloadMaker = (user: iJwtPayloadMaker) => {
   if (user.name) payload.name = user.name;
   if (user.email) payload.email = user.email;
   if (user.phone) payload.phone = user.phone;
+  if (user.address) payload.address = user.address;
   if (user.gender) payload.gender = user.gender;
   if (user.language) payload.language = user.language;
   if (user.country) payload.country = user.country;
