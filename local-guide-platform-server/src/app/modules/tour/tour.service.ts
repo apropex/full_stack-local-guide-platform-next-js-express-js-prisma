@@ -17,34 +17,32 @@ import {
   tourSearchFields,
 } from "./tour.constants";
 
-//* CREATE TOUR *\\
+//* CREATE TOUR (No Transaction) *\\
 export const createTour = async (
   guideId: string,
   payload: Tour,
   files?: CloudFiles,
 ) => {
-  return await prisma.$transaction(async (trx) => {
-    const tour = await trx.tour.create({
-      data: { ...payload, guideId },
-      include: { images: true },
-    });
-
-    if (files) {
-      await Promise.allSettled(
-        files.map((file) =>
-          trx.tourImage.create({
-            data: {
-              tourId: tour.id,
-              url: file.secure_url,
-              publicId: file.public_id,
-            },
-          }),
-        ),
-      );
-    }
-
-    return tour;
+  // Step 1: Create the tour
+  const tour = await prisma.tour.create({
+    data: { ...payload, guideId },
   });
+
+  // Step 2: Insert images sequentially (if any)
+  if (files && files.length > 0) {
+    for (const file of files) {
+      await prisma.tourImage.create({
+        data: {
+          tourId: tour.id,
+          url: file.secure_url,
+          publicId: file.public_id,
+        },
+      });
+    }
+  }
+
+  // Step 3: Return the created tour
+  return tour;
 };
 
 //* UPDATE TOUR *\\

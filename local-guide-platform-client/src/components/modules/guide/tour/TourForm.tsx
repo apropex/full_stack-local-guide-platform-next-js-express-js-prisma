@@ -1,6 +1,5 @@
 "use client";
 
-import LoadingButton from "@/components/buttons/LoadingButton";
 import {
   Form,
   FormControl,
@@ -18,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { TourDurationType } from "@/constants";
+import { Difficulty, TourDurationType } from "@/constants";
 import { cn } from "@/lib/utils";
 import { CreateTourPayload } from "@/zod/tour.schema";
 import { Plus, X } from "lucide-react";
@@ -28,16 +27,10 @@ import { SubmitHandler, useFieldArray, UseFormReturn } from "react-hook-form";
 interface TourFormProps {
   form: UseFormReturn<CreateTourPayload>;
   onSubmit: SubmitHandler<CreateTourPayload>;
-  loading: boolean;
-  isEdit: boolean;
+  id: string;
 }
 
-export default function TourForm({
-  form,
-  onSubmit,
-  loading,
-  isEdit,
-}: TourFormProps) {
+export default function TourForm({ form, onSubmit, id }: TourFormProps) {
   const description = form.watch("description");
   const descriptionLength = useMemo(
     () => description?.length ?? 0,
@@ -82,229 +75,54 @@ export default function TourForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8 p-5">
+      <form
+        id={id}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8"
+      >
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tour Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter an eye-catching title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="relative">
           <FormField
             control={form.control}
-            name="title"
+            name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tour Title</FormLabel>
+                <FormLabel>Description (details of the tour)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter a eye-catching title" {...field} />
+                  <Textarea
+                    placeholder="Enter your description here..."
+                    {...field}
+                    className="max-h-60"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <div className="relative">
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description (details of the tour)</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter your description here..."
-                      {...field}
-                      className="max-h-60"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <span
+            className={cn("absolute right-0 top-0 text-[#4B4458]/70 text-sm", {
+              "text-red-500": descriptionLength > 1000,
+            })}
+          >
+            {descriptionLength}/1000
+          </span>
+        </div>
 
-            <span
-              className={cn(
-                "absolute right-0 top-0 text-[#4B4458]/70 text-sm",
-                {
-                  "text-red-500": descriptionLength > 1000,
-                },
-              )}
-            >
-              {descriptionLength}/1000
-            </span>
-          </div>
-
-          <div className="space-y-2 min-h-15">
-            <div className="flex justify-between gap-3 flex-wrap">
-              <FormLabel>Highlights</FormLabel>
-              <button
-                className="text-xs flex items-center gap-2 hover:text-green-500"
-                type="button"
-                onClick={() => highlightsAppend({ value: "" })}
-              >
-                <Plus size={16} /> Add More
-              </button>
-            </div>
-
-            {highlightsFields.map((item, index) => (
-              <FormField
-                key={item.id}
-                control={form.control}
-                name={`highlights.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <span className="inline-flex items-center relative">
-                        <Input
-                          {...field}
-                          placeholder="Enter language"
-                          className="pr-8"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => highlightsRemove(index)}
-                          className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
-                        >
-                          <span className="bg-background p-1 rounded inline-block">
-                            <X size={16} />
-                          </span>
-                        </button>
-                      </span>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-
-          <div className="space-y-2 min-h-15">
-            <div className="flex justify-between gap-3 flex-wrap">
-              <FormLabel>Includes</FormLabel>
-              <button
-                className="text-xs flex items-center gap-2 hover:text-green-500"
-                type="button"
-                onClick={() => includesAppend({ value: "" })}
-              >
-                <Plus size={16} /> Add More
-              </button>
-            </div>
-
-            {includesFields.map((item, index) => (
-              <FormField
-                key={item.id}
-                control={form.control}
-                name={`includes.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <span className="inline-flex items-center relative">
-                        <Input
-                          {...field}
-                          placeholder="Enter language"
-                          className="pr-8"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => includesRemove(index)}
-                          className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
-                        >
-                          <span className="bg-background p-1 rounded inline-block">
-                            <X size={16} />
-                          </span>
-                        </button>
-                      </span>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-
-          <div className="space-y-2 min-h-15">
-            <div className="flex justify-between gap-3 flex-wrap">
-              <FormLabel>Excludes</FormLabel>
-              <button
-                className="text-xs flex items-center gap-2 hover:text-green-500"
-                type="button"
-                onClick={() => excludesAppend({ value: "" })}
-              >
-                <Plus size={16} /> Add More
-              </button>
-            </div>
-
-            {excludesFields.map((item, index) => (
-              <FormField
-                key={item.id}
-                control={form.control}
-                name={`excludes.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <span className="inline-flex items-center relative">
-                        <Input
-                          {...field}
-                          placeholder="Enter excludes"
-                          className="pr-8"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => excludesRemove(index)}
-                          className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
-                        >
-                          <span className="bg-background p-1 rounded inline-block">
-                            <X size={16} />
-                          </span>
-                        </button>
-                      </span>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-
-          <div className="space-y-2 min-h-15">
-            <div className="flex justify-between gap-3 flex-wrap">
-              <FormLabel>What to bring</FormLabel>
-              <button
-                className="text-xs flex items-center gap-2 hover:text-green-500"
-                type="button"
-                onClick={() => whatToBringAppend({ value: "" })}
-              >
-                <Plus size={16} /> Add More
-              </button>
-            </div>
-
-            {whatToBringFields.map((item, index) => (
-              <FormField
-                key={item.id}
-                control={form.control}
-                name={`whatToBring.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <span className="inline-flex items-center relative">
-                        <Input
-                          {...field}
-                          placeholder="Enter whatToBring"
-                          className="pr-8"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => whatToBringRemove(index)}
-                          className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
-                        >
-                          <span className="bg-background p-1 rounded inline-block">
-                            <X size={16} />
-                          </span>
-                        </button>
-                      </span>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8">
           <FormField
             control={form.control}
             name="price"
@@ -490,45 +308,231 @@ export default function TourForm({
             name="difficulty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Difficulty <br />{" "}
-                  <span className="text-xs text-muted-foreground">
-                    What type of difficulties visitor can face.
-                  </span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter difficulties" {...field} />
-                </FormControl>
+                <FormLabel>Difficulty</FormLabel>
+
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger
+                      className={`${form.formState.errors.difficulty && "border-red-500"} w-full`}
+                    >
+                      <SelectValue placeholder="Select a difficulty" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    <SelectItem value={Difficulty.EASY}>Easy</SelectItem>
+                    <SelectItem value={Difficulty.MEDIUM}>Medium</SelectItem>
+                    <SelectItem value={Difficulty.HARD}>Hard</SelectItem>
+                  </SelectContent>
+                </Select>
+
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="cancellationPolicy"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Cancellation Policy</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter cancellation policy" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+          <div className="md:col-span-2">
+            <div className="grid md:grid-cols-2 gap-x-4 gap-y-8">
+              <FormField
+                control={form.control}
+                name="cancellationPolicy"
+                render={({ field }) => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel>Cancellation Policy</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Enter cancellation policy"
+                        {...field}
+                        className="max-h-60"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div className="flex justify-center mb-4 mt-8">
-          <LoadingButton
-            isLoading={loading}
-            loadingText={isEdit ? "Updating..." : "Creating..."}
-            type="submit"
-            className="w-full max-w-sm"
-            disabled={loading}
-          >
-            {isEdit ? "Update" : "Create"} Admin
-          </LoadingButton>
+              <div className="space-y-2 min-h-15">
+                <div className="flex justify-between gap-3 flex-wrap">
+                  <FormLabel>Includes</FormLabel>
+                  <button
+                    className="text-xs flex items-center gap-2 hover:text-green-500"
+                    type="button"
+                    onClick={() => includesAppend({ value: "" })}
+                  >
+                    <Plus size={16} /> Add More
+                  </button>
+                </div>
+
+                {includesFields.map((item, index) => (
+                  <FormField
+                    key={item.id}
+                    control={form.control}
+                    name={`includes.${index}.value`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <span className="inline-flex items-center relative">
+                            <Input
+                              {...field}
+                              placeholder="Enter language"
+                              className="pr-8"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => includesRemove(index)}
+                              className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
+                            >
+                              <span className="bg-background p-1 rounded inline-block">
+                                <X size={16} />
+                              </span>
+                            </button>
+                          </span>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
+
+              <div className="space-y-2 min-h-15">
+                <div className="flex justify-between gap-3 flex-wrap">
+                  <FormLabel>Excludes</FormLabel>
+                  <button
+                    className="text-xs flex items-center gap-2 hover:text-green-500"
+                    type="button"
+                    onClick={() => excludesAppend({ value: "" })}
+                  >
+                    <Plus size={16} /> Add More
+                  </button>
+                </div>
+
+                {excludesFields.map((item, index) => (
+                  <FormField
+                    key={item.id}
+                    control={form.control}
+                    name={`excludes.${index}.value`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <span className="inline-flex items-center relative">
+                            <Input
+                              {...field}
+                              placeholder="Enter excludes"
+                              className="pr-8"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => excludesRemove(index)}
+                              className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
+                            >
+                              <span className="bg-background p-1 rounded inline-block">
+                                <X size={16} />
+                              </span>
+                            </button>
+                          </span>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <div className="space-y-2 min-h-15">
+              <div className="flex justify-between gap-3 flex-wrap">
+                <FormLabel>Highlights</FormLabel>
+                <button
+                  className="text-xs flex items-center gap-2 hover:text-green-500"
+                  type="button"
+                  onClick={() => highlightsAppend({ value: "" })}
+                >
+                  <Plus size={16} /> Add More
+                </button>
+              </div>
+
+              {highlightsFields.map((item, index) => (
+                <FormField
+                  key={item.id}
+                  control={form.control}
+                  name={`highlights.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <span className="inline-flex items-center relative">
+                          <Input
+                            {...field}
+                            placeholder="Enter language"
+                            className="pr-8"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => highlightsRemove(index)}
+                            className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
+                          >
+                            <span className="bg-background p-1 rounded inline-block">
+                              <X size={16} />
+                            </span>
+                          </button>
+                        </span>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+
+            <div className="space-y-2 min-h-15">
+              <div className="flex justify-between gap-3 flex-wrap">
+                <FormLabel>What to bring</FormLabel>
+                <button
+                  className="text-xs flex items-center gap-2 hover:text-green-500"
+                  type="button"
+                  onClick={() => whatToBringAppend({ value: "" })}
+                >
+                  <Plus size={16} /> Add More
+                </button>
+              </div>
+
+              {whatToBringFields.map((item, index) => (
+                <FormField
+                  key={item.id}
+                  control={form.control}
+                  name={`whatToBring.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <span className="inline-flex items-center relative">
+                          <Input
+                            {...field}
+                            placeholder="Enter whatToBring"
+                            className="pr-8"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => whatToBringRemove(index)}
+                            className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
+                          >
+                            <span className="bg-background p-1 rounded inline-block">
+                              <X size={16} />
+                            </span>
+                          </button>
+                        </span>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </form>
     </Form>

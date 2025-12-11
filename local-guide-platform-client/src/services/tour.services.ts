@@ -3,22 +3,60 @@
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
 import { _fetch } from "@/lib/custom-fetch";
-import { join } from "@/utils";
+import { join, modifiedArray, stringToArray } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
 import { CreateTourPayload, UpdateTourPayload } from "@/zod/tour.schema";
 
 export const createTour = async (payload: CreateTourPayload, files: File[]) => {
+  const highlights = modifiedArray(payload.highlights);
+  const includes = modifiedArray(payload.includes);
+  const excludes = modifiedArray(payload.excludes);
+  const whatToBring = modifiedArray(payload.whatToBring);
+
+  const tags = stringToArray(",", payload.tags);
+  const languages = stringToArray(",", payload.languages);
+
+  const safePayload = {
+    ...payload,
+    highlights,
+    includes,
+    excludes,
+    whatToBring,
+    tags,
+    languages,
+  };
+
   try {
-    const formData = makeFormData("data", payload, "files", files);
+    const formData = makeFormData("data", safePayload, "files", files);
     return await _fetch.post(routes.tour("create"), { body: formData });
   } catch (error) {
     return errorResponse(error);
   }
 };
 
-export const updateTour = async (payload: UpdateTourPayload, files?: File[]) => {
+export const updateTour = async (
+  payload: UpdateTourPayload,
+  files?: File[],
+) => {
+  const highlights = modifiedArray(payload.highlights);
+  const includes = modifiedArray(payload.includes);
+  const excludes = modifiedArray(payload.excludes);
+  const whatToBring = modifiedArray(payload.whatToBring);
+
+  const tags = stringToArray(",", payload.tags);
+  const languages = stringToArray(",", payload.languages);
+
+  const safePayload = {
+    ...payload,
+    highlights,
+    includes,
+    excludes,
+    whatToBring,
+    tags,
+    languages,
+  };
   try {
-    const formData = makeFormData("data", payload, "files", files);
+    const formData = makeFormData("data", safePayload, "files", files);
     return await _fetch.post(routes.tour("update"), { body: formData });
   } catch (error) {
     return errorResponse(error);

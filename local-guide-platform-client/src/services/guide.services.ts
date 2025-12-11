@@ -3,12 +3,8 @@
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
 import { _fetch } from "@/lib/custom-fetch";
-import { join } from "@/utils";
+import { join, modifiedArray } from "@/utils";
 import { GuidePayload } from "@/zod/guide.schema";
-
-const modifiedArray = (ary?: { value: string }[]): string[] => {
-  return ary ? ary.map(({ value }) => value.trim()).filter(Boolean) : [];
-};
 
 const number = (n?: string | number): number => {
   return n ? Number(n) : 0;

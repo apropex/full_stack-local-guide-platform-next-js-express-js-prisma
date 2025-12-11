@@ -4,6 +4,7 @@ import httpStatus from "http-status";
 import ApiError from "../../lib/ApiError";
 import { isProd } from "../../lib/config/env";
 import { deleteImageFromCloud } from "../../utils/deleteImageFromCloud";
+import { CloudFile, CloudFiles } from "../constants";
 
 interface ErrorResponse {
   message: string;
@@ -258,12 +259,18 @@ const globalErrorHandler = async (
     });
   }
 
-  if (req.file && req.file.path) await deleteImageFromCloud(req.file.path);
+  if (req.file && (req.file as CloudFile)?.public_id) {
+    await deleteImageFromCloud((req.file as CloudFile).public_id);
+  }
 
   if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    const imageUrls = req.files?.map((file) => file.path);
+    const selectedFiles = (req.files as CloudFiles)?.filter(
+      (file: CloudFile) => file.public_id,
+    );
 
-    await Promise.all(imageUrls.map((url) => deleteImageFromCloud(url)));
+    await Promise.all(
+      selectedFiles.map((file) => deleteImageFromCloud(file.public_id)),
+    );
   }
 
   res.status(statusCode).json({ success: false, ...errorResponse });
