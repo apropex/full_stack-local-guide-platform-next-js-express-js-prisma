@@ -35,12 +35,12 @@ export const getAllBookings = catchAsync(async (req, res) => {
 
 //
 export const getMyBookings = catchAsync(async (req, res) => {
-  req.query.userId = checkString(
-    req.decoded?.id,
-    "User id not found, login again",
-  );
+  const userId = checkString(req.decoded?.id, "User id not found, login again");
 
-  const { data, meta } = await bookingServices.getAllBookings(req.query);
+  const { data, meta } = await bookingServices.getAllBookings({
+    ...req.query,
+    userId,
+  });
 
   _response(res, {
     message: "User bookings retrieved successfully!",

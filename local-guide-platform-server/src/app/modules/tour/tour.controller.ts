@@ -1,3 +1,4 @@
+import { TourStatus } from "@prisma/client";
 import { multiFileUploaderToCloud } from "../../../lib/fileUploader";
 import catchAsync from "../../../shared/catchAsync";
 import _response from "../../../shared/sendResponse";
@@ -66,8 +67,23 @@ export const getAllTours = catchAsync(async (req, res) => {
   });
 });
 
+export const getAllToursPublic = catchAsync(async (req, res) => {
+  const approveStatus = TourStatus.APPROVED;
+  const isActive = "true";
+  const isDeleted = "false";
+
+  const query = { ...req.query, approveStatus, isActive, isDeleted };
+
+  const { data, meta } = await tourServices.getAllTours(query);
+  _response(res, {
+    message: "Tours retrieved successfully!",
+    data,
+    meta,
+  });
+});
+
 export const myTours = catchAsync(async (req, res) => {
-  req.params.guideId = checkString(
+  req.query.guideId = checkString(
     req.decoded?.guideId,
     "Guide ID not found, login again.",
   );

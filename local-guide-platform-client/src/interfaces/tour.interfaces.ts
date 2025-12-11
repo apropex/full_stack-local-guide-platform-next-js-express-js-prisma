@@ -1,6 +1,13 @@
-import { tDifficulty, tTourDurationType, tTourStatus } from "@/constants";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  tBookingStatus,
+  tDifficulty,
+  tPaymentStatus,
+  tTourDurationType,
+  tTourStatus,
+} from "@/constants";
 import { iImage } from ".";
-import { iGuide } from "./user.interfaces";
+import { iGuide, iUser } from "./user.interfaces";
 
 export interface iTour {
   id: string;
@@ -36,4 +43,33 @@ export interface iTour {
   guide: iGuide;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface iBooking {
+  id: string;
+  userId: string;
+  tourId: string;
+  status: tBookingStatus;
+  paymentId: string;
+  payment: iPayment;
+
+  trxId: string;
+
+  updatedAt: string;
+  createdAt: string;
+
+  user: iUser;
+
+  tour: iTour;
+}
+
+export interface iPayment {
+  id: string;
+  amount: number;
+  trxId: string;
+  paymentInfo: any;
+  invoiceUrl: string;
+  status: tPaymentStatus;
+  booking: iBooking;
+  createdAt: string;
 }

@@ -2,8 +2,6 @@ import { Role, tRole } from "@/constants";
 import {
   BarChart3,
   CalendarCheck,
-  ClipboardList,
-  CreditCard,
   Map,
   MapPinned,
   PlusIcon,
@@ -66,16 +64,16 @@ const ADMIN: iSidebarMenu = {
           url: "/dashboard/admin/manage-tours",
           icon: MapPinned,
         },
-        {
-          title: "Manage Bookings",
-          url: "/dashboard/admin/manage-bookings",
-          icon: ClipboardList,
-        },
-        {
-          title: "Manage Payments",
-          url: "/dashboard/admin/manage-payments",
-          icon: CreditCard,
-        },
+        // {
+        //   title: "Manage Bookings",
+        //   url: "/dashboard/admin/manage-bookings",
+        //   icon: ClipboardList,
+        // },
+        // {
+        //   title: "Manage Payments",
+        //   url: "/dashboard/admin/manage-payments",
+        //   icon: CreditCard,
+        // },
       ],
     },
   ],
@@ -106,16 +104,16 @@ const GUIDE: iSidebarMenu = {
         },
       ],
     },
-    {
-      title: "Docs Management",
-      items: [
-        {
-          title: "Manage Bookings",
-          url: "/dashboard/guide/manage-bookings",
-          icon: ClipboardList,
-        },
-      ],
-    },
+    // {
+    //   title: "Docs Management",
+    //   items: [
+    //     {
+    //       title: "Manage Bookings",
+    //       url: "/dashboard/guide/manage-bookings",
+    //       icon: ClipboardList,
+    //     },
+    //   ],
+    // },
   ],
 };
 

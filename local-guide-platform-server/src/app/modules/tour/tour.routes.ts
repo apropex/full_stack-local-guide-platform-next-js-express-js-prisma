@@ -14,9 +14,11 @@ import {
 
 const router = Router();
 
-router.get("/all", tourControllers.getAllTours);
+router.get("/all", roleVerifier(adminAccess), tourControllers.getAllTours);
 
-router.get("/my-tours", tokenVerifier, tourControllers.myTours);
+router.get("/all-public", tourControllers.getAllToursPublic);
+
+router.get("/my-tours", roleVerifier(guideAccess), tourControllers.myTours);
 
 router.get("/:id", tokenVerifier, tourControllers.getTourById);
 

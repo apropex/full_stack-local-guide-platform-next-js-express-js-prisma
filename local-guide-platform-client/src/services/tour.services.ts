@@ -105,6 +105,15 @@ export const getMyTours = async (query?: string) => {
   }
 };
 
+export const getAllToursPublic = async (query?: string) => {
+  try {
+    const api = join(routes.tour("all-public"), query ? join("?", query) : "");
+    return await _fetch.get(api);
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
+
 export const getAllTours = async (query?: string) => {
   try {
     const api = join(routes.tour("all"), query ? join("?", query) : "");

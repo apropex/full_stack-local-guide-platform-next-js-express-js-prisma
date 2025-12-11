@@ -21,8 +21,6 @@ bookingRoutes.patch(
   bookingControllers.updateBookingStatus,
 );
 
-bookingRoutes.get("/:id", tokenVerifier, bookingControllers.getBookingById);
-
 bookingRoutes.get(
   "/all",
   roleVerifier(adminAccess),
@@ -34,5 +32,7 @@ bookingRoutes.get(
   tokenVerifier,
   bookingControllers.getMyBookings,
 );
+
+bookingRoutes.get("/:id", tokenVerifier, bookingControllers.getBookingById);
 
 export default bookingRoutes;
