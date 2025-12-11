@@ -15,6 +15,8 @@ const router = Router();
 
 router.get("/all", tourControllers.getAllTours);
 
+router.get("/my-tours", tokenVerifier, tourControllers.myTours);
+
 router.get("/:id", tokenVerifier, tourControllers.getTourById);
 
 router.post(
@@ -26,7 +28,7 @@ router.post(
 );
 
 router.post(
-  "/update",
+  "/update/:id",
   roleVerifier(guideAccess),
   multiFileUploader,
   validateRequest(UpdateTourPayloadSchema),

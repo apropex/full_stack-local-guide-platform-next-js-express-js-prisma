@@ -49,7 +49,7 @@ export default function CreateTourForm() {
   });
 
   async function onSubmit(values: CreateTourPayload) {
-    if (!images || images.length < 1) return setImageError(true);
+    if (!images || images.length < 3) return setImageError(true);
 
     setImageError(false);
     setLoading(true);
@@ -79,7 +79,7 @@ export default function CreateTourForm() {
       </h3>
       <TourForm form={form} onSubmit={onSubmit} id="create_tour_form" />
       <MultiFileUploader setImages={setImages} />
-      {imageError && (images?.length ?? 0) < 1 && (
+      {imageError && (images?.length ?? 0) < 3 && (
         <p className="text-sm text-destructive">
           Minimum 3 images are required
         </p>

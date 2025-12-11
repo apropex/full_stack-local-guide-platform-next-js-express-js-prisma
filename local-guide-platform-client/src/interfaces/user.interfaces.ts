@@ -1,4 +1,5 @@
 import { tGender, tRole, tUserStatus } from "@/constants";
+import { iImage } from ".";
 
 export interface iUser {
   id: string;
@@ -76,16 +77,7 @@ export interface iAdmin {
   verifiedAdmins: iAdmin[];
 }
 
-export interface iUserAvatar {
-  id: string;
-  url: string;
-  publicId: string;
-  format?: string;
-  width?: number;
-  height?: number;
-  bytes?: number;
-  folder?: string;
-  createdAt: string;
+export interface iUserAvatar extends iImage {
   userId: string;
   user: iUser;
 }

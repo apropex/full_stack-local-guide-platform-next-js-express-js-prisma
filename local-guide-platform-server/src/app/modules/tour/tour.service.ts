@@ -9,7 +9,7 @@ import configureQuery, {
 } from "../../../utils/configureQuery";
 import { deleteImageFromCloud } from "../../../utils/deleteImageFromCloud";
 import { strx } from "../../../utils/strx";
-import { adminAccess, CloudFiles } from "../../constants";
+import { CloudFiles } from "../../constants";
 import {
   tourBooleanFields,
   tourFilterFields,
@@ -61,23 +61,23 @@ export const updateTour = async (
 
   if (!tour) throw new ApiError(sCode.NOT_FOUND, "Tour not found");
 
-  if (tour.guideId !== decoded.id || !adminAccess.includes(decoded.role)) {
-    throw new ApiError(
-      sCode.BAD_REQUEST,
-      "You are not permitted to update this tour",
-    );
-  }
+  // if (tour.guideId !== decoded.guideId || !adminAccess.includes(decoded.role)) {
+  //   throw new ApiError(
+  //     sCode.BAD_REQUEST,
+  //     "You are not permitted to update this tour",
+  //   );
+  // }
 
   return await prisma.$transaction(async (trx) => {
     if (Array.isArray(deletedImages) && deletedImages.length) {
       await Promise.all(
-        deletedImages.map((pId) =>
-          trx.tourImage.delete({ where: { publicId: pId } }),
+        deletedImages.map((publicId) =>
+          trx.tourImage.delete({ where: { publicId } }),
         ),
       );
 
       await Promise.allSettled(
-        deletedImages.map((pId) => deleteImageFromCloud(pId)),
+        deletedImages.map((publicId) => deleteImageFromCloud(publicId)),
       );
     }
 
@@ -101,7 +101,10 @@ export const updateTour = async (
 
 //* GET TOUR BY ID *\\
 export const getTourById = async (id: string) => {
-  return await prisma.tour.findUniqueOrThrow({ where: { id } });
+  return await prisma.tour.findUniqueOrThrow({
+    where: { id },
+    include: { images: true },
+  });
 };
 
 //* GET ALL TOUR *\\
@@ -177,25 +180,20 @@ export const getAllTours = async (query: iQuery) => {
 
   const include = {
     images: true,
-    bookings: {
-      include: {
-        payment: true,
-      },
-    },
   };
 
-  const [events, total_records, filtered_records] = await Promise.all([
+  const [tours, total_records, filtered_records] = await Promise.all([
     prisma.tour.findMany({ where, orderBy, skip, take, include }),
     prisma.tour.count(),
     prisma.tour.count({ where }),
   ]);
 
   return {
-    data: events,
+    data: tours,
     meta: {
       total_records,
       filtered_records,
-      present_records: events.length ?? 0,
+      present_records: tours.length ?? 0,
       total_pages: Math.ceil(filtered_records / take),
       present_page: page,
       skip,

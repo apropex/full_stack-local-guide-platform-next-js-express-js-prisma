@@ -23,3 +23,15 @@ export interface iResponse<T> {
   };
   data: T;
 }
+
+export interface iImage {
+  id: string;
+  url: string;
+  publicId: string;
+  format?: string;
+  width?: number;
+  height?: number;
+  bytes?: number;
+  folder?: string;
+  createdAt: string;
+}

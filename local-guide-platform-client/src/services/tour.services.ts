@@ -2,6 +2,7 @@
 
 import { routes } from "@/constants/routes";
 import { errorResponse } from "@/helper/errorResponse";
+import { iImage } from "@/interfaces";
 import { _fetch } from "@/lib/custom-fetch";
 import { join, modifiedArray, stringToArray } from "@/utils";
 import { makeFormData } from "@/utils/makeFormData";
@@ -35,8 +36,10 @@ export const createTour = async (payload: CreateTourPayload, files: File[]) => {
 };
 
 export const updateTour = async (
+  id: string,
   payload: UpdateTourPayload,
   files?: File[],
+  deletedImages: iImage[] = [],
 ) => {
   const highlights = modifiedArray(payload.highlights);
   const includes = modifiedArray(payload.includes);
@@ -54,10 +57,12 @@ export const updateTour = async (
     whatToBring,
     tags,
     languages,
+    deletedImages: deletedImages.map((img) => img.publicId),
   };
+
   try {
     const formData = makeFormData("data", safePayload, "files", files);
-    return await _fetch.post(routes.tour("update"), { body: formData });
+    return await _fetch.post(routes.tour("update", id), { body: formData });
   } catch (error) {
     return errorResponse(error);
   }
@@ -82,6 +87,15 @@ export const hardDeleteTour = async (tourId: string) => {
 export const getSingleTour = async (tourId: string) => {
   try {
     return await _fetch.get(routes.tour(tourId));
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
+
+export const getMyTours = async (query?: string) => {
+  try {
+    const api = join(routes.tour("my-tours"), query ? join("?", query) : "");
+    return await _fetch.get(api);
   } catch (error) {
     return errorResponse(error);
   }

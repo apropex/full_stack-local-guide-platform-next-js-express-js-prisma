@@ -66,6 +66,20 @@ export const getAllTours = catchAsync(async (req, res) => {
   });
 });
 
+export const myTours = catchAsync(async (req, res) => {
+  req.params.guideId = checkString(
+    req.decoded?.guideId,
+    "Guide ID not found, login again.",
+  );
+
+  const { data, meta } = await tourServices.getAllTours(req.query);
+  _response(res, {
+    message: "Tours retrieved successfully!",
+    data,
+    meta,
+  });
+});
+
 export const tourSoftDelete = catchAsync(async (req, res) => {
   await tourServices.tourSoftDelete(req.decoded?.id, req.params.id);
   _response(res, {

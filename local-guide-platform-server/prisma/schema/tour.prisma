@@ -43,7 +43,6 @@ model Tour {
 
 model TourImage {
   id       String  @id @default(uuid())
-  tourId   String
   url      String
   publicId String  @unique
   format   String?
@@ -54,7 +53,8 @@ model TourImage {
 
   createdAt DateTime @default(now())
 
-  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  tourId String
+  tour   Tour   @relation(fields: [tourId], references: [id], onDelete: Cascade)
 
   @@index([tourId])
 }
