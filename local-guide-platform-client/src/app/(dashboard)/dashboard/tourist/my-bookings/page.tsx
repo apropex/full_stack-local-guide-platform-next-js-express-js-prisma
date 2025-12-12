@@ -22,10 +22,8 @@ export default async function MyBookingsPage({
 
   const result = (await getMyBookings(query)) as iResponse<iBooking[]>;
 
-  console.log("My bookings", result.data);
-
-  const totalPage = result.meta?.total_pages || 1;
-  const currentPage = result.meta?.present_page || 1;
+  // const totalPage = result.meta?.total_pages || 1;
+  // const currentPage = result.meta?.present_page || 1;
 
   return (
     <div className="space-y-5">

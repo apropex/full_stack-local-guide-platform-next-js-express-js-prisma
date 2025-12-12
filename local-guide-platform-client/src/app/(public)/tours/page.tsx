@@ -14,11 +14,11 @@ export default async function TourPage({ searchParams }: ToursProps) {
 
   const result = (await getAllToursPublic(query)) as iResponse<iTour[]>;
 
-  const totalPage = result.meta?.total_pages || 1;
-  const currentPage = result.meta?.present_page || 1;
+  // const totalPage = result.meta?.total_pages || 1;
+  // const currentPage = result.meta?.present_page || 1;
 
   return (
-    <div className="mt-24 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+    <div className="mt-24 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {result.data?.map((tour) => (
         <TourCard key={tour.id} tour={tour} />
       ))}

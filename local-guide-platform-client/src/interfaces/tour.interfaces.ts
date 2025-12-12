@@ -52,14 +52,10 @@ export interface iBooking {
   status: tBookingStatus;
   paymentId: string;
   payment: iPayment;
-
   trxId: string;
-
   updatedAt: string;
   createdAt: string;
-
   user: iUser;
-
   tour: iTour;
 }
 

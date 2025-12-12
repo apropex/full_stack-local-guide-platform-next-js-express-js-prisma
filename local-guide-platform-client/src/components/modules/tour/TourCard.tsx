@@ -31,8 +31,8 @@ export default function TourCard({ tour }: TourCardProps) {
   const imageUrl = images?.[0]?.url ?? "";
 
   return (
-    <Link href={`/tours/${id}`} className="block">
-      <Card className="w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 bg-white dark:bg-gray-800 border-none shadow-md">
+    <Link href={`/tours/${id}`} className="block h-full">
+      <Card className="w-full h-full max-w-sm mx-auto overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 bg-white dark:bg-gray-900 border-none shadow-md ">
         <CardHeader className="p-0">
           <div className="relative h-48 w-full">
             <Image
@@ -48,7 +48,7 @@ export default function TourCard({ tour }: TourCardProps) {
             </Badge>
           </div>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-4 flex-1">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 truncate">
             {title}
           </h3>
