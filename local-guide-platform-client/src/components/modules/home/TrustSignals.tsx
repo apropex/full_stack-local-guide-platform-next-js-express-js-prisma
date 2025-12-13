@@ -20,34 +20,7 @@ const contents = [
 
 export default function TrustSignals() {
   return (
-    <div className="py-24 md:py-36 relative dark:bg-black overflow-hidden">
-      {/* Aurora Dream Diagonal Flow */}
-      <div
-        className="absolute inset-0 z-0 dark:hidden"
-        style={{
-          background: `
-         radial-gradient(ellipse 80% 60% at 5% 40%, rgba(175, 109, 255, 0.48), transparent 67%),
-        radial-gradient(ellipse 70% 60% at 45% 45%, rgba(255, 100, 180, 0.41), transparent 67%),
-        radial-gradient(ellipse 62% 52% at 83% 76%, rgba(255, 235, 170, 0.44), transparent 63%),
-        radial-gradient(ellipse 60% 48% at 75% 20%, rgba(120, 190, 255, 0.36), transparent 66%),
-        linear-gradient(45deg, #f7eaff 0%, #fde2ea 100%)
-      `,
-        }}
-      />
-
-      <div
-        className="absolute inset-0 z-0 hidden dark:block"
-        style={{
-          background: `
-          radial-gradient(ellipse 70% 55% at 50% 50%, rgba(255, 20, 147, 0.15), transparent 50%),
-            radial-gradient(ellipse 160% 130% at 10% 10%, rgba(0, 255, 255, 0.12), transparent 60%),
-            radial-gradient(ellipse 160% 130% at 90% 90%, rgba(138, 43, 226, 0.18), transparent 65%),
-            radial-gradient(ellipse 110% 50% at 80% 30%, rgba(255, 215, 0, 0.08), transparent 40%),
-            #000000
-          `,
-        }}
-      />
-
+    <div className="py-24 md:py-36 relative overflow-hidden bg-card">
       {/* content  */}
       <div className="w-full max-w-6xl mx-auto px-4 mb-16 text-center relative z-10">
         <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
