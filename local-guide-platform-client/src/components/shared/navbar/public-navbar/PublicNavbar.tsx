@@ -20,28 +20,30 @@ export default async function PublicNavbar() {
 
   return (
     <nav className="w-full max-w-6xl fixed top-2 left-[50%] -translate-x-[50%] z-999 overflow-hidden px-4">
-      <div className="rounded bg-background/80 backdrop-blur-xs w-full py-2 px-3 flex items-center justify-between">
-        {/* LEFT SIDE */}
-        <div>
-          <Link href={"/"} className="text-lg font-bold uppercase">
-            LASV Guides
-          </Link>
-        </div>
-
-        {/* MIDDLE */}
-        <NavMenuItems />
-
-        {/* RIGHT SIDE */}
-        <div>
-          {!user ? (
-            <Link href={"/login"}>
-              <Button className="border border-green-700 dark:border-none">
-                Login
-              </Button>
+      <div className="rounded-lg bg-background/80">
+        <div className="w-full py-2 px-3 rounded-lg bg-primary/8 backdrop-blur-xs border-b-2 border-primary flex items-center justify-between">
+          {/* LEFT SIDE */}
+          <div>
+            <Link href={"/"} className="text-lg font-bold uppercase">
+              LASV Guides
             </Link>
-          ) : (
-            <PublicProfileMenu user={user} />
-          )}
+          </div>
+
+          {/* MIDDLE */}
+          <NavMenuItems />
+
+          {/* RIGHT SIDE */}
+          <div>
+            {!user ? (
+              <Link href={"/login"}>
+                <Button className="border border-green-700 dark:border-none">
+                  Login
+                </Button>
+              </Link>
+            ) : (
+              <PublicProfileMenu user={user} />
+            )}
+          </div>
         </div>
       </div>
     </nav>

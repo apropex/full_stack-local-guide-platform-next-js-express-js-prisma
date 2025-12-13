@@ -2,9 +2,10 @@
 
 import { Role, tRole } from "@/constants";
 import { join } from "@/utils";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Map } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import CreateAdminForm from "../modules/Admin/adminManagement/CreateAdminForm";
 import CreateGuideForm from "../modules/Admin/guideManagement/CreateGuideForm";
 import {
@@ -23,6 +24,7 @@ import {
 import SidebarRoutes from "./SidebarRoutes";
 
 export default function SidebarMenuComponent({ role }: { role: tRole }) {
+  const [guideFormDialog, setGuideFormDialog] = useState(false);
   const pathname = usePathname();
   const routes = SidebarRoutes(role);
 
@@ -95,7 +97,20 @@ export default function SidebarMenuComponent({ role }: { role: tRole }) {
             {(role === Role.GUIDE || role === Role.TOURIST) && (
               <CreateAdminForm />
             )}
-            {role === Role.TOURIST && <CreateGuideForm />}
+            {role === Role.TOURIST && (
+              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton onClick={() => setGuideFormDialog(true)}>
+                    <Map />
+                    <span>Apply For Guide</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <CreateGuideForm
+                  guideFormDialog={guideFormDialog}
+                  setGuideFormDialog={setGuideFormDialog}
+                />
+              </>
+            )}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

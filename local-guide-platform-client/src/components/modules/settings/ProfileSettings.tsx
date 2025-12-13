@@ -22,6 +22,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import CreateGuideForm from "../Admin/guideManagement/CreateGuideForm";
 import AccountVerification from "./AccountVerification";
 
 interface TagInputProps {
@@ -85,6 +86,7 @@ export function ProfileSettings({ initialData }: { initialData: iUser }) {
     initialData.guide?.languages || [],
   );
   const [guideAbout, setGuideAbout] = useState(initialData.guide?.about || "");
+  const [guideFormDialog, setGuideFormDialog] = useState(false);
 
   return (
     <div className="space-y-10">
@@ -375,9 +377,16 @@ export function ProfileSettings({ initialData }: { initialData: iUser }) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={() => setGuideFormDialog(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               Start Guide Application
             </Button>
+            <CreateGuideForm
+              guideFormDialog={guideFormDialog}
+              setGuideFormDialog={setGuideFormDialog}
+            />
           </CardContent>
         </Card>
       )}

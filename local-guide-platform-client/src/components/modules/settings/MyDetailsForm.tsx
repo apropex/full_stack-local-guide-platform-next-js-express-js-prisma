@@ -78,7 +78,7 @@ export function MyDetailsForm({ user }: iProps) {
   }
 
   return (
-    <Card className="max-w-4xl mx-auto shadow-2xl backdrop-blur-md bg-card/70 animate-fade-in-up">
+    <Card className="max-w-4xl mx-auto bg-transparent border-none">
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-primary">
           Personal Information
