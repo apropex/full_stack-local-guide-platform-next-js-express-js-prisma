@@ -25,6 +25,7 @@ export default function OtpEmail({
   return (
     <Html>
       <Head />
+
       <Preview>Your secure one-time password (OTP) is {otp}</Preview>
 
       <Tailwind>
@@ -51,8 +52,19 @@ export default function OtpEmail({
 
             {/* OTP Box */}
             <Section className="my-10 text-center">
-              <div className="inline-flex items-center justify-center rounded-xl bg-linear-to-br from-indigo-50 to-purple-50 px-10 py-8 shadow-inner">
-                <Text className="font-mono text-4xl font-bold tracking-widest text-indigo-700 lg:text-5xl">
+              <div
+                className="
+                  inline-flex 
+                  items-center 
+                  justify-center 
+                  rounded-xl 
+                  px-10 
+                  py-8 
+                  shadow-inner
+                  bg-[#f3e8ff]
+                "
+              >
+                <Text className="font-mono text-4xl font-bold tracking-widest text-indigo-700">
                   {otp}
                 </Text>
               </div>
@@ -67,8 +79,8 @@ export default function OtpEmail({
             </Text>
 
             <Text className="mt-6 text-base text-gray-600">
-              If you didn&apos;t request this verification, you can safely
-              ignore this email. Someone may have entered your email address by
+              If you didn’t request this verification, you can safely ignore
+              this email. Someone may have entered your email address by
               mistake.
             </Text>
 
@@ -85,7 +97,7 @@ export default function OtpEmail({
             </Section>
           </Container>
 
-          {/* Optional: Extra spacing for email clients */}
+          {/* Spacing for email clients */}
           <Section className="h-12" />
         </Body>
       </Tailwind>

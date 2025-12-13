@@ -8,7 +8,7 @@ export interface ButtonTypes extends React.ComponentProps<"button"> {
   iconRight?: boolean;
   className?: string;
   iconClass?: string;
-  textClass?: string;
+  textclass?: string;
   variant?:
     | "link"
     | "default"

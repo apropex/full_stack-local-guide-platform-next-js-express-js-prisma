@@ -17,6 +17,7 @@ export default function LoadingButton({
   asChild = false,
   icon: Icon,
   iconClass,
+  textclass,
   iconRight = false,
   isLoading,
   loadingText,
@@ -40,12 +41,12 @@ export default function LoadingButton({
               <Loader className={cn("animate-spin", iconClass)} />
             )}
           </span>
-          <span className="inline-block ">{loadingText}</span>
+          <span className={cn("inline-block", textclass)}>{loadingText}</span>
         </>
       ) : (
         <>
           {Icon && !iconRight && <Icon className={iconClass} />}
-          <span className="inline-block ">{children}</span>
+          <span className={cn("inline-block", textclass)}>{children}</span>
           {Icon && iconRight && <Icon className={iconClass} />}
         </>
       )}

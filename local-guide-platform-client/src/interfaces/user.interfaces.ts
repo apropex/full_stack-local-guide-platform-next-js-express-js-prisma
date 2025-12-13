@@ -1,5 +1,6 @@
 import { tGender, tRole, tUserStatus } from "@/constants";
 import { iImage } from ".";
+import { iTour } from "./tour.interfaces";
 
 export interface iUser {
   id: string;
@@ -41,8 +42,8 @@ export interface iAccount {
 export interface iGuide {
   id: string;
   userId: string;
-  expertise: string;
-  languages: string;
+  expertise: string[];
+  languages: string[];
   about: string;
   experienceYears?: number;
   city: string;
@@ -59,6 +60,7 @@ export interface iGuide {
   verifierId?: string;
   verifier?: iAdmin;
   user: iUser;
+  tours: iTour[];
 }
 
 export interface iAdmin {

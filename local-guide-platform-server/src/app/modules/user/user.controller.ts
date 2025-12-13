@@ -1,8 +1,11 @@
+import { UserStatus } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
 import ApiError from "../../../lib/ApiError";
 import { fileUploader } from "../../../lib/fileUploader";
 import catchAsync from "../../../shared/catchAsync";
 import _response from "../../../shared/sendResponse";
+import { sCode } from "../../../utils";
+import { checkString } from "../../../utils/checkString";
 import { adminAccess, CloudFile, MulterFile } from "../../constants";
 import * as userService from "./user.service";
 
@@ -63,7 +66,14 @@ export const getUserById = catchAsync(async (req, res) => {
 
 //* GET ME *\\
 export const getMe = catchAsync(async (req, res) => {
-  const userId = req.decoded?.id ?? "";
+  const { id, isDeleted, status } = req.decoded ?? {};
+
+  const userId = checkString(id, "User ID not found, login again");
+
+  if (isDeleted) throw new ApiError(sCode.BAD_REQUEST, "User was deleted");
+  if (status === UserStatus.BANNED)
+    throw new ApiError(sCode.BAD_REQUEST, "User was banned");
+
   const user = await userService.getUserById(userId);
   _response(res, {
     message: "User retrieved successfully!",

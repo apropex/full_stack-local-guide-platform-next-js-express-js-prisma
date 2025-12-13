@@ -74,8 +74,6 @@ export default function RegisterForm({ dest }: { dest?: string }) {
 
     const result = await createUser(values, file);
 
-    console.log(result);
-
     _alert.dismiss(values.email);
     if (!result.success) {
       _alert.error(
@@ -88,9 +86,13 @@ export default function RegisterForm({ dest }: { dest?: string }) {
       );
     } else {
       _alert.success("User registered successfully!");
-      router.push(
-        dest ?? getDefaultDashboardRoute((result.data as iUser)?.role),
-      );
+      if ((result.data as iUser)?.isVerified === false) {
+        router.push("/settings/profile");
+      } else {
+        router.push(
+          dest ?? getDefaultDashboardRoute((result.data as iUser)?.role),
+        );
+      }
     }
 
     setLoading(false);

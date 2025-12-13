@@ -47,7 +47,8 @@ export default function LoginForm({ dest }: { dest?: string }) {
         "Welcome back to LASV Guides",
         "You've logged in successfully",
       );
-      router.push(dest ?? "/");
+      if (result.data?.isVerified === false) router.push("/settings/profile");
+      else router.push(dest ?? "/");
     } else {
       _alert.error(
         "We are sorry to say that, an error occurred during login",

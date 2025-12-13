@@ -14,7 +14,7 @@ declare module "jsonwebtoken" {
     country?: string;
     nationality?: string;
     status: tUserStatus;
-    avatar?: string;
+    avatar: string;
     isVerified: boolean;
     isDeleted: boolean;
     guide?: string;

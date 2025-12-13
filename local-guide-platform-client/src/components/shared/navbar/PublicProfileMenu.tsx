@@ -10,7 +10,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -20,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { getInitials } from "@/utils/getInitials";
 import { JwtPayload } from "jsonwebtoken";
 import { LogOutIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function PublicProfileMenu({ user }: { user: JwtPayload }) {
   return (
@@ -54,21 +54,10 @@ export default function PublicProfileMenu({ user }: { user: JwtPayload }) {
 
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Keyboard shortcuts
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={"/settings"}>Settings</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -85,15 +74,9 @@ export default function PublicProfileMenu({ user }: { user: JwtPayload }) {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <DropdownMenuItem>
-            New Team
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem className="rounded-sm" variant="destructive" asChild>
           <Logout>

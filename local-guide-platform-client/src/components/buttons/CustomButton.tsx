@@ -8,7 +8,7 @@ export default function CustomButton({
   size,
   asChild = false,
   className,
-  textClass,
+  textclass,
   icon: Icon,
   iconClass,
   iconRight = false,
@@ -24,7 +24,7 @@ export default function CustomButton({
     >
       {Icon && !iconRight && <Icon className={iconClass} />}
       {children && (
-        <span className={cn("inline-block", textClass)}>{children}</span>
+        <span className={cn("inline-block", textclass)}>{children}</span>
       )}
       {Icon && iconRight && <Icon className={iconClass} />}
     </Button>
