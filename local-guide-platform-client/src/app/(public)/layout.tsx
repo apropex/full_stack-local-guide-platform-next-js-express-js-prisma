@@ -5,7 +5,7 @@ import { iChildren } from "@/interfaces";
 
 export default function PublicLayout({ children }: iChildren) {
   return (
-    <div className="">
+    <div className="custom_scrollbar">
       <PublicNavbar />
       <div>{children}</div>
     </div>

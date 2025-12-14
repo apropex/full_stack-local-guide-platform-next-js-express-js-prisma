@@ -1,5 +1,9 @@
 //
 
+import SectionContainer, {
+  SectionTitle,
+} from "@/components/shared/SectionContainer";
+
 const contents = [
   {
     icon: "🛡️",
@@ -20,18 +24,14 @@ const contents = [
 
 export default function TrustSignals() {
   return (
-    <div className="py-24 md:py-36 relative overflow-hidden bg-card">
-      {/* content  */}
-      <div className="w-full max-w-6xl mx-auto px-4 mb-16 text-center relative z-10">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-          The Trust You Deserve
-        </h2>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-          We are committed to providing you with the highest quality service and
-          complete peace of mind. Your experience is safe, secure, and fully
-          verified.
-        </p>
-      </div>
+    <SectionContainer bg="bg-card/60">
+      <SectionTitle
+        title="The Trust"
+        highlight="You Deserve"
+        description="We are committed to providing you with the highest quality service and complete peace of mind. Your experience is safe, secure, and fully
+        verified."
+        className="max-w-xl mx-auto text-center mb-8 md:mb-12"
+      />
 
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
         {contents.map((content, i) => (
@@ -64,6 +64,6 @@ export default function TrustSignals() {
           </div>
         ))}
       </div>
-    </div>
+    </SectionContainer>
   );
 }
