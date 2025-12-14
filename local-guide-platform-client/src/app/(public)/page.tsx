@@ -16,7 +16,6 @@ export default function Home() {
       <ExperiencesByCategory />
       <JoinAsGuide />
       <Testimonials />
-      <div className=" py-36" />
     </div>
   );
 }
