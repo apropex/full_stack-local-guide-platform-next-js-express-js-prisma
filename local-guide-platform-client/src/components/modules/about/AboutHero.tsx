@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function AboutHero() {
   return (
-    <SectionContainer className="relative z-10">
+    <SectionContainer containerClass="relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Text Content */}
         <div className="space-y-6 animate-in slide-in-from-bottom-5 duration-700">

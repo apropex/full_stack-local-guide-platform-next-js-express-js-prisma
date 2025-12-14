@@ -17,7 +17,7 @@ import Image from "next/image";
 
 export default function JoinAsGuide() {
   return (
-    <SectionContainer bg="bg-card/60">
+    <SectionContainer className="bg-card/60">
       {/* Background Gradient Blob (Subtle) */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-rose-500/20 dark:bg-amber-500/15 rounded-full blur-[10rem] " />
 

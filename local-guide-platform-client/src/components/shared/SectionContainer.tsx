@@ -2,8 +2,8 @@ import { iChildren } from "@/interfaces";
 import { cn } from "@/lib/utils";
 
 interface SectionContainerProps extends iChildren {
-  bg?: string;
   className?: string;
+  containerClass?: string;
 }
 
 interface iProps {
@@ -44,12 +44,12 @@ export function SectionTitle({
 
 export default function SectionContainer({
   children,
-  bg,
   className,
+  containerClass,
 }: SectionContainerProps) {
   return (
-    <section className={cn("py-24 md:py-36 px-4 sm:px-6 lg:px-8", bg)}>
-      <div className={cn("container mx-auto", className)}>{children}</div>
+    <section className={cn("py-24 md:py-36 px-4 sm:px-6 lg:px-8", className)}>
+      <div className={cn("container mx-auto", containerClass)}>{children}</div>
     </section>
   );
 }

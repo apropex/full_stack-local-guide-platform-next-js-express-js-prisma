@@ -24,7 +24,7 @@ const contents = [
 
 export default function TrustSignals() {
   return (
-    <SectionContainer bg="bg-card/60">
+    <SectionContainer className="bg-card/60">
       <SectionTitle
         title="The Trust"
         highlight="You Deserve"

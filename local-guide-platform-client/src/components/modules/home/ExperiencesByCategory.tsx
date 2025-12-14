@@ -40,13 +40,13 @@ type TourType = {
 
 // --- Categories Config ---
 const categories = [
-  { id: "Food", label: "Food Crawl", icon: Utensils, color: "text-orange-500" },
   {
     id: "Photography",
     label: "Photography",
     icon: Camera,
     color: "text-blue-500",
   },
+  { id: "Food", label: "Food Crawl", icon: Utensils, color: "text-orange-500" },
   {
     id: "Heritage",
     label: "Heritage",
@@ -137,15 +137,54 @@ const allTours: TourType[] = [
   {
     id: "6",
     title: "Sunrise Photography at Cox's Bazar",
-    price: 40,
-    duration: 4,
+    price: 55,
+    duration: 3,
     durationType: "HOURS",
     location: "Cox's Bazar",
+    maxGroupSize: 4,
+    category: "Photography",
+    rating: 4.8,
+    totalReviews: 92,
+    images: [{ url: "/bento/41.jpg" }],
+  },
+  {
+    id: "7",
+    title: "Golden Hour Street Photography Walk",
+    price: 30,
+    duration: 2,
+    durationType: "HOURS",
+    location: "Dhaka",
+    maxGroupSize: 6,
+    category: "Photography",
+    rating: 4.7,
+    totalReviews: 58,
+    images: [{ url: "/bento/60.jpg" }],
+  },
+  {
+    id: "8",
+    title: "Mountain Landscape Photography Tour",
+    price: 70,
+    duration: 1,
+    durationType: "DAYS",
+    location: "Bandarban",
     maxGroupSize: 5,
     category: "Photography",
     rating: 4.9,
-    totalReviews: 75,
-    images: [{ url: "/bento/47.jpg" }],
+    totalReviews: 110,
+    images: [{ url: "/bento/2.jpg" }],
+  },
+  {
+    id: "9",
+    title: "Night Sky & Astrophotography Session",
+    price: 65,
+    duration: 5,
+    durationType: "HOURS",
+    location: "Sajek Valley",
+    maxGroupSize: 4,
+    category: "Photography",
+    rating: 4.8,
+    totalReviews: 67,
+    images: [{ url: "/bento/3.jpg" }],
   },
 ];
 
@@ -249,7 +288,7 @@ const TourCard = ({ tour }: { tour: TourType }) => {
 
 // --- Main Section Component ---
 export default function ExperiencesByCategory() {
-  const [activeCategory, setActiveCategory] = React.useState("Food");
+  const [activeCategory, setActiveCategory] = React.useState("Photography");
   const [isAnimating, setIsAnimating] = React.useState(false);
 
   // Filter Logic (In real app, this would be an API call)

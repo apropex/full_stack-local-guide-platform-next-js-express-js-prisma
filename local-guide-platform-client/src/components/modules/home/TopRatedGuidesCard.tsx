@@ -259,7 +259,7 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
 // --- Main Section ---
 export default function TopRatedGuides() {
   return (
-    <SectionContainer bg="bg-card/60">
+    <SectionContainer className="bg-card/60">
       {/* Section Header with stylized underline */}
       <div className="mb-21 text-center max-w-2xl mx-auto">
         <Badge

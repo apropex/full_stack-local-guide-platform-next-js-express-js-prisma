@@ -21,7 +21,7 @@ export default async function TourPage({ searchParams }: ToursProps) {
   // const currentPage = result.meta?.present_page || 1;
 
   return (
-    <SectionContainer className="mt-12">
+    <SectionContainer containerClass="mt-12">
       <SectionTitle title="Our Tours" className="text-center" />
       <div className="mt-8 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {result.data?.map((tour) => (

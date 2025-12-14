@@ -37,7 +37,7 @@ const values = [
 
 export default function CoreValues() {
   return (
-    <SectionContainer bg="bg-card/60">
+    <SectionContainer className="bg-card/60">
       <SectionTitle
         title="Our Core Values"
         description="We are not just a booking platform. We are a community built on principles that matter."
