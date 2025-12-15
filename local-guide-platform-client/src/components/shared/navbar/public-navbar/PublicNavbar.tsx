@@ -5,6 +5,7 @@ import { getUserFromJwt } from "@/lib/jwt/jwt";
 import Link from "next/link";
 import PublicProfileMenu from "../PublicProfileMenu";
 import NavMenuItems from "./NavMenuItems";
+import NavMobileMenu from "./NavMobileMenu";
 
 export const navItems = [
   { href: "/", name: "Home" },
@@ -23,14 +24,23 @@ export default async function PublicNavbar() {
       <div className="rounded-lg bg-background/80">
         <div className="w-full py-2 px-3 rounded-lg bg-primary/8 backdrop-blur-xs border-b-2 border-primary flex items-center justify-between">
           {/* LEFT SIDE */}
-          <div>
-            <Link href={"/"} className="text-lg font-bold uppercase">
-              LASV Guides
-            </Link>
+          <div className="flex items-center gap-x-2">
+            {/* Mobile Menu */}
+            <div className="md:hidden flex items-center">
+              <NavMobileMenu />
+            </div>
+
+            <div className="flex items-center">
+              <Link href={"/"} className="text-lg font-bold uppercase">
+                LASV Guides
+              </Link>
+            </div>
           </div>
 
           {/* MIDDLE */}
-          <NavMenuItems />
+          <div className="hidden md:block">
+            <NavMenuItems />
+          </div>
 
           {/* RIGHT SIDE */}
           <div>
