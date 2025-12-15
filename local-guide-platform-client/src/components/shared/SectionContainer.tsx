@@ -48,7 +48,12 @@ export default function SectionContainer({
   containerClass,
 }: SectionContainerProps) {
   return (
-    <section className={cn("py-24 md:py-36 px-4 sm:px-6 lg:px-8", className)}>
+    <section
+      className={cn(
+        "relative w-full overflow-hidden py-24 md:py-36 px-4 sm:px-6 lg:px-8",
+        className,
+      )}
+    >
       <div className={cn("container mx-auto", containerClass)}>{children}</div>
     </section>
   );
