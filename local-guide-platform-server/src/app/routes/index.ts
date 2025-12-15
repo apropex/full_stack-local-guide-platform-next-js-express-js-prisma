@@ -4,6 +4,7 @@ import authRoutes from "../modules/auth/auth.routes";
 import bookingRoutes from "../modules/booking/booking.routes";
 import guideRoutes from "../modules/guide/guide.routes";
 import paymentRoutes from "../modules/payment/payment.route";
+import reviewRoutes from "../modules/review/review.routes";
 import tourRoutes from "../modules/tour/tour.routes";
 import userRoutes from "../modules/user/user.routes";
 
@@ -17,6 +18,7 @@ const router = Router();
   { path: "/tour", route: tourRoutes },
   { path: "/booking", route: bookingRoutes },
   { path: "/payment", route: paymentRoutes },
+  { path: "/review", route: reviewRoutes },
 ].forEach(({ path, route }) => router.use(path, route));
 
 export default router;

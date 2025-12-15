@@ -1,5 +1,6 @@
 import TourDetails from "@/components/modules/tour/TourDetails";
 import { iTour } from "@/interfaces/tour.interfaces";
+import { getUserFromJwt } from "@/lib/jwt/jwt";
 import { getSingleTour } from "@/services/tour.services";
 import { redirect } from "next/navigation";
 
@@ -10,6 +11,10 @@ interface iProps {
 export default async function TourDetailsPublic({ params }: iProps) {
   const id = (await params).id;
   if (!id) redirect("/tours");
+
+  const userId = await getUserFromJwt("id");
+
+  if (!userId) return <div>User not found</div>;
 
   const result = await getSingleTour(id);
 
@@ -22,7 +27,7 @@ export default async function TourDetailsPublic({ params }: iProps) {
 
   return (
     <div className="">
-      <TourDetails tour={result.data as iTour} />
+      <TourDetails tour={result.data as iTour} userId={userId} />
     </div>
   );
 }

@@ -21,6 +21,7 @@ export const routes = {
   tour: createRoute("/api/v1/tour"),
   booking: createRoute("/api/v1/booking"),
   payment: createRoute("/api/v1/payment"),
+  review: createRoute("/api/v1/review"),
 } as const;
 
 /*

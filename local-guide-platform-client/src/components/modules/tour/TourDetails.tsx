@@ -4,15 +4,18 @@ import { Separator } from "@/components/ui/separator";
 import { iTour } from "@/interfaces/tour.interfaces";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import CreateReviewForm from "../review/CreateReviewForm";
+import ReviewCarousel from "../review/ReviewCarousel";
 import BookNowButton from "./BookNowButton";
 
 interface TourDetailsProps {
   tour: iTour;
+  userId: string;
 }
 
-export default function TourDetails({ tour }: TourDetailsProps) {
+export default function TourDetails({ tour, userId }: TourDetailsProps) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen text-gray-900 dark:text-gray-100">
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-96"
@@ -30,11 +33,11 @@ export default function TourDetails({ tour }: TourDetailsProps) {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 pt-24 pb-24 md:pb-36 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Details */}
         <div className="lg:col-span-2 space-y-8">
           {/* Description */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg">
+          <Card className="bg-card border-none shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">About This Tour</CardTitle>
             </CardHeader>
@@ -46,7 +49,7 @@ export default function TourDetails({ tour }: TourDetailsProps) {
           </Card>
 
           {/* Highlights */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg">
+          <Card className="bg-card border-none shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">Highlights</CardTitle>
             </CardHeader>
@@ -60,7 +63,7 @@ export default function TourDetails({ tour }: TourDetailsProps) {
           </Card>
 
           {/* Images Gallery */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg">
+          <Card className="bg-card border-none shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">Gallery</CardTitle>
             </CardHeader>
@@ -81,14 +84,15 @@ export default function TourDetails({ tour }: TourDetailsProps) {
           </Card>
 
           {/* Reviews Placeholder */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg">
+          <Card className="bg-card border-none shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">Reviews</CardTitle>
+              <div className="flex justify-between">
+                <CardTitle className="text-2xl">Reviews</CardTitle>
+                <CreateReviewForm touristId={userId} tourId={tour.id} />
+              </div>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 dark:text-gray-300">
-                Coming soon: User reviews and ratings.
-              </p>
+              <ReviewCarousel />
             </CardContent>
           </Card>
         </div>
@@ -96,7 +100,7 @@ export default function TourDetails({ tour }: TourDetailsProps) {
         {/* Sidebar Details */}
         <div className="lg:col-span-1 space-y-8">
           {/* Booking Card / CTA */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg sticky top-4">
+          <Card className="bg-card border-none shadow-lg sticky top-4 md:top-12">
             <CardHeader>
               <CardTitle className="text-2xl">Book This Tour</CardTitle>
             </CardHeader>
@@ -131,7 +135,7 @@ export default function TourDetails({ tour }: TourDetailsProps) {
           </Card>
 
           {/* Additional Info */}
-          <Card className="bg-white dark:bg-gray-800 border-none shadow-lg">
+          <Card className="bg-card border-none shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl">Details</CardTitle>
             </CardHeader>
