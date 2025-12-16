@@ -1,9 +1,10 @@
+import CustomButton from "@/components/buttons/CustomButton";
 import Link from "next/link";
 import HeroSearchCard from "./HeroSearchCard";
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full min-h-screen ">
       {/* Background Video */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover"
@@ -29,9 +30,9 @@ export default function Hero() {
               Book authentic tours with verified local experts instantly
             </p>
             <Link href={"/tours"} className="block w-full max-w-60">
-              <button className="mt-6 w-full bg-white text-black px-6 py-3 rounded-lg font-semibold">
+              <CustomButton className="mt-6 w-full h-14 bg-white/90 hover:bg-white text-black px-6 py-3 rounded-lg font-semibold ">
                 Get Started
-              </button>
+              </CustomButton>
             </Link>
           </div>
 

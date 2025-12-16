@@ -129,7 +129,7 @@ export default function ContactFormSection() {
               </label>
               <Textarea
                 placeholder="Tell us how we can help..."
-                className="min-h-[150px] bg-black/5 dark:bg-black/5 resize-none p-4"
+                className="min-h-40 md:min-h-56 bg-black/5 dark:bg-black/5 resize-none p-4"
               />
             </div>
 

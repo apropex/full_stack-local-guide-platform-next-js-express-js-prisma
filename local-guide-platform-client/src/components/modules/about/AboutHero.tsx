@@ -56,7 +56,7 @@ export default function AboutHero() {
           {/* Main Image */}
           <div className="absolute right-0 top-0 w-3/4 h-5/6 rounded-4xl overflow-hidden shadow-2xl border-4 border-background dark:border-zinc-900 z-10">
             <Image
-              src="/bento/38.jpg"
+              src="/about-pic/1.jpg"
               alt="Travelers"
               fill
               className="object-cover hover:scale-105 transition-transform duration-700"
@@ -65,7 +65,7 @@ export default function AboutHero() {
           {/* Secondary Image (Floating) */}
           <div className="absolute left-0 bottom-0 w-1/2 h-1/2 rounded-4xl overflow-hidden shadow-2xl border-4 border-background dark:border-zinc-900 z-20 animate-bounce-slow">
             <Image
-              src="/bento/51.jpg"
+              src="/about-pic/2.jpg"
               alt="Local Guide"
               fill
               className="object-cover"

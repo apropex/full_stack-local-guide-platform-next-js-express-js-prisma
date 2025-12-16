@@ -24,13 +24,13 @@ export const tourFilterFields: iTour = [
   "deletedBy",
   "rating",
   "totalReviews",
+  "category",
 ];
 export const tourSearchFields: iTour = [
   "title",
   "description",
   "location",
   "meetingPoint",
-  "category",
 ];
 export const tourBooleanFields: iTour = ["isActive", "isDeleted"];
 export const tourNumberFields: iTour = [

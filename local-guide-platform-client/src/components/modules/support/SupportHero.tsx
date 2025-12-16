@@ -35,8 +35,8 @@ export default function SupportHero() {
     <SectionContainer className="relative bg-slate-950">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/6 w-96 h-96 bg-blue-600/20 rounded-full blur-[6rem]" />
+        <div className="absolute bottom-1/4 right-1/6 w-96 h-96 bg-purple-600/20 rounded-full blur-[6rem]" />
       </div>
 
       <div className="relative z-10 text-center">
