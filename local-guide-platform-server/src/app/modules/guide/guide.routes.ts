@@ -11,6 +11,8 @@ const router = Router();
 
 router.get("/all", roleVerifier(adminAccess), guideController.getAllGuides);
 
+router.get("/top-rated-guides", guideController.topRatedGuides);
+
 router.get("/:id", tokenVerifier, guideController.getGuideById);
 
 router.post(

@@ -28,9 +28,10 @@ model User {
   guide Guide?
   admin Admin?
 
-  bookings Booking[]
-  reviews  Review[]
-  accounts Account[]
+  bookings     Booking[]
+  reviews      Review[]
+  guideReviews GuideReview[]
+  accounts     Account[]
 
   @@index([email])
 }
@@ -50,63 +51,6 @@ model Account {
   createdAt DateTime @default(now())
 
   @@unique([provider, providerAccountId])
-}
-
-model Guide {
-  id     String @id @default(uuid())
-  userId String @unique
-
-  expertise       String[] // categories like: ["History", "Food"]
-  languages       String[] // spoken languages
-  about           String?
-  experienceYears Int?     @default(0)
-
-  city    String
-  country String
-
-  dailyRate  Float
-  hourlyRate Float
-
-  isVerifiedGuide  Boolean @default(false)
-  verificationDocs Json?
-
-  dob DateTime
-  nid String
-
-  averageRating Float? @default(0)
-  totalReviews  Int?   @default(0)
-
-  createdAt DateTime @default(now())
-
-  verifierId String?
-  verifier   Admin?  @relation(fields: [verifierId], references: [id], onDelete: Cascade)
-
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tours Tour[]
-}
-
-model Admin {
-  id     String @id @default(uuid())
-  userId String @unique
-
-  dob DateTime
-  nid String
-
-  permissions      String[] // MANAGE_USERS, DELETE_TOURS etc.
-  isVerifiedAdmin  Boolean  @default(false)
-  verificationDocs Json?
-
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  verifiedGuides Guide[]
-
-  /// SELF RELATION: verified by another admin
-  verifierId String?
-  verifier   Admin?  @relation("AdminVerifications", fields: [verifierId], references: [id])
-
-  verifiedAdmins Admin[] @relation("AdminVerifications")
 }
 
 model UserAvatar {

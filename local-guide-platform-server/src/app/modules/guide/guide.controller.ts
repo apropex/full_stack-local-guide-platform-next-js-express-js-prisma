@@ -72,3 +72,17 @@ export const getAllGuides = catchAsync(async (req, res) => {
     meta,
   });
 });
+
+export const topRatedGuides = catchAsync(async (req, res) => {
+  const { data, meta } = await guideService.getAllGuides({
+    isVerifiedGuide: "true",
+    sortBy: "totalRatings",
+    sortOrder: "desc",
+  });
+
+  _response(res, {
+    message: "Guides retrieved successfully!",
+    data,
+    meta,
+  });
+});

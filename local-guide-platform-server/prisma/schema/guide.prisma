@@ -1,0 +1,57 @@
+model Guide {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  expertise       String[] // categories like: ["History", "Food"]
+  languages       String[] // spoken languages
+  about           String?
+  experienceYears Int?     @default(0)
+
+  city    String
+  country String
+
+  dailyRate  Float
+  hourlyRate Float
+
+  isVerifiedGuide  Boolean @default(false)
+  verificationDocs Json?
+
+  dob DateTime
+  nid String
+
+  totalRatings Float? @default(0)
+  totalReviews Int?   @default(0)
+
+  createdAt DateTime @default(now())
+
+  verifierId String?
+  verifier   Admin?  @relation(fields: [verifierId], references: [id], onDelete: Cascade)
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tours   Tour[]
+  reviews GuideReview[]
+}
+
+model GuideReview {
+  id      String  @id @default(uuid())
+  rating  Int // 1 to 5
+  comment String?
+
+  // User who reviewed (tourist)
+  touristId String
+  tourist   User   @relation(fields: [touristId], references: [id])
+
+  // Which guide is being reviewed
+  guideId String
+  guide   Guide  @relation(fields: [guideId], references: [id])
+
+  // Optional: review visibility
+  isVisible Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([guideId, touristId])
+  @@index([guideId])
+  @@index([touristId])
+}

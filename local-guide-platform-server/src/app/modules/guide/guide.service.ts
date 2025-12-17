@@ -83,7 +83,6 @@ export const getAllGuides = async (query: iQuery) => {
     experienceYears,
     dailyRate,
     hourlyRate,
-    averageRating,
     totalReviews,
     ...restFilters
   } = filters;
@@ -117,9 +116,7 @@ export const getAllGuides = async (query: iQuery) => {
   if (hourlyRate && typeof hourlyRate === "number") {
     where.AND.push({ hourlyRate: { gte: hourlyRate } });
   }
-  if (averageRating && typeof averageRating === "number") {
-    where.AND.push({ averageRating: { gte: averageRating } });
-  }
+
   if (totalReviews && typeof totalReviews === "number") {
     where.AND.push({ totalReviews: { gte: totalReviews } });
   }
@@ -127,6 +124,7 @@ export const getAllGuides = async (query: iQuery) => {
   const include = {
     user: { include: { avatar: true } },
     verifier: { include: { user: true } },
+    reviews: true
   };
 
   const [guides, total_records, filtered_records] = await Promise.all([

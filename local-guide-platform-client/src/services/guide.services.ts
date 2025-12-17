@@ -90,3 +90,11 @@ export const getAllGuides = async (query?: string) => {
     return errorResponse(error);
   }
 };
+
+export const topRatedGuides = async () => {
+  try {
+    return await _fetch.get(routes.guide("top-rated-guides"));
+  } catch (error) {
+    return errorResponse(error);
+  }
+};

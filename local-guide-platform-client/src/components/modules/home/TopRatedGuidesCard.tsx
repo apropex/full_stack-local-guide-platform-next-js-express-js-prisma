@@ -11,135 +11,124 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { iGuide } from "@/interfaces/user.interfaces";
+import { topRatedGuides } from "@/services/guide.services";
 import { ArrowRight, Heart, MapPin, Star, Verified } from "lucide-react";
 import Image from "next/image";
 
-// --- Types based on your Prisma Model ---
-// বাস্তবে আপনি এই টাইপগুলো আপনার generated prisma types থেকে ইম্পোর্ট করবেন
-type GuideWithUser = {
-  id: string;
-  dailyRate: number;
-  averageRating: number | null;
-  totalReviews: number | null;
-  city: string;
-  country: string;
-  expertise: string[];
-  user: {
-    name: string;
-    socialImageUrl: string | null;
-  };
-};
-
-// --- Mock Data (Replace with API data) ---
-const guidesData: GuideWithUser[] = [
-  {
-    id: "1",
-    dailyRate: 45,
-    averageRating: 4.9,
-    totalReviews: 120,
-    city: "Sylhet",
-    country: "Bangladesh",
-    expertise: ["Nature", "Hiking"],
-    user: {
-      name: "Jabed Hasan",
-      socialImageUrl: "/author/17.jpg",
-    },
-  },
-  {
-    id: "2",
-    dailyRate: 30,
-    averageRating: 4.8,
-    totalReviews: 85,
-    city: "Dhaka",
-    country: "Bangladesh",
-    expertise: ["History", "Foodie"],
-    user: {
-      name: "Atiq Hasan",
-      socialImageUrl: "/author/18.jpg",
-    },
-  },
-  {
-    id: "3",
-    dailyRate: 50,
-    averageRating: 5.0,
-    totalReviews: 42,
-    city: "Bandarban",
-    country: "Bangladesh",
-    expertise: ["Adventure", "Trekking"],
-    user: {
-      name: "Marma Singh",
-      socialImageUrl: "/author/19.jpg",
-    },
-  },
-  {
-    id: "4",
-    dailyRate: 25,
-    averageRating: 4.7,
-    totalReviews: 200,
-    city: "Cox's Bazar",
-    country: "Bangladesh",
-    expertise: ["Photography", "Relaxation"],
-    user: {
-      name: "Karim Ahmed",
-      socialImageUrl: "/author/20.jpg",
-    },
-  },
-  {
-    id: "5",
-    dailyRate: 45,
-    averageRating: 4.9,
-    totalReviews: 120,
-    city: "Sylhet",
-    country: "Bangladesh",
-    expertise: ["Nature", "Hiking"],
-    user: {
-      name: "Jabed Hasan",
-      socialImageUrl: "/author/17.jpg",
-    },
-  },
-  {
-    id: "6",
-    dailyRate: 30,
-    averageRating: 4.8,
-    totalReviews: 85,
-    city: "Dhaka",
-    country: "Bangladesh",
-    expertise: ["History", "Foodie"],
-    user: {
-      name: "Atiq Hasan",
-      socialImageUrl: "/author/18.jpg",
-    },
-  },
-  {
-    id: "7",
-    dailyRate: 50,
-    averageRating: 5.0,
-    totalReviews: 42,
-    city: "Bandarban",
-    country: "Bangladesh",
-    expertise: ["Adventure", "Trekking"],
-    user: {
-      name: "Marma Singh",
-      socialImageUrl: "/author/19.jpg",
-    },
-  },
-  {
-    id: "8",
-    dailyRate: 25,
-    averageRating: 4.7,
-    totalReviews: 200,
-    city: "Cox's Bazar",
-    country: "Bangladesh",
-    expertise: ["Photography", "Relaxation"],
-    user: {
-      name: "Karim Ahmed",
-      socialImageUrl: "/author/20.jpg",
-    },
-  },
-];
+// const guidesData = [
+//   {
+//     id: "1",
+//     dailyRate: 45,
+//     totalRatings: 545,
+//     totalReviews: 120,
+//     city: "Sylhet",
+//     country: "Bangladesh",
+//     expertise: ["Nature", "Hiking"],
+//     user: {
+//       name: "Jabed Hasan",
+//       socialImageUrl: "/author/17.jpg",
+//     },
+//   },
+//   {
+//     id: "2",
+//     dailyRate: 30,
+//     totalRatings: 4.8,
+//     totalReviews: 85,
+//     city: "Dhaka",
+//     country: "Bangladesh",
+//     expertise: ["History", "Foodie"],
+//     user: {
+//       name: "Atiq Hasan",
+//       socialImageUrl: "/author/18.jpg",
+//     },
+//   },
+//   {
+//     id: "3",
+//     dailyRate: 50,
+//     totalRatings: 5.0,
+//     totalReviews: 42,
+//     city: "Bandarban",
+//     country: "Bangladesh",
+//     expertise: ["Adventure", "Trekking"],
+//     user: {
+//       name: "Marma Singh",
+//       socialImageUrl: "/author/19.jpg",
+//     },
+//   },
+//   {
+//     id: "4",
+//     dailyRate: 25,
+//     totalRatings: 4.7,
+//     totalReviews: 200,
+//     city: "Cox's Bazar",
+//     country: "Bangladesh",
+//     expertise: ["Photography", "Relaxation"],
+//     user: {
+//       name: "Karim Ahmed",
+//       socialImageUrl: "/author/20.jpg",
+//     },
+//   },
+//   {
+//     id: "5",
+//     dailyRate: 45,
+//     totalRatings: 4.9,
+//     totalReviews: 120,
+//     city: "Sylhet",
+//     country: "Bangladesh",
+//     expertise: ["Nature", "Hiking"],
+//     user: {
+//       name: "Jabed Hasan",
+//       socialImageUrl: "/author/17.jpg",
+//     },
+//   },
+//   {
+//     id: "6",
+//     dailyRate: 30,
+//     totalRatings: 4.8,
+//     totalReviews: 85,
+//     city: "Dhaka",
+//     country: "Bangladesh",
+//     expertise: ["History", "Foodie"],
+//     user: {
+//       name: "Atiq Hasan",
+//       socialImageUrl: "/author/18.jpg",
+//     },
+//   },
+//   {
+//     id: "7",
+//     dailyRate: 50,
+//     totalRatings: 5.0,
+//     totalReviews: 42,
+//     city: "Bandarban",
+//     country: "Bangladesh",
+//     expertise: ["Adventure", "Trekking"],
+//     user: {
+//       name: "Marma Singh",
+//       socialImageUrl: "/author/19.jpg",
+//     },
+//   },
+//   {
+//     id: "8",
+//     dailyRate: 25,
+//     totalRatings: 4.7,
+//     totalReviews: 200,
+//     city: "Cox's Bazar",
+//     country: "Bangladesh",
+//     expertise: ["Photography", "Relaxation"],
+//     user: {
+//       name: "Karim Ahmed",
+//       socialImageUrl: "/author/20.jpg",
+//     },
+//   },
+// ];
 
 // --- Unique "Profile Style" Guide Card ---
-const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
+
+const GuideCard = ({ guide }: { guide: iGuide }) => {
+  const avgRating = (guide.totalRatings ?? 0) / (guide.totalReviews ?? 0) || 0;
+  const avatar = guide.user?.avatar?.url || guide.user.socialImageUrl;
+
   return (
     <div className="group h-full p-1">
       <Card className="border border-primary/20 hover:border-primary relative h-full flex flex-col items-center pt-10 pb-6 px-6 overflow-hidden bg-card shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:bg-zinc-900/80 rounded-3xl">
@@ -158,7 +147,7 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
           </Button>
         </div>
 
-        {guide.averageRating && guide.averageRating >= 4.8 && (
+        {avgRating >= 4.5 && (
           <div className="absolute top-4 left-4">
             <Badge className="bg-linear-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white border-0 px-3 py-1 shadow-md">
               Super Guide
@@ -174,7 +163,8 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
           <div className="relative w-28 h-28 p-1 rounded-full border-2 border-dashed border-muted-foreground/30 group-hover:border-primary/50 group-hover:rotate-12 transition-all duration-700">
             <div className="w-full h-full rounded-full overflow-hidden relative border-4 border-background dark:border-zinc-900 shadow-lg">
               <Image
-                src={guide.user.socialImageUrl || "/placeholder-avatar.png"}
+                src={avatar || "/placeholder-avatar.png"}
+                // TODO: crate /placeholder-avatar.png
                 alt={guide.user.name}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -205,7 +195,7 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
           {guide.expertise.slice(0, 3).map((exp, i) => (
             <span
               key={i}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-secondary/50 text-secondary-foreground border border-secondary"
+              className="px-2.5 py-1 rounded-md text-xs font-medium bg-card/80 border border-foreground/40"
             >
               {exp}
             </span>
@@ -217,7 +207,7 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
           <div className="flex flex-col items-center justify-center gap-0.5">
             <div className="flex items-center gap-1 font-bold text-foreground">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              {guide.averageRating}
+              {avgRating}
             </div>
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
               Rating
@@ -257,7 +247,11 @@ const GuideCard = ({ guide }: { guide: GuideWithUser }) => {
 };
 
 // --- Main Section ---
-export default function TopRatedGuides() {
+export default async function TopRatedGuides() {
+  const result = await topRatedGuides();
+
+  if (!result.success) return null;
+
   return (
     <SectionContainer className="bg-card/60">
       {/* Section Header with stylized underline */}
@@ -286,7 +280,7 @@ export default function TopRatedGuides() {
           className="w-full"
         >
           <CarouselContent className="-ml-4 pb-8">
-            {guidesData.map((guide) => (
+            {(result.data as iGuide[])?.map((guide) => (
               <CarouselItem
                 key={guide.id}
                 className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/3"

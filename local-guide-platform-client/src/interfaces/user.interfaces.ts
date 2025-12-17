@@ -54,7 +54,7 @@ export interface iGuide {
   verificationDocs: string;
   dob: string;
   nid: string;
-  averageRating?: number;
+  totalRatings?: number;
   totalReviews?: number;
   createdAt: string;
   verifierId?: string;
@@ -77,9 +77,23 @@ export interface iAdmin {
   verifierId?: string;
   verifier?: iAdmin;
   verifiedAdmins: iAdmin[];
+  reviews: iGuideReview[];
 }
 
 export interface iUserAvatar extends iImage {
   userId: string;
   user: iUser;
+}
+
+export interface iGuideReview {
+  id: string;
+  rating: number;
+  comment: string;
+  touristId: string;
+  tourist: iUser;
+  guideId: string;
+  guide: iGuide;
+  isVisible: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

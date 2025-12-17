@@ -82,7 +82,8 @@ export default function FeaturedDestinations() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
         {destinations.map((city) => (
           <Link
-            href={`/explore?city=${city.name}`}
+            // href={`/explore?city=${city.name}`}
+            href={"#"}
             key={city.id}
             className={`relative group overflow-hidden rounded-2xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 ${city.className}`}
           >

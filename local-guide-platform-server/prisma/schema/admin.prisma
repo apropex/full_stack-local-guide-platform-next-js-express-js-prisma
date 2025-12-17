@@ -1,0 +1,23 @@
+model Admin {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  dob DateTime
+  nid String
+
+  permissions      String[] // MANAGE_USERS, DELETE_TOURS etc.
+  isVerifiedAdmin  Boolean  @default(false)
+  verificationDocs Json?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  verifiedGuides Guide[]
+
+  /// SELF RELATION: verified by another admin
+  verifierId String?
+  verifier   Admin?  @relation("AdminVerifications", fields: [verifierId], references: [id])
+
+  verifiedAdmins Admin[] @relation("AdminVerifications")
+}
