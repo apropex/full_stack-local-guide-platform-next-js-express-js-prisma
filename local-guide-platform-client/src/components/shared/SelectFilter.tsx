@@ -41,7 +41,11 @@ export default function SelectFilter({
   };
 
   return (
-    <Select value={currentValue} onValueChange={handleChange} disabled={isPending}>
+    <Select
+      value={currentValue}
+      onValueChange={handleChange}
+      disabled={isPending}
+    >
       <SelectTrigger className="w-auto min-w-52">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

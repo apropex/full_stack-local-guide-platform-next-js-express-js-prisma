@@ -69,7 +69,7 @@ export async function NavUser() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={"/settings/my-details"}>
+            <Link href={"/settings"}>
               <Settings className="size-5" />
               <span className="inline-block mt-1">Settings</span>
             </Link>

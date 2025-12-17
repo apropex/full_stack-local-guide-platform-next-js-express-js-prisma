@@ -7,8 +7,13 @@ import { sCode } from "../../../utils";
 import configureQuery from "../../../utils/configureQuery";
 import { generateTrxID } from "../../../utils/trxIDgenerator";
 import { sslPaymentInit } from "../sslCommerz/sslCommerz.service";
+import { BookingPayload } from "./booking.validation";
 
-export const createBooking = async (decoded: JwtPayload, tourId: string) => {
+export const createBooking = async (
+  decoded: JwtPayload,
+  tourId: string,
+  payload: BookingPayload,
+) => {
   const { id, name, email, phone, address } = decoded;
 
   if (!id) {
@@ -37,6 +42,7 @@ export const createBooking = async (decoded: JwtPayload, tourId: string) => {
 
     const booking = await trx.booking.create({
       data: {
+        ...payload,
         userId: id,
         tourId,
         status: BookingStatus.PENDING,

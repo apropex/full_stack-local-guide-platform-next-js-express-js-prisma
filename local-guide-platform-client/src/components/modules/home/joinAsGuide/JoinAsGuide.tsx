@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  ArrowRight,
   CheckCircle,
   Clock4,
   Star,
@@ -14,6 +13,7 @@ import {
   Wallet,
 } from "lucide-react";
 import Image from "next/image";
+import GuideApplyButton from "./GuideApplyButton";
 
 export default function JoinAsGuide() {
   return (
@@ -82,13 +82,8 @@ export default function JoinAsGuide() {
 
             {/* CTA Actions */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                size="lg"
-                className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-base h-12 px-8 rounded-full shadow-lg shadow-orange-600/20 transition-all hover:scale-105"
-              >
-                Apply Now
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <GuideApplyButton />
+
               <Button
                 size="lg"
                 variant="ghost"

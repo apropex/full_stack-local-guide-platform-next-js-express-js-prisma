@@ -22,3 +22,12 @@ export const createReview = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+export const getAllReviewsPublic = catchAsync(async (req, res) => {
+  const result = await reviewServices.getAllReviewsPublic();
+
+  _response(res, {
+    message: "Reviews retrieved successfully!",
+    data: result,
+  });
+});

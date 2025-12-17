@@ -23,26 +23,24 @@ export default function HeroSearchCard() {
   const [category, setCategory] = useState("");
   const [tours, setTours] = useState<iTour[] | null>(null);
 
-  const getTours = async () => {
-    let query = "";
-
-    if (location.trim()) query = join("search=", location.trim());
-    if (category) query = join("category=", category);
-    if (location.trim() && category) {
-      query = join("search=", location.trim(), "&", "category=", category);
-    }
-
-    const result = await getAllToursPublic(query);
-
-    if (result.success) setTours(result.data as iTour[]);
-  };
-
   useEffect(() => {
-    if (!location.trim() && !!category) return;
+    if (!location.trim() && !category) return;
 
     const timer = setTimeout(() => {
-      getTours();
-    }, 500);
+      (async () => {
+        let query = "";
+
+        if (location.trim()) query = join("search=", location.trim());
+        if (category) query = join("category=", category);
+        if (location.trim() && category) {
+          query = join("search=", location.trim(), "&", "category=", category);
+        }
+
+        const result = await getAllToursPublic(query);
+
+        if (result.success) setTours(result.data as iTour[]);
+      })();
+    }, 555);
 
     return () => {
       clearTimeout(timer);
@@ -62,7 +60,7 @@ export default function HeroSearchCard() {
             setLocation("");
             setCategory("");
           }}
-          className="absolute right-3 top-3 bg-transparent text-white shadow-lg shadow-primary/30"
+          className="absolute z-10 right-3 top-3 bg-transparent text-white shadow-lg shadow-primary/30"
         >
           <X />
         </Button>
@@ -130,51 +128,59 @@ export default function HeroSearchCard() {
               <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/20 to-transparent opacity-60 pointer-events-none" />
 
               <div className="flex flex-col gap-2">
-                {tours?.map((tour) => (
-                  <Link
-                    key={tour.id}
-                    href={join("tours/", tour.id)}
-                    className="flex gap-1.5 border-b border-white/40 pb-1.5"
-                  >
-                    <Image
-                      src={tour.images[0]?.url}
-                      alt="tour image"
-                      width={40}
-                      height={30}
-                      className="object-cover"
-                    />
+                {tours && tours.length > 0 ? (
+                  tours?.map((tour) => (
+                    <Link
+                      key={tour.id}
+                      href={join("tours/", tour.id)}
+                      className="flex gap-1.5 border-b border-white/40 pb-1.5"
+                    >
+                      <Image
+                        src={tour.images[0]?.url}
+                        alt="tour image"
+                        width={40}
+                        height={30}
+                        className="object-cover"
+                      />
 
-                    <div>
-                      <h5 className="line-clamp-1">{tour.title}</h5>
-                      <div className="flex items-center gap-2.5">
-                        <div className="flex items-center gap-1">
-                          <Star
-                            size={12}
-                            className="text-amber-400 fill-amber-400"
-                          />
-                          <span className="text-sm">{tour.rating}</span>
-                        </div>
-                        <div className="flex items-center gap-0.5">
-                          <DollarSign size={12} />
-                          <span className="text-sm">{tour.price}</span>
-                        </div>
-                        <div className="flex items-center gap-0.5 text-sm">
-                          <span>Duration: </span>
-                          <span>{tour.duration}</span>
-                          <span className="capitalize">
-                            {tour.durationType.toLowerCase()}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-0.5 text-sm">
-                          <span>Difficulty: </span>
-                          <span className="capitalize">
-                            {tour.difficulty.toLowerCase()}
-                          </span>
+                      <div>
+                        <h5 className="line-clamp-1">{tour.title}</h5>
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex items-center gap-1">
+                            <Star
+                              size={12}
+                              className="text-amber-400 fill-amber-400"
+                            />
+                            <span className="text-sm">{tour.rating}</span>
+                          </div>
+                          <div className="flex items-center gap-0.5">
+                            <DollarSign size={12} />
+                            <span className="text-sm">{tour.price}</span>
+                          </div>
+                          <div className="flex items-center gap-0.5 text-sm">
+                            <span>Duration: </span>
+                            <span>{tour.duration}</span>
+                            <span className="capitalize">
+                              {tour.durationType.toLowerCase()}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-0.5 text-sm">
+                            <span>Difficulty: </span>
+                            <span className="capitalize">
+                              {tour.difficulty.toLowerCase()}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))
+                ) : (
+                  <div>
+                    <p className="text-white font-medium">
+                      No tours found with this filter
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

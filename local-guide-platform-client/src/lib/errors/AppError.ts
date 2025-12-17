@@ -16,7 +16,11 @@ export class AppError extends Error {
   constructor(
     statusCode: number,
     message: string,
-    { code = "INTERNAL_ERROR", context, isOperational = true }: AppErrorOptions = {}
+    {
+      code = "INTERNAL_ERROR",
+      context,
+      isOperational = true,
+    }: AppErrorOptions = {},
   ) {
     super(message);
     this.name = this.constructor.name;

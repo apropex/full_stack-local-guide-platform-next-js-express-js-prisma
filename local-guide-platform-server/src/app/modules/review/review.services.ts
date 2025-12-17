@@ -27,3 +27,12 @@ export const createReview = async (payload: Review, files?: CloudFiles) => {
     }
   }
 };
+
+//
+export const getAllReviewsPublic = async () => {
+  return await prisma.review.findMany({
+    where: { isVisible: true },
+    orderBy: { rating: "desc" },
+    take: 20,
+  });
+};

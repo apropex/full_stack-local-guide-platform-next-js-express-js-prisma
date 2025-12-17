@@ -13,6 +13,7 @@ export const createBooking = catchAsync(async (req, res) => {
   const { data, options } = await bookingServices.createBooking(
     req.decoded ?? {},
     tourId,
+    req.body,
   );
 
   _response(res, {

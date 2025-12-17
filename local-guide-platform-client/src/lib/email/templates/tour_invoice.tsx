@@ -84,14 +84,25 @@ export const InvoiceEmail = ({
               <Row>
                 <Column>
                   {logoUrl ? (
-                    <Img src={logoUrl} alt={appName} width="160" className="mb-4" />
+                    <Img
+                      src={logoUrl}
+                      alt={appName}
+                      width="160"
+                      className="mb-4"
+                    />
                   ) : (
-                    <Heading className="text-3xl font-bold text-white">{appName}</Heading>
+                    <Heading className="text-3xl font-bold text-white">
+                      {appName}
+                    </Heading>
                   )}
-                  <Text className="text-indigo-100 text-lg mt-2">Official Invoice</Text>
+                  <Text className="text-indigo-100 text-lg mt-2">
+                    Official Invoice
+                  </Text>
                 </Column>
                 <Column align="right">
-                  <Text className="text-4xl font-extrabold opacity-90">INVOICE</Text>
+                  <Text className="text-4xl font-extrabold opacity-90">
+                    INVOICE
+                  </Text>
                   <Text className="text-indigo-100 mt-2">#{invoiceId}</Text>
                 </Column>
               </Row>
@@ -102,7 +113,9 @@ export const InvoiceEmail = ({
               <Row className="mb-8">
                 <Column>
                   <Text className="text-sm text-gray-500">Invoice Date</Text>
-                  <Text className="font-semibold text-gray-900">{invoiceDate}</Text>
+                  <Text className="font-semibold text-gray-900">
+                    {invoiceDate}
+                  </Text>
                 </Column>
                 <Column align="right">
                   <Text className="text-sm text-gray-500">Payment Status</Text>
@@ -120,7 +133,9 @@ export const InvoiceEmail = ({
                   <Text className="text-gray-600">{customerEmail}</Text>
                 </Column>
                 <Column className="w-1/2">
-                  <Text className="font-bold text-gray-900 mb-3">Tour Details</Text>
+                  <Text className="font-bold text-gray-900 mb-3">
+                    Tour Details
+                  </Text>
                   <Text className="text-gray-700 font-medium">{tourTitle}</Text>
                   <Text className="text-gray-600">
                     {tourDate} {tourTime && `• ${tourTime}`}
@@ -128,34 +143,60 @@ export const InvoiceEmail = ({
                   <Text className="text-gray-600">
                     {duration} • {location}
                   </Text>
-                  {guideName && <Text className="text-gray-600 mt-1">Guide: {guideName}</Text>}
-                  {groupSize && <Text className="text-gray-600">Group Size: {groupSize} guests</Text>}
+                  {guideName && (
+                    <Text className="text-gray-600 mt-1">
+                      Guide: {guideName}
+                    </Text>
+                  )}
+                  {groupSize && (
+                    <Text className="text-gray-600">
+                      Group Size: {groupSize} guests
+                    </Text>
+                  )}
                 </Column>
               </Row>
 
               {/* Pricing Table */}
               <Section className="rounded-xl border border-gray-200 bg-gray-50/50">
-                <table width="100%" cellPadding="0" cellSpacing="0" className="text-sm">
+                <table
+                  width="100%"
+                  cellPadding="0"
+                  cellSpacing="0"
+                  className="text-sm"
+                >
                   <thead>
                     <tr className="border-b border-gray-300">
-                      <th align="left" className="py-4 px-6 font-semibold text-gray-900">
+                      <th
+                        align="left"
+                        className="py-4 px-6 font-semibold text-gray-900"
+                      >
                         Description
                       </th>
-                      <th align="right" className="py-4 px-6 font-semibold text-gray-900">
+                      <th
+                        align="right"
+                        className="py-4 px-6 font-semibold text-gray-900"
+                      >
                         Amount
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="py-4 px-6 text-gray-700">Tour Ticket ({tourTitle})</td>
-                      <td align="right" className="py-4 px-6 font-medium text-gray-900">
+                      <td className="py-4 px-6 text-gray-700">
+                        Tour Ticket ({tourTitle})
+                      </td>
+                      <td
+                        align="right"
+                        className="py-4 px-6 font-medium text-gray-900"
+                      >
                         ₱{subtotal}
                       </td>
                     </tr>
                     {discount !== "0.00" && (
                       <tr>
-                        <td className="py-4 px-6 text-green-700">Discount Applied</td>
+                        <td className="py-4 px-6 text-green-700">
+                          Discount Applied
+                        </td>
                         <td align="right" className="py-4 px-6 text-green-700">
                           -₱{discount}
                         </td>
@@ -170,8 +211,13 @@ export const InvoiceEmail = ({
                       </tr>
                     )}
                     <tr className="border-t-2 border-gray-400">
-                      <td className="py-5 px-6 text-lg font-bold text-gray-900">Total Paid</td>
-                      <td align="right" className="py-5 px-6 text-2xl font-extrabold text-indigo-600">
+                      <td className="py-5 px-6 text-lg font-bold text-gray-900">
+                        Total Paid
+                      </td>
+                      <td
+                        align="right"
+                        className="py-5 px-6 text-2xl font-extrabold text-indigo-600"
+                      >
                         ₱{totalAmount}
                       </td>
                     </tr>
@@ -182,13 +228,20 @@ export const InvoiceEmail = ({
               {/* Payment Method */}
               <Section className="mt-8 text-center text-sm text-gray-600">
                 <Text>
-                  Paid via <span className="font-semibold text-gray-900">{paymentMethod}</span>
+                  Paid via{" "}
+                  <span className="font-semibold text-gray-900">
+                    {paymentMethod}
+                  </span>
                 </Text>
                 <Text>
-                  Payment ID: <span className="font-mono text-gray-800">{paymentId}</span>
+                  Payment ID:{" "}
+                  <span className="font-mono text-gray-800">{paymentId}</span>
                 </Text>
                 <Text>
-                  Transaction ID: <span className="font-mono text-gray-800">{transactionId}</span>
+                  Transaction ID:{" "}
+                  <span className="font-mono text-gray-800">
+                    {transactionId}
+                  </span>
                 </Text>
               </Section>
 
@@ -200,7 +253,8 @@ export const InvoiceEmail = ({
                   Thank you for booking with {appName}!
                 </Heading>
                 <Text className="mt-4 text-lg text-gray-600 max-w-md mx-auto">
-                  Your adventure is confirmed. Get ready for an unforgettable experience in the Philippines.
+                  Your adventure is confirmed. Get ready for an unforgettable
+                  experience in the Philippines.
                 </Text>
 
                 <Button
@@ -215,10 +269,15 @@ export const InvoiceEmail = ({
 
               {/* Footer */}
               <Section className="text-center text-sm text-gray-500">
-                <Text>© {new Date().getFullYear()} PH Tour. All rights reserved.</Text>
+                <Text>
+                  © {new Date().getFullYear()} PH Tour. All rights reserved.
+                </Text>
                 <Text className="mt-2">
                   Questions? Contact us at{" "}
-                  <a href="mailto:support@ph-tour.com" className="text-indigo-600 hover:underline">
+                  <a
+                    href="mailto:support@ph-tour.com"
+                    className="text-indigo-600 hover:underline"
+                  >
                     support@ph-tour.com
                   </a>
                 </Text>

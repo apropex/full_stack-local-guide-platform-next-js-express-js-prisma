@@ -18,7 +18,12 @@ export const makeFormData = (value: [string, any, string?, (File | File[])?]): F
 };
 */
 
-export const makeFormData = (key: string, value: any, key2?: string, value2?: File | File[]): FormData => {
+export const makeFormData = (
+  key: string,
+  value: any,
+  key2?: string,
+  value2?: File | File[],
+): FormData => {
   const formData = new FormData();
 
   formData.append(key, JSON.stringify(value));

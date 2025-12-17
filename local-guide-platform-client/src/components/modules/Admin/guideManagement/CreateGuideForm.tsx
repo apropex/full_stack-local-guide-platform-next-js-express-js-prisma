@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/incompatible-library */
+
 "use client";
 
 import CustomButton from "@/components/buttons/CustomButton";
 import LoadingButton from "@/components/buttons/LoadingButton";
 import { _alert } from "@/components/custom-toast/CustomToast";
+import MultiSelector from "@/components/MultiSelector";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -23,12 +25,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MultiSElectOption } from "@/components/ui/multiselect";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { tourCategories } from "@/constants";
 import { cn } from "@/lib/utils";
 import { createGuide } from "@/services/guide.services";
 import { urid } from "@/utils";
@@ -51,8 +55,8 @@ export default function CreateGuideForm({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [aboutLength, setAboutLength] = useState(0);
   const [dobError, setDobError] = useState<string | null>(null);
+  const [expertise, setExpertise] = useState<MultiSElectOption[] | undefined>();
 
   const form = useForm<GuidePayload>({
     resolver: zodResolver(GuideSchema),
@@ -72,21 +76,6 @@ export default function CreateGuideForm({
     },
   });
 
-  const about = form.watch("about");
-
-  useEffect(() => {
-    setAboutLength(about?.length ?? 0);
-  }, [about]);
-
-  const {
-    fields: expertiseFields,
-    append: expertiseAppend,
-    remove: expertiseRemove,
-  } = useFieldArray({
-    control: form.control,
-    name: "expertise",
-  });
-
   const {
     fields: languagesFields,
     append: languagesAppend,
@@ -103,6 +92,8 @@ export default function CreateGuideForm({
 
     setError(null);
     setLoading(true);
+
+    values.expertise = expertise;
 
     const result = await createGuide(values);
 
@@ -129,7 +120,7 @@ export default function CreateGuideForm({
   return (
     <Dialog open={guideFormDialog} onOpenChange={setGuideFormDialog}>
       <Form {...form}>
-        <DialogContent className="sm:max-w-[425px] max-h-[85vh] overflow-y-auto custom_scrollbar">
+        <DialogContent className="w-full md:min-w-3xl  max-h-[80vh] overflow-y-auto custom_scrollbar">
           <DialogHeader>
             <DialogTitle>Guide Form</DialogTitle>
             <DialogDescription>
@@ -139,7 +130,7 @@ export default function CreateGuideForm({
           <form
             id="guide_register_form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 "
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-2.5 gap-y-4"
           >
             {error && (
               <p className="text-red-500 text-sm bg-red-500/6 rounded-xs px-1 pb-0.5">
@@ -147,7 +138,38 @@ export default function CreateGuideForm({
               </p>
             )}
 
-            {/*  */}
+            <div className="relative md:col-span-2">
+              <FormField
+                control={form.control}
+                name="about"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>About you</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Enter your bio here..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <span
+                className={cn(
+                  "absolute right-0 top-0 text-black/70 dark:text-white/80 text-sm",
+                  {
+                    "text-red-500": (form.watch("about") ?? "").length > 160,
+                    "text-[#4B4458]/30 dark:text-[#4B4458]/70":
+                      (form.watch("about") ?? "").length === 0,
+                  },
+                )}
+              >
+                {(form.watch("about") ?? "").length}/160
+              </span>
+            </div>
+
             <div className="flex flex-col gap-3">
               <Label
                 htmlFor="date"
@@ -209,49 +231,16 @@ export default function CreateGuideForm({
               )}
             />
 
-            <div className="space-y-2 min-h-15">
-              <div className="flex justify-between gap-3 flex-wrap">
-                <FormLabel>Expertise</FormLabel>
-                <button
-                  className="text-xs flex items-center gap-2 hover:text-green-500"
-                  type="button"
-                  onClick={() => expertiseAppend({ value: "" })}
-                >
-                  <Plus size={16} /> Add More
-                </button>
-              </div>
-
-              {expertiseFields.map((item, index) => (
-                <FormField
-                  key={item.id}
-                  control={form.control}
-                  name={`expertise.${index}.value`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <span className="inline-flex items-center relative">
-                          <Input
-                            {...field}
-                            placeholder="Enter expertise item"
-                            className="pr-8"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => expertiseRemove(index)}
-                            className="absolute right-0 pr-1.5 text-sm text-muted-foreground hover:text-red-500 h-full flex items-center cursor-pointer"
-                          >
-                            <span className="bg-background p-1 rounded inline-block">
-                              <X size={16} />
-                            </span>
-                          </button>
-                        </span>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
+            <MultiSelector
+              setValue={setExpertise}
+              value={expertise}
+              label="Expertise"
+              defaultOptions={tourCategories.map((cat) => ({
+                value: cat,
+                label: cat,
+              }))}
+              max={5}
+            />
 
             <div className="space-y-2 min-h-15">
               <div className="flex justify-between gap-3 flex-wrap">
@@ -295,38 +284,6 @@ export default function CreateGuideForm({
                   )}
                 />
               ))}
-            </div>
-
-            <div className="relative">
-              <FormField
-                control={form.control}
-                name="about"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>About you</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter your bio here..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <span
-                className={cn(
-                  "absolute right-0 top-0 text-black/70 dark:text-white/80 text-sm",
-                  {
-                    "text-red-500": aboutLength > 160,
-                    "text-[#4B4458]/30 dark:text-[#4B4458]/70":
-                      aboutLength === 0,
-                  },
-                )}
-              >
-                {aboutLength}/160
-              </span>
             </div>
 
             <FormField

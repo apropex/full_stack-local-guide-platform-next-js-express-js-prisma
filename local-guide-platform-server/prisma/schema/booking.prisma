@@ -8,6 +8,9 @@ model Booking {
   paymentId String?  @unique
   payment   Payment? @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 
+  startDate DateTime @default(now())
+  endDate   DateTime @default(now())
+
   trxId String?
 
   updatedAt DateTime @updatedAt

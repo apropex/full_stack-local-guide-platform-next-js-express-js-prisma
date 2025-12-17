@@ -69,3 +69,30 @@ export interface iPayment {
   booking: iBooking;
   createdAt: string;
 }
+
+export interface iReview {
+  id: string;
+  rating: number;
+  comment: string;
+  images: iReviewImage[];
+  touristId: string;
+  tourist: iUser;
+  tourId: string;
+  tour: iTour;
+  isVisible: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface iReviewImage {
+  id: string;
+  reviewId: string;
+  url: string;
+  publicId: string;
+  format?: string;
+  width?: number;
+  height?: number;
+  bytes?: number;
+  folder?: string;
+  createdAt: string;
+}

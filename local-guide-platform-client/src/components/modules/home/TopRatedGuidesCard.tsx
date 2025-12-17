@@ -141,9 +141,9 @@ const GuideCard = ({ guide }: { guide: iGuide }) => {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="size-8 rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
           >
-            <Heart className="w-5 h-5" />
+            <Heart className="size-5" />
           </Button>
         </div>
 

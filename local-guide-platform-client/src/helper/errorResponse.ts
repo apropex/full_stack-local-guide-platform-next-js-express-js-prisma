@@ -3,9 +3,16 @@
 import { iResponse } from "@/interfaces";
 import { isProd } from "@/lib/config/env";
 
-export const errorResponse = <T>(error: any, message?: string): iResponse<T> => {
+export const errorResponse = <T>(
+  error: any,
+  message?: string,
+): iResponse<T> => {
   if (!isProd) {
-    console.error("🚨 ========================", error, "======================== 🚨");
+    console.error(
+      "🚨 ========================",
+      error,
+      "======================== 🚨",
+    );
   }
 
   return {

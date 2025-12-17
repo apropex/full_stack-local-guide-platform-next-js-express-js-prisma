@@ -6,7 +6,9 @@ import SectionContainer, {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { iTour } from "@/interfaces/tour.interfaces";
 import { cn } from "@/lib/utils";
+import { getAllToursPublic } from "@/services/tour.services";
 import {
   Camera,
   Clock,
@@ -19,6 +21,7 @@ import {
   Utensils,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import * as React from "react";
 
 // --- Types based on Prisma ---
@@ -62,7 +65,7 @@ const categories = [
 ];
 
 // --- Mock Data ---
-const allTours: TourType[] = [
+const tours: TourType[] = [
   // Food
   {
     id: "1",
@@ -192,7 +195,7 @@ const allTours: TourType[] = [
 const TourCard = ({ tour }: { tour: TourType }) => {
   return (
     <div className="group h-full">
-      <Card className="h-full border-0 shadow-md bg-card rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:bg-zinc-900/60">
+      <Card className="pt-0 h-full border-0 shadow-md bg-card rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:bg-zinc-900/60">
         {/* Image Container */}
         <div className="relative h-60 w-full overflow-hidden">
           <Image
@@ -290,14 +293,15 @@ const TourCard = ({ tour }: { tour: TourType }) => {
 export default function ExperiencesByCategory() {
   const [activeCategory, setActiveCategory] = React.useState("Photography");
   const [isAnimating, setIsAnimating] = React.useState(false);
+  const [tours, setTours] = React.useState<iTour[]>([]);
 
   // Filter Logic (In real app, this would be an API call)
   // For demo, if less than 4 items, we might just duplicate or show what we have
-  const filteredTours = allTours.filter((t) => t.category === activeCategory);
+  const filteredTours = tours.filter((t) => t.category === activeCategory);
 
   // Fill up to 4 items for UI demo (optional logic)
   const displayTours =
-    filteredTours.length > 0 ? filteredTours : allTours.slice(0, 4);
+    filteredTours.length > 0 ? filteredTours : tours.slice(0, 4);
 
   const handleCategoryChange = (catId: string) => {
     if (catId === activeCategory) return;
@@ -305,6 +309,15 @@ export default function ExperiencesByCategory() {
     setActiveCategory(catId);
     setTimeout(() => setIsAnimating(false), 300); // Simple fade timing
   };
+
+  React.useEffect(() => {
+    (async () => {
+      const result = await getAllToursPublic(
+        `category=${activeCategory}&limit=4`,
+      );
+      if (result.success) setTours(result.data as iTour[]);
+    })();
+  }, [activeCategory]);
 
   return (
     <SectionContainer>
@@ -361,10 +374,12 @@ export default function ExperiencesByCategory() {
 
       {/* Bottom CTA */}
       <div className="mt-12 text-center">
-        <Button variant="link" className="text-primary text-lg gap-1">
-          View all {activeCategory} Experiences{" "}
-          <span aria-hidden="true">&rarr;</span>
-        </Button>
+        <Link href={`/tours?category=${activeCategory}`}>
+          <Button variant="link" className="text-primary text-lg gap-1">
+            View all {activeCategory} Experiences{" "}
+            <span aria-hidden="true">&rarr;</span>
+          </Button>
+        </Link>
       </div>
     </SectionContainer>
   );

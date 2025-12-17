@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Difficulty, TourDurationType } from "@/constants";
+import { Difficulty, tourCategories, TourDurationType } from "@/constants";
 import { cn } from "@/lib/utils";
 import { CreateTourPayload } from "@/zod/tour.schema";
 import { Plus, X } from "lucide-react";
@@ -259,9 +259,28 @@ export default function TourForm({ form, onSubmit, id }: TourFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <FormControl>
-                  <Input placeholder="Tour category" {...field} />
-                </FormControl>
+
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger
+                      className={`${form.formState.errors.category && "border-red-500"} w-full`}
+                    >
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    {tourCategories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
                 <FormMessage />
               </FormItem>
             )}

@@ -15,3 +15,11 @@ export const createReview = async (payload: ReviewPayload, files?: File[]) => {
     return errorResponse(error);
   }
 };
+
+export const getAllReviewsPublic = async () => {
+  try {
+    return await _fetch.get(routes.review("all-reviews-public"));
+  } catch (error) {
+    return errorResponse(error);
+  }
+};
