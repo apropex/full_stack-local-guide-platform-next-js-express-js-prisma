@@ -6,7 +6,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import CreateReviewForm from "../review/CreateReviewForm";
 import ReviewCarousel from "../review/ReviewCarousel";
-import BookNowButton from "./BookNowButton";
+import BookNowButton from "./BookNowForm";
 
 interface TourDetailsProps {
   tour: iTour;

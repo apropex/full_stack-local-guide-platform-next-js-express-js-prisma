@@ -9,7 +9,7 @@ import { BookingPayload } from "@/zod/booking.schema";
 
 export const createBooking = async (
   tourId: string,
-  payload?: BookingPayload,
+  payload: BookingPayload,
 ) => {
   try {
     return await _fetch.post(routes.booking("create", tourId), {

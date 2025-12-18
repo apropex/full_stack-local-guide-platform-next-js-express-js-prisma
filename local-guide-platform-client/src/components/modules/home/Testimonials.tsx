@@ -151,36 +151,42 @@ export default async function Testimonials() {
       </div>
 
       {/* Carousel */}
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-2 md:-ml-4">
-          {(result.data as iReview[]).map((review) => (
-            <CarouselItem
-              key={review.id}
-              className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
-            >
-              <ReviewCard review={review} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
+      {result.data && (result.data as []).length ? (
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {(result.data as iReview[]).map((review) => (
+              <CarouselItem
+                key={review.id}
+                className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
+              >
+                <ReviewCard review={review} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
 
-        {/* Custom positioned buttons */}
-        <div className="absolute -top-24 right-0 hidden md:flex gap-2">
-          <CarouselPrevious className="static translate-y-0 h-10 w-10 border-input hover:bg-primary hover:text-primary-foreground" />
-          <CarouselNext className="static translate-y-0 h-10 w-10 border-input hover:bg-primary hover:text-primary-foreground" />
-        </div>
+          {/* Custom positioned buttons */}
+          <div className="absolute -top-24 right-0 hidden md:flex gap-2">
+            <CarouselPrevious className="static translate-y-0 size-10 border-input hover:bg-primary hover:text-primary-foreground" />
+            <CarouselNext className="static translate-y-0 size-10 border-input hover:bg-primary hover:text-primary-foreground" />
+          </div>
 
-        {/* Mobile Only Controls (Optional) */}
-        <div className="flex justify-center gap-4 mt-6 md:hidden">
-          <CarouselPrevious className="static translate-y-0" />
-          <CarouselNext className="static translate-y-0" />
+          {/* Mobile Only Controls (Optional) */}
+          <div className="flex justify-center gap-4 mt-6 md:hidden">
+            <CarouselPrevious className="static translate-y-0" />
+            <CarouselNext className="static translate-y-0" />
+          </div>
+        </Carousel>
+      ) : (
+        <div className="grid place-content-center whitespace-nowrap border border-border/50 py-20 text-lg font-medium text-muted-foreground">
+          <p>No review founds</p>
         </div>
-      </Carousel>
+      )}
     </SectionContainer>
   );
 }

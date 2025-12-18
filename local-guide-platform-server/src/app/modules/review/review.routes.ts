@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/create", tokenVerifier, reviewControllers.createReview);
 
-router.get("all-reviews-public", reviewControllers.getAllReviewsPublic);
+router.get("/all-reviews-public", reviewControllers.getAllReviewsPublic);
 
 export default router;

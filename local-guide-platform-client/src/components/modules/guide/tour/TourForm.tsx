@@ -20,8 +20,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Difficulty, tourCategories, TourDurationType } from "@/constants";
 import { cn } from "@/lib/utils";
 import { CreateTourPayload } from "@/zod/tour.schema";
-import { Plus, X } from "lucide-react";
-import { useMemo } from "react";
+import { Plus, Search, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { SubmitHandler, useFieldArray, UseFormReturn } from "react-hook-form";
 
 interface TourFormProps {
@@ -31,6 +31,15 @@ interface TourFormProps {
 }
 
 export default function TourForm({ form, onSubmit, id }: TourFormProps) {
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const categories = useMemo(() => {
+    if (!categoryFilter.trim()) return tourCategories;
+
+    return tourCategories.filter((cat) =>
+      cat.toLowerCase().includes(categoryFilter.trim().toLowerCase()),
+    );
+  }, [categoryFilter]);
+
   const description = form.watch("description");
   const descriptionLength = useMemo(
     () => description?.length ?? 0,
@@ -273,7 +282,22 @@ export default function TourForm({ form, onSubmit, id }: TourFormProps) {
                   </FormControl>
 
                   <SelectContent>
-                    {tourCategories.map((cat) => (
+                    <div className="relative px-1 py-2 group">
+                      <Search className="absolute size-5 bottom-[50%] translate-y-[50%] left-3" />
+                      <X
+                        className="hidden group-hover:block absolute size-5 bottom-[50%] translate-y-[50%] right-2 text-muted-foreground hover:text-destructive cursor-pointer"
+                        onClick={() => setCategoryFilter("")}
+                      />
+                      <Input
+                        value={categoryFilter}
+                        onChange={({ target }) =>
+                          setCategoryFilter(target.value)
+                        }
+                        className="px-9"
+                        placeholder="Search category"
+                      />
+                    </div>
+                    {categories.map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
                       </SelectItem>
