@@ -87,11 +87,11 @@ export const getAllBookings = async (query: iQuery) => {
 
   where.AND = [];
 
-  if (query.userId) where.AND.push({ userId: query.userId });
   if (query.trxId) where.AND.push({ trxId: query.trxId });
+  if (query.userId) where.AND.push({ userId: query.userId });
   if (query.tourId) where.AND.push({ tourId: query.tourId });
-  if (query.status) where.AND.push({ status: query.status });
   if (query.paymentId) where.AND.push({ paymentId: query.paymentId });
+  if (query.status) where.AND.push({ status: query.status });
 
   const include = {
     payment: true,

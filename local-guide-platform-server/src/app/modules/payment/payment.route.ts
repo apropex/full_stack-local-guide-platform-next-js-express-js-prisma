@@ -27,4 +27,6 @@ router.get(
   paymentControllers.getInvoiceUrl,
 );
 
+router.get("/my-payments", tokenVerifier, paymentControllers.myPayments);
+
 export default router;

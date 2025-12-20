@@ -1,8 +1,7 @@
-import RefreshButton from "@/components/buttons/RefreshButton";
 import MyBookingsTable from "@/components/modules/tourist/bookings/MyBookingsTable";
+import PaginationComponent from "@/components/PaginationComponent";
+import BookingFilters from "@/components/shared/filters/BookingFilters";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
-import SearchFilter from "@/components/shared/SearchFilter";
-import SelectFilter from "@/components/shared/SelectFilter";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import { iResponse } from "@/interfaces";
 import { iBooking } from "@/interfaces/tour.interfaces";
@@ -22,8 +21,8 @@ export default async function MyBookingsPage({
 
   const result = (await getMyBookings(query)) as iResponse<iBooking[]>;
 
-  // const totalPage = result.meta?.total_pages || 1;
-  // const currentPage = result.meta?.present_page || 1;
+  const totalPages = result.meta?.total_pages || 1;
+  const currentPage = result.meta?.present_page || 1;
 
   return (
     <div className="space-y-5">
@@ -32,23 +31,22 @@ export default async function MyBookingsPage({
         description="My bookings information and details"
       />
 
-      <div className="flex items-center flex-wrap gap-4">
-        <SearchFilter />
-        <SelectFilter
-          placeholder="Find deleted or active admins"
-          paramName="isDeleted"
-          options={[
-            { label: "All", value: "all" },
-            { label: "Deleted", value: "true" },
-            { label: "Active", value: "false" },
-          ]}
-        />
-        <RefreshButton variant="outline">Refresh</RefreshButton>
-      </div>
+      <div className="w-fit grid lg:grid-cols-12 gap-4 mt-10">
+        <BookingFilters className="my-10 lg:my-0 static lg:col-span-3" />
 
-      <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-        <MyBookingsTable bookings={result.data || []} />
-      </Suspense>
+        <div className="lg:col-span-9 border rounded-2xl py-4">
+          <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+            <MyBookingsTable bookings={result.data || []} />
+          </Suspense>
+
+          <div className="py-3" />
+
+          <PaginationComponent
+            totalPages={totalPages}
+            currentPage={currentPage}
+          />
+        </div>
+      </div>
     </div>
   );
 }

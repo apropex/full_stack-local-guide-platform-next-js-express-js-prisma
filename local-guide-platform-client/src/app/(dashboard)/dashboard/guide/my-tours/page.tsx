@@ -1,6 +1,6 @@
 import TourTable from "@/components/modules/Admin/guideManagement/TourTable";
-import TourFilters from "@/components/modules/tour/TourFilters";
 import PaginationComponent from "@/components/PaginationComponent";
+import TourFilters from "@/components/shared/filters/TourFilters";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import { iResponse } from "@/interfaces";

@@ -387,10 +387,6 @@ export default function TourFilters({ className }: { className?: string }) {
           </Accordion>
         </div>
       </div>
-
-      {/* Decorative Blur Element */}
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 dark:bg-primary/25 rounded-full blur-[80px] -z-10 pointer-events-none" />
-      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 dark:bg-blue-400/20 rounded-full blur-[80px] -z-10 pointer-events-none" />
     </aside>
   );
 }

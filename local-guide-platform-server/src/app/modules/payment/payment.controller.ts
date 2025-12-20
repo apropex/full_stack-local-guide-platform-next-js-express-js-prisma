@@ -1,6 +1,7 @@
 import env from "../../../lib/config/env";
 import catchAsync from "../../../shared/catchAsync";
 import _response from "../../../shared/sendResponse";
+import { checkString } from "../../../utils/checkString";
 import { validationPayment } from "../sslCommerz/sslCommerz.service";
 import * as paymentServices from "./payment.service";
 
@@ -62,5 +63,18 @@ export const validatePayment = catchAsync(async (req, res) => {
   await validationPayment(req.body);
   _response(res, {
     message: "Payment validated successfully!",
+  });
+});
+
+// ================================================
+
+export const myPayments = catchAsync(async (req, res) => {
+  const userId = checkString(req.decoded?.id, "User ID not found, login again");
+  const { data, meta } = await paymentServices.myPayments(userId, req.query);
+
+  _response(res, {
+    message: "Payment retrieved successfully!",
+    data,
+    meta,
   });
 });

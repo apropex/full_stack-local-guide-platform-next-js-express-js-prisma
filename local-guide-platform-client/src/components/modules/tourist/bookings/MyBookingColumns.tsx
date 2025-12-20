@@ -1,3 +1,4 @@
+import IdField from "@/components/shared/IdField";
 import { iTableColumns } from "@/components/shared/ManagementTable";
 import { BookingStatus, PaymentStatus } from "@/constants";
 import { iBooking } from "@/interfaces/tour.interfaces";
@@ -7,15 +8,15 @@ import formatDate from "@/utils/formatDate";
 export const myBookingsColumns: iTableColumns<iBooking>[] = [
   {
     header: "TrxID",
-    accessor: ({ payment }) => payment.trxId,
+    accessor: ({ payment }) => <IdField id={payment.trxId} />,
   },
   {
     header: "Payment ID",
-    accessor: ({ paymentId }) => paymentId,
+    accessor: ({ paymentId }) => <IdField id={paymentId} />,
   },
   {
     header: "Tour ID",
-    accessor: ({ tourId }) => tourId,
+    accessor: ({ tourId }) => <IdField id={tourId} />,
   },
   {
     header: "Amount",

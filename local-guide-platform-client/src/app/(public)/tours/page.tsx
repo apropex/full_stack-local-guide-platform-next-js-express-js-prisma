@@ -1,6 +1,6 @@
 import TourCard from "@/components/modules/tour/TourCard";
-import TourFilters from "@/components/modules/tour/TourFilters";
 import PaginationComponent from "@/components/PaginationComponent";
+import TourFilters from "@/components/shared/filters/TourFilters";
 import { SectionTitle } from "@/components/shared/SectionContainer";
 import { iResponse } from "@/interfaces";
 import { iTour } from "@/interfaces/tour.interfaces";
