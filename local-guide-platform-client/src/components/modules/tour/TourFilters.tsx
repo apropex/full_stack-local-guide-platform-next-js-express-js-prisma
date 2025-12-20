@@ -33,7 +33,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-export default function TourFilters() {
+export default function TourFilters({ className }: { className?: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -148,7 +148,9 @@ export default function TourFilters() {
   }, [searchParams]); // search dependency cannot be provided, it may cause a loop.
 
   return (
-    <aside className="w-full max-w-6xl mx-auto h-fit sticky top-24 overflow-hidden">
+    <aside
+      className={cn("w-full h-fit sticky top-24 overflow-hidden", className)}
+    >
       {/* Premium Glass Card Container */}
       <div
         className={cn(
