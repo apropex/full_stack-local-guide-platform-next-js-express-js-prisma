@@ -60,7 +60,7 @@ export interface iAdminSearchQuery extends iPaginationAndSearchQuery {
   nid: string;
 }
 
-export interface iTourSearchQuery {
+export interface iTourSearchQuery extends iPaginationAndSearchQuery {
   id: string;
   title: string;
   description: string;

@@ -21,7 +21,7 @@ export default async function TourDetailsGuide({ searchParams }: Props) {
     );
 
   return (
-    <div className="">
+    <div>
       <TourDetails tour={result.data as iTour} />
     </div>
   );

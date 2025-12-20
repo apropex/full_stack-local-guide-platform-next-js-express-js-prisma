@@ -34,7 +34,6 @@ export default function TourForm({ form, onSubmit, id }: TourFormProps) {
   const [categoryFilter, setCategoryFilter] = useState("");
   const categories = useMemo(() => {
     if (!categoryFilter.trim()) return tourCategories;
-
     return tourCategories.filter((cat) =>
       cat.toLowerCase().includes(categoryFilter.trim().toLowerCase()),
     );

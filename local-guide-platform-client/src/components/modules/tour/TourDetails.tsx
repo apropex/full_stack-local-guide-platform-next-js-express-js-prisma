@@ -10,7 +10,7 @@ import BookNowButton from "./BookNowForm";
 
 interface TourDetailsProps {
   tour: iTour;
-  userId: string;
+  userId?: string;
 }
 
 export default function TourDetails({ tour, userId }: TourDetailsProps) {
@@ -88,7 +88,9 @@ export default function TourDetails({ tour, userId }: TourDetailsProps) {
             <CardHeader>
               <div className="flex justify-between">
                 <CardTitle className="text-2xl">Reviews</CardTitle>
-                <CreateReviewForm touristId={userId} tourId={tour.id} />
+                {userId && (
+                  <CreateReviewForm touristId={userId} tourId={tour.id} />
+                )}
               </div>
             </CardHeader>
             <CardContent>
@@ -130,7 +132,7 @@ export default function TourDetails({ tour, userId }: TourDetailsProps) {
                   <strong>Difficulty:</strong> {tour.difficulty}
                 </p>
               </div>
-              <BookNowButton tourId={tour.id} />
+              <BookNowButton tourId={tour.id} disable={!userId} />
             </CardContent>
           </Card>
 

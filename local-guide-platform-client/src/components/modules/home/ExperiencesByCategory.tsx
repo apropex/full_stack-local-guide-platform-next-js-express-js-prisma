@@ -311,12 +311,14 @@ export default function ExperiencesByCategory() {
   };
 
   React.useEffect(() => {
+    if (tours?.[0]?.category === activeCategory) return;
     (async () => {
       const result = await getAllToursPublic(
         `category=${activeCategory}&limit=4`,
       );
       if (result.success) setTours(result.data as iTour[]);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory]);
 
   return (

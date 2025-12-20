@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { iTour } from "@/interfaces/tour.interfaces";
-import { ArrowUpRight, Clock, MapPin, Star } from "lucide-react";
+import { ArrowRight, Clock, Heart, MapPin, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,93 +23,101 @@ export default function TourCard({ tour }: TourCardProps) {
     images,
   } = tour;
 
-  const imageUrl = images?.[0]?.url ?? "/placeholder-tour.jpg"; // Fallback image handling
+  const imageUrl = images?.[0]?.url ?? "/placeholder-tour.jpg";
 
   return (
-    <Link href={`/tours/${id}`} className="block h-full group">
-      <Card className="pt-0 h-full flex flex-col border-0 shadow-sm bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-1 ring-1 ring-zinc-100 dark:ring-zinc-800">
-        {/* --- Image Section --- */}
-        <div className="relative aspect-4/3 w-full overflow-hidden">
+    <Link href={`/tours/${id}`} className="block w-full group">
+      <Card className="py-0 relative flex flex-col md:flex-row overflow-hidden border border-zinc-200/60 dark:border-zinc-800 shadow-sm bg-white dark:bg-zinc-900 rounded-4xl transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-zinc-300 dark:hover:border-zinc-700">
+        {/* --- Left Side: Image Section (40% width on Desktop) --- */}
+        <div className="relative w-full md:w-[40%] h-64 md:h-auto shrink-0 overflow-hidden">
           <Image
             src={imageUrl}
             alt={title}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 40vw"
             priority={false}
           />
 
-          {/* Overlay Gradient (Subtle) */}
-          <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-60" />
+          {/* Gradient Overlay for Text Contrast */}
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
 
-          {/* Floating Location Badge */}
-          <div className="absolute top-4 left-4">
-            <Badge
-              variant="secondary"
-              className="bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md text-zinc-800 dark:text-zinc-200 border-0 px-3 py-1.5 shadow-sm font-medium gap-1.5 hover:bg-white"
-            >
+          {/* Top Left Badge: Location */}
+          <div className="absolute top-4 left-4 z-10">
+            <Badge className="bg-white/95 dark:bg-zinc-950/90 backdrop-blur-md text-zinc-800 dark:text-zinc-200 hover:bg-white border-0 px-3 py-1.5 shadow-sm font-semibold flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-blue-500" />
               {location}
             </Badge>
           </div>
+
+          {/* Top Right: Wishlist/Heart Icon (Optional Decorative) */}
+          <button className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-red-500 transition-colors">
+            <Heart className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* --- Content Section --- */}
-        <CardContent className="flex-1 p-5 space-y-3">
-          {/* Title & Arrow */}
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50 leading-tight line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        {/* --- Right Side: Content Section --- */}
+        <div className="flex flex-col flex-1 p-6 md:p-8 justify-between">
+          {/* Top Row: Rating & Category */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-1.5 text-sm font-medium">
+              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <span className="text-zinc-900 dark:text-zinc-100">{rating}</span>
+              <span className="text-zinc-400">({totalReviews} reviews)</span>
+            </div>
+
+            {/* Optional Tag - e.g. "Best Seller" or just Type */}
+            <span className="text-xs font-semibold tracking-wider uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 rounded-md">
+              Adventure
+            </span>
+          </div>
+
+          {/* Main Content */}
+          <div className="space-y-3">
+            <h3 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {title}
             </h3>
-            <ArrowUpRight className="w-5 h-5 text-zinc-300 group-hover:text-blue-500 transition-colors shrink-0" />
-          </div>
 
-          {/* Metadata Row (Duration & Rating) */}
-          <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-            <div className="flex items-center gap-1.5 bg-zinc-50 dark:bg-zinc-800/50 px-2.5 py-1 rounded-md">
-              <Clock className="w-3.5 h-3.5" />
-              <span className="font-medium">
-                {duration} {durationType.toLowerCase()}
-              </span>
-            </div>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+              {description}
+            </p>
 
-            <div className="flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="font-bold text-zinc-700 dark:text-zinc-300">
-                {rating}
-              </span>
-              <span className="text-xs text-zinc-400">({totalReviews})</span>
+            {/* Features Grid / Pills */}
+            <div className="flex flex-wrap gap-3 mt-2">
+              <div className="flex items-center gap-2 text-xs font-medium text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-full">
+                <Clock className="w-3.5 h-3.5" />
+                {duration} {durationType}
+              </div>
+              <div className="flex items-center gap-2 text-xs font-medium text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-full">
+                <Users className="w-3.5 h-3.5" />
+                Group Tour
+              </div>
             </div>
           </div>
 
-          {/* Description */}
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
-            {description}
-          </p>
-        </CardContent>
-
-        {/* --- Footer Section --- */}
-        <CardFooter className="p-5 pt-0 mt-auto flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800/50">
-          <div className="flex flex-col pt-4">
-            <span className="text-xs text-zinc-400 font-medium uppercase tracking-wide">
-              From
-            </span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                ${price.toFixed(0)}
+          {/* Footer Section: Price & CTA */}
+          <div className="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800 flex items-end justify-between">
+            <div className="flex flex-col">
+              <span className="text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1">
+                Starting from
               </span>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                / person
-              </span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold text-zinc-900 dark:text-white">
+                  ${price.toFixed(0)}
+                </span>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                  / person
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="pt-4">
-            <Badge className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-blue-600 dark:hover:bg-blue-400 transition-colors px-4 py-1.5 rounded-full font-semibold pointer-events-none group-hover:bg-blue-600 dark:group-hover:bg-blue-400">
+            {/* Custom Styled Button */}
+            <div className="flex items-center gap-2 text-sm font-semibold text-white bg-zinc-900 dark:bg-white dark:text-zinc-900 px-5 py-2.5 rounded-full transition-all group-hover:bg-blue-600 dark:group-hover:bg-blue-500 dark:group-hover:text-white group-hover:pl-6 group-hover:pr-4">
               Book Now
-            </Badge>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </div>
           </div>
-        </CardFooter>
+        </div>
       </Card>
     </Link>
   );

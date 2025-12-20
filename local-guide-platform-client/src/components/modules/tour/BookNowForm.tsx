@@ -20,7 +20,12 @@ import { mergeDateAndTime } from "@/utils/formatDate";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 
-export default function BookNowForm({ tourId }: { tourId: string }) {
+interface iProps {
+  tourId: string;
+  disable?: boolean;
+}
+
+export default function BookNowForm({ tourId, disable = false }: iProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -61,9 +66,10 @@ export default function BookNowForm({ tourId }: { tourId: string }) {
       <Button
         type="button"
         onClick={() => setOpen(true)}
+        disabled={disable}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white"
       >
-        Book Now
+        {disable ? "You can not book this tour" : "Book Now"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-auto">
@@ -126,9 +132,9 @@ export default function BookNowForm({ tourId }: { tourId: string }) {
               isLoading={loading}
               loadingText="Booking now..."
               onClick={handleBooking}
-              disabled={loading}
+              disabled={loading || disable}
             >
-              Book Now
+              {disable ? "You can not book this tour" : "Book Now"}
             </LoadingButton>
           </div>
         </DialogContent>

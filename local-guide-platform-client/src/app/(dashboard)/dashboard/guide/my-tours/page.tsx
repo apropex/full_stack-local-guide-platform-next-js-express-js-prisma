@@ -1,5 +1,5 @@
 import RefreshButton from "@/components/buttons/RefreshButton";
-import TourTable from "@/components/modules/Admin/tourManagement/TourTable";
+import TourTable from "@/components/modules/Admin/guideManagement/TourTable";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
 import SearchFilter from "@/components/shared/SearchFilter";
 import SelectFilter from "@/components/shared/SelectFilter";
