@@ -53,7 +53,7 @@ export default function GuideTable({ guides }: GuideTableProps) {
       <ManagementTable
         data={guides}
         columns={guideColumns}
-        onVerify={setVerifyingGuide}
+        randomFn={setVerifyingGuide}
         onEdit={({ id }) =>
           router.push(`/admin/dashboard/manage-admin/update-admin?id=${id}`)
         }

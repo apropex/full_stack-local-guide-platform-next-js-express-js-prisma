@@ -36,22 +36,30 @@ export default async function PaymentHistory({
       <div className="grid lg:grid-cols-12 gap-4 mt-10">
         <PaymentFilters className="my-10 lg:my-0 static lg:col-span-3" />
 
-        <div className="lg:col-span-9 border rounded-2xl py-4">
-          <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-            <MyPaymentsTable payments={data || []} />
-          </Suspense>
+        <div className="flex flex-col lg:col-span-9 border rounded-2xl py-4">
+          <div className="flex-1">
+            <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+              <MyPaymentsTable payments={data || []} />
+            </Suspense>
 
-          <div className="border-t p-3 flex flex-wrap justify-end gap-4 whitespace-nowrap text-muted-foreground text-sm">
-            <p>
-              Total pending amount:{" "}
-              <span className="text-foreground font-medium">
-                {pendingAmount}
-              </span>
-            </p>
-            <p>
-              Total amount you paid:{" "}
-              <span className="text-foreground font-medium">{totalAmount}</span>
-            </p>
+            <div className="border-t p-3 flex flex-wrap justify-end gap-4 whitespace-nowrap text-muted-foreground text-sm">
+              {pendingAmount && (
+                <p>
+                  Total pending amount:{" "}
+                  <span className="text-foreground font-medium">
+                    {pendingAmount}
+                  </span>
+                </p>
+              )}
+              {totalAmount && (
+                <p>
+                  Total amount you paid:{" "}
+                  <span className="text-foreground font-medium">
+                    {totalAmount}
+                  </span>
+                </p>
+              )}
+            </div>
           </div>
 
           <PaginationComponent

@@ -34,12 +34,12 @@ export default async function MyBookingsPage({
       <div className="w-fit grid lg:grid-cols-12 gap-4 mt-10">
         <BookingFilters className="my-10 lg:my-0 static lg:col-span-3" />
 
-        <div className="lg:col-span-9 border rounded-2xl py-4">
-          <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-            <MyBookingsTable bookings={result.data || []} />
-          </Suspense>
-
-          <div className="py-3" />
+        <div className="flex flex-col lg:col-span-9 border rounded-2xl py-4">
+          <div className="flex-1">
+            <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+              <MyBookingsTable bookings={result.data || []} />
+            </Suspense>
+          </div>
 
           <PaginationComponent
             totalPages={totalPages}

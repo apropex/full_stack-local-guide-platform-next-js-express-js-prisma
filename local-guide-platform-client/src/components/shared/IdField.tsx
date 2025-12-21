@@ -24,9 +24,10 @@ export default function IdField({ id }: { id: string }) {
 
   return (
     <div className="relative flex items-center gap-1.5 font-mono text-sm group">
-      <span className="truncate md:block max-w-[150px] cursor-default">
+      <span className="cursor-default absolute top-0 border border-border/30 bg-foreground text-background inline-block py-px px-1 scale-0 opacity-0 group-hover:scale-100 group-hover:-top-8 group-hover:opacity-100 transition-all duration-150">
         {id}
       </span>
+      <span className="truncate max-w-[150px] cursor-default">{id}</span>
       <button
         onClick={handleCopy}
         className="relative flex items-center justify-center w-5 h-5 transition-all active:scale-90"

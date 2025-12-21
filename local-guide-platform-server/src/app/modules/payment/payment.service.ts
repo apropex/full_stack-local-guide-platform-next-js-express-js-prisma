@@ -103,7 +103,7 @@ export const repayment = async (req: Request) => {
   ) {
     throw new ApiError(
       sCode.BAD_REQUEST,
-      "This user already paid the bill and booked the tour",
+      "You already paid the bill and booked the tour",
     );
   }
 

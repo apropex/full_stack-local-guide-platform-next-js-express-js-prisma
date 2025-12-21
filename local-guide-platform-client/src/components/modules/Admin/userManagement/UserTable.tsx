@@ -81,7 +81,7 @@ export default function UserTable({ users }: UserTableProps) {
       <ManagementTable
         data={users}
         columns={userColumns}
-        onVerify={setVerifyingUser}
+        randomFn={setVerifyingUser}
         onDelete={setDeletingUser}
         onEdit={setUpdatingUser}
         rowKey={({ id }) => id}

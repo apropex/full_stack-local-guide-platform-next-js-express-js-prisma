@@ -32,12 +32,12 @@ export default async function MyToursPage({ searchParams }: MyToursProps) {
       <div className="grid lg:grid-cols-12 gap-4 mt-10">
         <TourFilters className="my-10 lg:my-0 static lg:col-span-3" />
 
-        <div className="lg:col-span-9 border rounded-2xl py-4">
-          <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-            <TourTable tours={result.data || []} />
-          </Suspense>
-
-          <div className="py-3" />
+        <div className="flex flex-col lg:col-span-9 border rounded-2xl py-4">
+          <div className="pb-3 flex-1">
+            <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+              <TourTable tours={result.data || []} />
+            </Suspense>
+          </div>
 
           <PaginationComponent
             totalPages={totalPages}

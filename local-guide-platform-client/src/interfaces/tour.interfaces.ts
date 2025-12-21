@@ -53,6 +53,8 @@ export interface iBooking {
   paymentId: string;
   payment: iPayment;
   trxId: string;
+  startDate: string;
+  endDate: string;
   updatedAt: string;
   createdAt: string;
   user: iUser;

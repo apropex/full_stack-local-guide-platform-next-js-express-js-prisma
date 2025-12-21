@@ -55,7 +55,7 @@ export default function AdminTable({ admins }: AdminTableProps) {
       <ManagementTable
         data={admins}
         columns={adminColumns}
-        onVerify={setVerifyingAdmin}
+        randomFn={setVerifyingAdmin}
         rowKey={({ id }) => id}
         emptyMessage="No admins found"
         isRefresh={false}

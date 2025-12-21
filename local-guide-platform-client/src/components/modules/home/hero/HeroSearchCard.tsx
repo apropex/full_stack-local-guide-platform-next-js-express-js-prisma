@@ -53,17 +53,19 @@ export default function HeroSearchCard() {
         {/* subtle glow */}
         <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/20 to-transparent opacity-60 pointer-events-none" />
 
-        <Button
-          variant={"outline"}
-          size={"icon-sm"}
-          onClick={() => {
-            setLocation("");
-            setCategory("");
-          }}
-          className="absolute z-10 right-3 top-3 bg-transparent text-white shadow-lg shadow-primary/30"
-        >
-          <X />
-        </Button>
+        {location.trim() && category && (
+          <Button
+            variant={"outline"}
+            size={"icon-sm"}
+            onClick={() => {
+              setLocation("");
+              setCategory("");
+            }}
+            className="absolute z-10 right-3 top-3 bg-transparent text-white shadow-lg shadow-primary/30 border-white/30 dark:border-white/30"
+          >
+            <X />
+          </Button>
+        )}
 
         <div className="relative space-y-4">
           <div>
@@ -93,7 +95,7 @@ export default function HeroSearchCard() {
               <label className="text-xs text-white/70">Category</label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger
-                  className="data-[size=default]:h-10.5 data-[size=sm]:h-8 bg-transparent text-white border border-white/20
+                  className="data-[size=default]:h-10.5 data-[size=sm]:h-8 bg-transparent dark:bg-transparent text-white border border-white/20 dark:border-white/20
                   focus:ring-2 focus:ring-primary/30 data-placeholder:text-white/50"
                 >
                   <SelectValue placeholder="Select tour category" />

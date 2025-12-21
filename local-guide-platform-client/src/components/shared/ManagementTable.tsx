@@ -39,8 +39,9 @@ interface iManagementTable<T> {
   onView?: (row: T) => void;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
-  onVerify?: (row: T) => void;
   rowKey: (row: T) => string;
+  randomFn?: (row: T) => void;
+  randomFnTitle?: string;
   isRefresh: boolean;
   emptyMessage?: string;
 }
@@ -51,7 +52,8 @@ export default function ManagementTable<T>({
   onView,
   onEdit,
   onDelete,
-  onVerify,
+  randomFn,
+  randomFnTitle = "Verify",
   rowKey,
   emptyMessage,
 }: iManagementTable<T>) {
@@ -63,7 +65,7 @@ export default function ManagementTable<T>({
 
   return (
     <div className="">
-      <Table>
+      <Table className="">
         <TableHeader>
           <TableRow>
             {(columns || []).map((col, i) => (
@@ -87,7 +89,7 @@ export default function ManagementTable<T>({
             <TableHead className="w-14">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="custom_scrollbar">
           {!(data || []).length ? (
             <TableRow>
               <TableCell
@@ -134,12 +136,6 @@ export default function ManagementTable<T>({
                               View
                             </DropdownMenuItem>
                           )}
-                          {onVerify && (
-                            <DropdownMenuItem onClick={() => onVerify(item)}>
-                              <ShieldCheckIcon className="size-4" />
-                              Verify
-                            </DropdownMenuItem>
-                          )}
                           {onEdit && (
                             <DropdownMenuItem onClick={() => onEdit(item)}>
                               <EditIcon className="size-4" />
@@ -150,6 +146,12 @@ export default function ManagementTable<T>({
                             <DropdownMenuItem onClick={() => onDelete(item)}>
                               <Trash2Icon className="size-4" />
                               Delete
+                            </DropdownMenuItem>
+                          )}
+                          {randomFn && (
+                            <DropdownMenuItem onClick={() => randomFn(item)}>
+                              <ShieldCheckIcon className="size-4" />
+                              {randomFnTitle}
                             </DropdownMenuItem>
                           )}
                         </DropdownMenuGroup>

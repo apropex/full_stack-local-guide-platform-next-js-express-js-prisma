@@ -27,6 +27,14 @@ export const myBookingsColumns: iTableColumns<iBooking>[] = [
     accessor: ({ createdAt }) => formatDate(createdAt),
   },
   {
+    header: "Start Time",
+    accessor: ({ startDate }) => formatDate(startDate, true),
+  },
+  {
+    header: "Endtime",
+    accessor: ({ endDate }) => formatDate(endDate, true),
+  },
+  {
     header: "Booking Status",
     accessor: ({ status }) => (
       <span
