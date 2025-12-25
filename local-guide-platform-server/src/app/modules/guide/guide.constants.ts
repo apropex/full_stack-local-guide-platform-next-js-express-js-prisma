@@ -12,7 +12,7 @@ export const guideFilterFields: iGuide = [
   "hourlyRate",
   "isVerifiedGuide",
   "dob",
-  "averageRating",
+  "totalRatings",
   "totalReviews",
 ];
 
@@ -30,6 +30,6 @@ export const guideNumberFields: iGuide = [
   "experienceYears",
   "dailyRate",
   "hourlyRate",
-  "averageRating",
+  "totalRatings",
   "totalReviews",
 ];

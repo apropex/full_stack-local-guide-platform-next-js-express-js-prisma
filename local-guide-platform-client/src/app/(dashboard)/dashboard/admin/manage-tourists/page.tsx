@@ -1,8 +1,7 @@
-import RefreshButton from "@/components/buttons/RefreshButton";
 import UserTable from "@/components/modules/Admin/userManagement/UserTable";
+import PaginationComponent from "@/components/PaginationComponent";
+import TouristFilters from "@/components/shared/filters/TouristFilters";
 import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
-import SearchFilter from "@/components/shared/SearchFilter";
-import SelectFilter from "@/components/shared/SelectFilter";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import { iResponse } from "@/interfaces";
 import { iUser } from "@/interfaces/user.interfaces";
@@ -10,19 +9,19 @@ import { getAllUsers } from "@/services/user.services";
 import { queryFormatter } from "@/utils/queryFormatter";
 import { Suspense } from "react";
 
-interface ManageAdminProps {
+interface ManageTouristProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function ManageTouristsPage({
   searchParams,
-}: ManageAdminProps) {
+}: ManageTouristProps) {
   const params = await searchParams;
   const query = queryFormatter(params);
 
   const result = (await getAllUsers(query)) as iResponse<iUser[]>;
 
-  const totalPage = result.meta?.total_pages || 1;
+  const totalPages = result.meta?.total_pages || 1;
   const currentPage = result.meta?.present_page || 1;
 
   return (
@@ -32,23 +31,22 @@ export default async function ManageTouristsPage({
         description="Manage tourist information and details"
       />
 
-      <div className="flex items-center flex-wrap gap-4">
-        <SearchFilter />
-        <SelectFilter
-          placeholder="Find deleted or active admins"
-          paramName="isDeleted"
-          options={[
-            { label: "All", value: "all" },
-            { label: "Deleted", value: "true" },
-            { label: "Active", value: "false" },
-          ]}
-        />
-        <RefreshButton variant="outline">Refresh</RefreshButton>
-      </div>
+      <div className="grid lg:grid-cols-12 gap-4 mt-10">
+        <TouristFilters className="my-10 lg:my-0 static lg:col-span-3" />
 
-      <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
-        <UserTable users={result.data || []} />
-      </Suspense>
+        <div className="flex flex-col lg:col-span-9 border rounded-2xl py-4">
+          <div className="pb-3 flex-1">
+            <Suspense fallback={<TableSkeleton columns={2} rows={10} />}>
+              <UserTable users={result.data || []} />
+            </Suspense>
+          </div>
+
+          <PaginationComponent
+            totalPages={totalPages}
+            currentPage={currentPage}
+          />
+        </div>
+      </div>
     </div>
   );
 }

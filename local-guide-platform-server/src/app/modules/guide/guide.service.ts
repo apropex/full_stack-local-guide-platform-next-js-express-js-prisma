@@ -97,15 +97,31 @@ export const getAllGuides = async (query: iQuery) => {
 
   if (expertise && typeof expertise === "string") {
     const expertiseArray = expertise
-      .split(" ")
-      .filter((s) => s.trim().length > 0);
-    where.AND.push({ expertise: { hasSome: expertiseArray } });
+      .split(/[,\s]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (expertiseArray.length > 0) {
+      where.AND.push({
+        expertise: {
+          hasSome: expertiseArray,
+        },
+      });
+    }
   }
   if (languages && typeof languages === "string") {
     const languagesArray = languages
-      .split(" ")
-      .filter((s) => s.trim().length > 0);
-    where.AND.push({ languages: { hasSome: languagesArray } });
+      .split(/[,\s]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (languagesArray.length > 0) {
+      where.AND.push({
+        languages: {
+          hasSome: languagesArray,
+        },
+      });
+    }
   }
   if (experienceYears && typeof experienceYears === "number") {
     where.AND.push({ experienceYears: { gte: experienceYears } });
@@ -124,7 +140,7 @@ export const getAllGuides = async (query: iQuery) => {
   const include = {
     user: { include: { avatar: true } },
     verifier: { include: { user: true } },
-    reviews: true
+    reviews: true,
   };
 
   const [guides, total_records, filtered_records] = await Promise.all([

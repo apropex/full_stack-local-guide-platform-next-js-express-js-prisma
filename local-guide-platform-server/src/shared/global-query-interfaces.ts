@@ -49,7 +49,7 @@ export interface iGuideSearchQuery extends iPaginationAndSearchQuery {
   isVerifiedGuide: string;
   dob: string;
   nid: string;
-  averageRating: string;
+  totalRatings: string;
   totalReviews: string;
 }
 
