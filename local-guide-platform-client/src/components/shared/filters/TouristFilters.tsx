@@ -345,20 +345,22 @@ export default function TouristFilters({ className }: { className?: string }) {
                     </Select>
                   </div>
                   <div className="space-y-1 w-full">
-                    <Label className="text-[10px] uppercase text-muted-foreground">
+                    <Label className="text-xs uppercase text-muted-foreground">
                       Limit
                     </Label>
                     <Select
-                      value={searchParams.get("limit") || "10"}
+                      value={searchParams.get("limit") || "12"}
                       onValueChange={(val) => handleDirectChange("limit", val)}
                     >
-                      <SelectTrigger className="h-8 text-[10px] w-full">
+                      <SelectTrigger className="h-8 text-xs w-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="10">10 per page</SelectItem>
-                        <SelectItem value="20">20 per page</SelectItem>
-                        <SelectItem value="50">50 per page</SelectItem>
+                        <SelectItem value="3">3 per page</SelectItem>
+                        <SelectItem value="6">6 per page</SelectItem>
+                        <SelectItem value="12">12 per page</SelectItem>
+                        <SelectItem value="24">24 per page</SelectItem>
+                        <SelectItem value="48">48 per page</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

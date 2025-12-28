@@ -230,10 +230,13 @@ export default function PaymentFilters({ className }: { className?: string }) {
           >
             <AccordionItem value="advanced" className="border-b-0">
               <AccordionTrigger className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary py-4 hover:no-underline">
-                Lookup Payment ID
+                Special Filters
               </AccordionTrigger>
               <AccordionContent className="px-1 pt-2">
-                <div className="space-y-3">
+                <div className="space-y-2">
+                  <Label className="text-xs uppercase text-muted-foreground">
+                    Lookup Payment ID
+                  </Label>
                   <div className="relative">
                     <Fingerprint className="absolute left-2.5 top-2.5 size-3.5 text-muted-foreground" />
                     <Input
@@ -243,6 +246,27 @@ export default function PaymentFilters({ className }: { className?: string }) {
                       className="pl-8 h-9 text-xs bg-muted/30 border-transparent focus:bg-background focus:border-primary/30 transition-all font-mono"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2 w-full mt-4">
+                  <Label className="text-xs uppercase text-muted-foreground">
+                    Limit
+                  </Label>
+                  <Select
+                    value={searchParams.get("limit") || "12"}
+                    onValueChange={(val) => updateURL({ limit: val })}
+                  >
+                    <SelectTrigger className="h-8 text-xs w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="3">3 per page</SelectItem>
+                      <SelectItem value="6">6 per page</SelectItem>
+                      <SelectItem value="12">12 per page</SelectItem>
+                      <SelectItem value="24">24 per page</SelectItem>
+                      <SelectItem value="48">48 per page</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </AccordionContent>
             </AccordionItem>

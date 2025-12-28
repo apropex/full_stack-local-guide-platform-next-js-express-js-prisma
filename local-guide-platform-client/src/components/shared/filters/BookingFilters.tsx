@@ -268,6 +268,27 @@ export default function BookingFilters({ className }: { className?: string }) {
                     />
                   </div>
                 </div>
+
+                <div className="space-y-1 w-full">
+                  <Label className="text-xs uppercase text-muted-foreground">
+                    Limit
+                  </Label>
+                  <Select
+                    value={searchParams.get("limit") || "12"}
+                    onValueChange={(val) => updateURL({ limit: val })}
+                  >
+                    <SelectTrigger className="h-8 text-xs w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="3">3 per page</SelectItem>
+                      <SelectItem value="6">6 per page</SelectItem>
+                      <SelectItem value="12">12 per page</SelectItem>
+                      <SelectItem value="24">24 per page</SelectItem>
+                      <SelectItem value="48">48 per page</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
