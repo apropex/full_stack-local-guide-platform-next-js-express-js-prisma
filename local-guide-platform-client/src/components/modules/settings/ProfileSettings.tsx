@@ -253,10 +253,10 @@ export function ProfileSettings({ initialData }: { initialData: iUser }) {
                 />
               </div>
               <div className="space-y-1">
-                <Label>Average Rating</Label>
+                <Label>Total Ratings</Label>
                 <Input
                   type="number"
-                  value={initialData.guide.averageRating}
+                  value={initialData.guide.totalRatings}
                   disabled
                   className="bg-muted/50 text-muted-foreground"
                 />
